@@ -1,11 +1,10 @@
 package pn.nutrimeter.data.models.associations;
 
-import jdk.jfr.Enabled;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pn.nutrimeter.data.models.Food;
-import pn.nutrimeter.data.models.Mineral;
+import pn.nutrimeter.data.models.micro.Mineral;
 
 import javax.persistence.*;
 

@@ -1,4 +1,4 @@
-package pn.nutrimeter.data.models;
+package pn.nutrimeter.data.models.base;
 
 import lombok.Getter;
 import lombok.Setter;

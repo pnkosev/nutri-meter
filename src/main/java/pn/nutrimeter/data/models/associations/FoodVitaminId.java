@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pn.nutrimeter.data.models.Food;
-import pn.nutrimeter.data.models.Vitamin;
+import pn.nutrimeter.data.models.micro.Vitamin;
 
 import java.io.Serializable;
 import java.util.Objects;

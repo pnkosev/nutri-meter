@@ -5,22 +5,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pn.nutrimeter.data.models.base.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "exercises")
-public class Exercise extends BaseEntity {
+@Table(name = "categories")
+public class Category extends BaseEntity {
 
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "exercises")
-    private List<DailyStory> dailyStories;
+    @Column(name = "rdi")
+    private Integer rdi;
+
+    @ManyToMany(mappedBy = "categories")
+    private List<Food> foods;
 }

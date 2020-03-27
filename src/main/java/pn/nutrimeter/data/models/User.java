@@ -3,6 +3,7 @@ package pn.nutrimeter.data.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pn.nutrimeter.data.models.base.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -46,4 +47,7 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Food> foods;
+
+    @OneToMany(mappedBy = "user")
+    private List<Recipe> recipes;
 }
