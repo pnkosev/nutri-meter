@@ -45,6 +45,10 @@ public class User extends BaseEntity {
     @JoinColumn(name = "diary_id", referencedColumnName = "id")
     private Diary diary;
 
+    @ManyToOne
+    @JoinColumn(name = "target_id", referencedColumnName = "id")
+    private Target target;
+
     @OneToMany(mappedBy = "user")
     private List<Food> foods;
 

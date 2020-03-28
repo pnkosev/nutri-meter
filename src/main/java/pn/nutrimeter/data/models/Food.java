@@ -3,13 +3,8 @@ package pn.nutrimeter.data.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pn.nutrimeter.data.models.associations.FoodMineral;
-import pn.nutrimeter.data.models.associations.FoodVitamin;
-import pn.nutrimeter.data.models.associations.RecipeFood;
+import pn.nutrimeter.data.models.associations.*;
 import pn.nutrimeter.data.models.base.BaseEntity;
-import pn.nutrimeter.data.models.macro.Carbohydrate;
-import pn.nutrimeter.data.models.macro.Fat;
-import pn.nutrimeter.data.models.macro.Protein;
 
 import javax.persistence.*;
 import java.util.List;
@@ -32,20 +27,17 @@ public class Food extends BaseEntity {
     private State state;
 
     @ManyToOne
-    @JoinColumn(name = "fat_profile_id", referencedColumnName = "id")
-    private Fat fats;
-
-    @ManyToOne
-    @JoinColumn(name = "carb_profile_id", referencedColumnName = "id")
-    private Carbohydrate carbs;
-
-    @ManyToOne
-    @JoinColumn(name = "protein_profile_id", referencedColumnName = "id")
-    private Protein proteins;
-
-    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @OneToMany(mappedBy = "food")
+    private List<FoodProtein> foodProteinAssociation;
+
+    @OneToMany(mappedBy = "food")
+    private List<FoodCarbohydrate> foodCarbohydrateAssociation;
+
+    @OneToMany(mappedBy = "food")
+    private List<FoodLipid> foodLipidAssociation;
 
     @OneToMany(mappedBy = "food")
     private List<RecipeFood> recipeFoodAssociation;

@@ -3,7 +3,7 @@ package pn.nutrimeter.data.models.macro;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pn.nutrimeter.data.models.associations.FoodCarbohydrate;
+import pn.nutrimeter.data.models.associations.FoodLipid;
 import pn.nutrimeter.data.models.base.BaseMacroNutrient;
 
 import javax.persistence.Entity;
@@ -15,9 +15,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "carbohydrates")
-public class Carbohydrate extends BaseMacroNutrient {
+@Table(name = "lipids")
+public class Lipid extends BaseMacroNutrient {
 
-    @OneToMany(mappedBy = "carbohydrate")
-    private List<FoodCarbohydrate> foodCarbohydrateAssociation;
+    @OneToMany(mappedBy = "lipid")
+    private List<FoodLipid> foodLipidAssociation;
 }

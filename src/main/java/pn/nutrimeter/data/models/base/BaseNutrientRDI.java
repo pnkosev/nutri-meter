@@ -9,13 +9,16 @@ import javax.persistence.MappedSuperclass;
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseMacroNutrient extends BaseEntity {
+public class BaseNutrientRDI extends BaseEntity {
 
-    protected BaseMacroNutrient() {}
+    protected BaseNutrientRDI() {}
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "kcal_per_gram")
-    private Integer kcalPerGram;
+    @Column(name = "recommended_daily_intake")
+    private Double rdi;
+
+    @Column(name = "upper_limit")
+    private Double ul;
 }
