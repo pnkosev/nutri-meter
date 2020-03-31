@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "targets")
+@Table(name = "micro_targets")
 public class MicroTarget extends BaseEntity {
 
     @Column(name = "age_category")
@@ -155,6 +155,6 @@ public class MicroTarget extends BaseEntity {
     @Column(name = "water_rda")
     private Double waterRDA;
 
-    @OneToMany(mappedBy = "target")
+    @OneToMany(mappedBy = "microTarget")
     private List<User> users;
 }

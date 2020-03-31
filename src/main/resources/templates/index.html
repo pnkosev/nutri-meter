@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<th:block th:include="~{_shared/head}"/>
 <body>
-    <h1>It works!</h1>
+<th:block th:include="~{_shared/header}"/>
+<main>
+    <div class="container">
+        <h1>Welcome to Nutrimeter</h1>
+        <hr class="my-3"/>
+        <p class="h4">The most convenient tool for nutriment follow up on the web</p>
+        <p class="h4">Please enjoy owr services</p>
+        <hr class="my-3"/>
+        <h3><a th:href="@{/login}">Login</a> if you have an account or
+            <a th:href="@{/register}">Register</a> now and meet the greatest heroes of all time.
+        </h3>
+    </div>
+</main>
+<th:block th:include="~{_shared/footer}"/>
 </body>
 </html>

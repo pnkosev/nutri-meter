@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "food_sub_categories")
+@Table(name = "food_categories")
 public class FoodCategory extends BaseEntity {
 
     @Column(name = "name")

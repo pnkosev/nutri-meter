@@ -1,0 +1,36 @@
+<th:block>
+    <header>
+        <nav class="navbar bg-dark navbar-expand-lg navbar-background bg-dark ">
+            <th:block th:if="${session.user == null}">
+                <a class="navbar-brand text-white h4" href="/">Nutrimeter</a>
+            </th:block>
+            <th:block th:unless="${session.user == null}">
+                <a class="navbar-brand text-white h4" href="/home">Nutrimeter</a>
+            </th:block>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
+                <ul class="navbar-nav row">
+
+                    <th:block th:if="${session.user == null}">
+<!--                        <li class="nav-item col-md-4">-->
+<!--                            <a class="nav-link text-white active h5" href="/">Home</a>-->
+<!--                        </li>-->
+                        <li class="nav-item col-md-4">
+                            <a class="nav-link text-white active h5" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item col-md-4">
+                            <a class="nav-link text-white active h5" href="/register">Register</a>
+                        </li>
+                        <li class="nav-item col-md-4">
+                            <a class="nav-link text-white active h5" href="/food/add">Food</a>
+                        </li>
+                    </th:block>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+</th:block>
