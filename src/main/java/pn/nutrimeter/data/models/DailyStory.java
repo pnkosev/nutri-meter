@@ -3,10 +3,12 @@ package pn.nutrimeter.data.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pn.nutrimeter.data.models.associations.DailyStoryExercise;
+import pn.nutrimeter.data.models.associations.DailyStoryFood;
 import pn.nutrimeter.data.models.base.BaseEntity;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -17,25 +19,15 @@ import java.util.List;
 public class DailyStory extends BaseEntity {
 
     @Column(name = "date")
-    private LocalDate date;
+    private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "dairy_id", referencedColumnName = "id")
-    private Diary diary;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "daily_stories_foods",
-            joinColumns = @JoinColumn(name = "daily_story_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "food_id", referencedColumnName = "id")
-    )
-    private List<Food> foods;
+    @OneToMany(mappedBy = "dailyStory")
+    private List<DailyStoryFood> dailyStoryFoodAssociation;
 
-    @ManyToMany
-    @JoinTable(
-            name = "daily_stories_exercises",
-            joinColumns = @JoinColumn(name = "daily_story_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "exercise_id", referencedColumnName = "id")
-    )
-    private List<Exercise> exercises;
+    @OneToMany(mappedBy = "exercise")
+    private List<DailyStoryExercise> dailyStoryExerciseAssociation;
 }

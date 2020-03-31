@@ -3,8 +3,8 @@ package pn.nutrimeter.data.models.associations;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pn.nutrimeter.data.models.Food;
-import pn.nutrimeter.data.models.micro.Mineral;
+import pn.nutrimeter.data.models.DailyStory;
+import pn.nutrimeter.data.models.Exercise;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -12,23 +12,23 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-public class FoodMineralId implements Serializable {
+public class DailyStoryExerciseId implements Serializable {
 
-    private Food food;
+    private DailyStory dailyStory;
 
-    private Mineral mineral;
+    private Exercise exercise;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FoodMineralId that = (FoodMineralId) o;
-        return Objects.equals(food, that.food) &&
-                Objects.equals(mineral, that.mineral);
+        DailyStoryExerciseId that = (DailyStoryExerciseId) o;
+        return Objects.equals(dailyStory, that.dailyStory) &&
+                Objects.equals(exercise, that.exercise);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(food, mineral);
+        return Objects.hash(dailyStory, exercise);
     }
 }
