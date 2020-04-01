@@ -21,6 +21,9 @@ public class Measure extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "eequivalent_in_grams")
+    private Double equivalentInGrams;
+
     @ManyToMany(mappedBy = "measures")
     private List<Food> foods;
 }

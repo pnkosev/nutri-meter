@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<th:block th:include="~{_shared/head}"/>
+<body>
+<th:block th:include="~{_shared/header}"/>
+<main class="mb-5">
+    <div class="container w-50 mt-5">
+        <form class="mx-auto w-100" th:action="@{/food/category/add}" th:method="post" th:object="${foodCategoryCreateBindingModel}">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Food" th:field="*{name}">
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" rows="3" th:field="*{description}"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="recommended-daily-servings">Recommended daily servings</label>
+                <input type="number" class="form-control" id="recommended-daily-servings" placeholder="Food" th:field="*{recommendedDailyServings}">
+            </div>
+            <div class="form-group">
+                <label for="amount-in-grams">Amount in grams</label>
+                <input type="number" class="form-control" id="amount-in-grams" placeholder="Food" th:field="*{amountInGrams}">
+            </div>
+            <div class="button-holder d-flex justify-content-center mt-4">
+                <button class="btn btn-secondary text-white mb-3" type="submit">Add Food</button>
+            </div>
+        </form>
+    </div>
+</main>
+<th:block th:include="~{_shared/footer}"/>
+</body>
+</html>

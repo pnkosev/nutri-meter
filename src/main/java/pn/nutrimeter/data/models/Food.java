@@ -128,6 +128,9 @@ public class Food extends BaseEntity {
     @Column(name = "vitamin_d")
     private Double vitaminD;
 
+    @Column(name = "vitamin_e")
+    private Double vitaminE;
+
     @Column(name = "vitamin_k")
     private Double vitaminK;
 
@@ -148,6 +151,9 @@ public class Food extends BaseEntity {
 
     @Column(name = "manganese")
     private Double manganese;
+
+    @Column(name = "phosphorus")
+    private Double phosphorus;
 
     @Column(name = "potassium")
     private Double potassium;

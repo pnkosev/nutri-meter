@@ -8,18 +8,30 @@
 <th:block th:include="~{_shared/header}"/>
 <main class="mb-5">
     <div class="container w-50 mt-5">
-        <form class="mx-auto w-100" th:action="@{/food/add}" th:method="post">
+        <form class="mx-auto w-100" th:action="@{/food/add}" th:method="post" th:object="${foodCreateBindingModel}">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Food">
+                <input type="text" class="form-control" id="name" placeholder="Food Category" th:field="*{name}">
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea class="form-control" id="description" rows="3"></textarea>
+                <textarea class="form-control" id="description" placeholder="Description" rows="3" th:field="*{description}"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="categories">Select at least one category</label>
+                <select multiple class="form-control" id="categories" th:field="*{foodCategories}">
+                    <option class="multi-option"
+                            th:each="category : ${foodCategories}"
+                            th:value="${category.id}"
+                            th:text="${category.name}">
+
+                    </option>
+                </select>
             </div>
             <div class="row">
                 <div class="table-responsive col-md-6">
-                    <table class="table table-striped">
+
+                    <table class="table table-striped carbohydrates">
                         <thead class="thead-dark">
                         <tr>
                             <th scope="col">Carbohydrates</th>
@@ -30,34 +42,47 @@
                         <tr>
                             <td>
                                 <label for="carbs">
-                                    Carbs
+                                    Total Carbs
                                 </label>
                             </td>
                             <td>
-                                <input type="number" id="carbs">
+                                <input type="number" id="carbs" th:field="*{totalCarbohydrates}">
                             </td>
                         </tr>
                         <tr>
-                            <td>Fiber</td>
                             <td>
-                                <input type="number">
+                                <label for="fiber">
+                                    Fiber
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="fiber" th:field="*{fiber}">
                             </td>
                         </tr>
                         <tr>
-                            <td>Sugars</td>
                             <td>
-                                <input type="number">
+                                <label for="sugars">
+                                    Sugars
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="sugars" th:field="*{sugars}">
                             </td>
                         </tr>
                         <tr>
-                            <td>Added Sugars</td>
                             <td>
-                                <input type="number">
+                                <label for="added-sugars">
+                                    Added Sugars
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="added-sugars" th:field="*{addedSugars}">
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                    <table class="table table-striped">
+
+                    <table class="table table-striped proteins">
                         <thead class="thead-dark">
                         <tr>
                             <th scope="col">Proteins</th>
@@ -66,26 +91,128 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Fiber</td>
                             <td>
-                                <input type="number">
+                                <label for="proteins">
+                                    Total Proteins
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="proteins" th:field="*{totalProteins}">
                             </td>
                         </tr>
                         <tr>
-                            <td>Sugars</td>
                             <td>
-                                <input type="number">
+                                <label for="cysteine">
+                                    Cysteine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="cysteine" th:field="*{cysteine}">
                             </td>
                         </tr>
                         <tr>
-                            <td>Added Sugars</td>
                             <td>
-                                <input type="number">
+                                <label for="histidine">
+                                    Histidine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="histidine" th:field="*{histidine}">
                             </td>
                         </tr>
-                        </tbody>
+                        <tr>
+                            <td>
+                                <label for="isoleucine">
+                                    Isoleucine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="isoleucine" th:field="*{isoleucine}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="leucine">
+                                    Leucine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="leucine" th:field="*{leucine}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="lysine">
+                                    Lysine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="lysine" th:field="*{lysine}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="methionine">
+                                    Methionine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="methionine" th:field="*{methionine}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="phenylalanine">
+                                    Phenylalanine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="phenylalanine" th:field="*{phenylalanine}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="threonine">
+                                    Threonine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="threonine" th:field="*{threonine}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="tryptophan">
+                                    Tryptophan
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="tryptophan" th:field="*{tryptophan}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="tyrosine">
+                                    Tyrosine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="tyrosine" th:field="*{tyrosine}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="valine">
+                                    Valine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="valine" th:field="*{valine}">
+                            </td>
+                        </tr>
                     </table>
-                    <table class="table table-striped">
+
+                    <table class="table table-striped lipids">
                         <thead class="thead-dark">
                         <tr>
                             <th scope="col">Lipids</th>
@@ -94,28 +221,82 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Fiber</td>
                             <td>
-                                <input type="number">
+                                <label for="lipids">
+                                    Total Lipids
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="lipids" th:field="*{totalLipids}">
                             </td>
                         </tr>
                         <tr>
-                            <td>Sugars</td>
                             <td>
-                                <input type="number">
+                                <label for="monounsaturated">
+                                    Monounsaturated
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="monounsaturated" th:field="*{monounsaturated}">
                             </td>
                         </tr>
                         <tr>
-                            <td>Added Sugars</td>
                             <td>
-                                <input type="number">
+                                <label for="polyunsaturated">
+                                    Polyunsaturated
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="polyunsaturated" th:field="*{polyunsaturated}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="omega3">
+                                    Omega 3
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="omega3" th:field="*{omega3}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="omega6">
+                                    Omega 6
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="omega6" th:field="*{omega6}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="saturated">
+                                    Saturated
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="saturated" th:field="*{saturated}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="trans-fats">
+                                    Trans-fats
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="trans-fats" th:field="*{transFats}">
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
+
                 <div class="table-responsive col-md-6">
-                    <table class="table table-striped">
+
+                    <table class="table table-striped vitamins">
                         <thead class="thead-dark">
                         <tr>
                             <th scope="col">Vitamins</th>
@@ -124,9 +305,244 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Fiber</td>
                             <td>
-                                <input type="number">
+                                <label for="vitamin-a">
+                                    Vitamin A
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-a" th:field="*{vitaminA}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="vitamin-b1">
+                                    Vitamin B1
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-b1" th:field="*{vitaminB1}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="vitamin-b2">
+                                    Vitamin B2
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-b2" th:field="*{vitaminB2}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="vitamin-b3">
+                                    Vitamin B3
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-b3" th:field="*{vitaminB3}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="vitamin-b5">
+                                    Vitamin B5
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-b5" th:field="*{vitaminB5}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="vitamin-b6">
+                                    Vitamin B6
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-b6" th:field="*{vitaminB6}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="vitamin-b12">
+                                    Vitamin B12
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-b12" th:field="*{vitaminB12}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="folate">
+                                    Folate
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="folate" th:field="*{folate}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="vitamin-c">
+                                    Vitamin C
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-c" th:field="*{vitaminC}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="vitamin-d">
+                                    Vitamin D
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-d" th:field="*{vitaminD}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="vitamin-e">
+                                    Vitamin E
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-e" th:field="*{vitaminE}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="vitamin-k">
+                                    Vitamin K
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="vitamin-k" th:field="*{vitaminK}">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-striped minerals">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Minerals</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <label for="calcium">
+                                    Calcium
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="calcium" th:field="*{calcium}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="copper">
+                                    Copper
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="copper" th:field="*{copper}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="iodine">
+                                    Iodine
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="iodine" th:field="*{iodine}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="iron">
+                                    Iron
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="iron" th:field="*{iron}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="magnesium">
+                                    Magnesium
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="magnesium" th:field="*{magnesium}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="manganese">
+                                    Manganese
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="manganese" th:field="*{manganese}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="phosphorus">
+                                    Phosphorus
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="phosphorus" th:field="*{phosphorus}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="potassium">
+                                    Potassium
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="potassium" th:field="*{potassium}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="selenium">
+                                    Selenium
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="selenium" th:field="*{selenium}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="sodium">
+                                    Sodium
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="sodium" th:field="*{sodium}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="zinc">
+                                    Zinc
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" id="zinc" th:field="*{zinc}">
                             </td>
                         </tr>
                         </tbody>
