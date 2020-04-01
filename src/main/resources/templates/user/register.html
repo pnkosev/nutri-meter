@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<th:block th:include="~{_shared/head}"/>
+<body>
+<th:block th:include="~{_shared/header}"/>
+<main class="mb-5">
+    <h1 class="mt-5 mb-5 text-center">Create your account for free</h1>
+    <section class="container w-25">
+        <form th:action="@{/register}" th:method="post" th:object="${userRegisterBindingModel}">
+            <div class="form-group usernameInput">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Enter username" th:field="*{username}">
+            </div>
+            <div class="form-group emailInput">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" th:field="*{email}">
+            </div>
+            <div class="form-group passwordInput">
+                <label for="password">Password</label>
+                <input type="text" class="form-control" id="password" placeholder="Enter password" th:field="*{password}">
+            </div>
+            <div class="form-group confirmPasswordInput">
+                <label for="confirmPass">Confirm Password</label>
+                <input type="text" class="form-control" id="confirmPass" placeholder="Confirm password" th:field="*{confirmPassword}">
+            </div>
+            <th:block th:each="value,iter : ${T(pn.nutrimeter.data.models.enums.Sex).values()}" th:if="${iter.index} < 2">
+                <div class="form-group form-check mt-3 sexInput">
+                    <input class="form-check-input" type="radio" name="sex" th:id="sex + ${iter.index}"
+                           th:value="${value}" th:checked="${iter.index == 0 ? 'true' : 'false'}">
+                    <label class="form-check-label" th:for="sex + ${iter.index}">
+                        [[${value}]]
+                    </label>
+                </div>
+            </th:block>
+            <div class="form-group birthday">
+                <label for="birthday">Born</label>
+                <input type="date" class="form-control" id="birthday" name="birthday" th:field="*{birthday}">
+            </div>
+            <div class="form-group activity-level">
+                <label for="activity-level">Activity Level</label>
+                <select class="form-control" id="activity-level" th:field="*{activityLevel}">
+                    <option th:each="value : ${T(pn.nutrimeter.data.models.enums.ActivityLevel).values()}" th:value="${value}" th:text="${value}"></option>
+                </select>
+            </div>
+            <div class="form-group weightInput">
+                <label for="weight">Weight</label>
+                <input type="number" class="form-control" id="weight" th:field="*{weight}">
+                <select class="form-control">
+                    <option>Kilos</option>
+                    <option>Pounds</option>
+                </select>
+            </div>
+            <div class="form-group weightInput">
+                <label for="height">Height</label>
+                <span>
+                    <input type="number" class="form-control" id="height" th:field="*{height}">
+                </span>
+            </div>
+            <div class="button-holder d-flex justify-content-center mt-4">
+                <button class="btn btn-secondary text-white mb-3" type="submit">Register</button>
+            </div>
+        </form>
+    </section>
+</main>
+<th:block th:include="~{_shared/footer}"/>
+</body>
+</html>

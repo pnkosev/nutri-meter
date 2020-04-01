@@ -1,4 +1,4 @@
-package pn.nutrimeter.service.services;
+package pn.nutrimeter.service.services.api;
 
 import pn.nutrimeter.service.models.FoodServiceModel;
 

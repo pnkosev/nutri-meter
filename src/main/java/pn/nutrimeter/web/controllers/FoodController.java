@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import pn.nutrimeter.service.models.FoodCategoryServiceModel;
 import pn.nutrimeter.service.models.FoodServiceModel;
-import pn.nutrimeter.service.services.FoodCategoryService;
-import pn.nutrimeter.service.services.FoodService;
+import pn.nutrimeter.service.services.api.FoodCategoryService;
+import pn.nutrimeter.service.services.api.FoodService;
 import pn.nutrimeter.web.models.binding.FoodCategoryCreateBindingModel;
 import pn.nutrimeter.web.models.binding.FoodCreateBindingModel;
 

@@ -1,10 +1,11 @@
-package pn.nutrimeter.service.services;
+package pn.nutrimeter.service.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.FoodCategory;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.service.models.FoodCategoryServiceModel;
+import pn.nutrimeter.service.services.api.FoodCategoryService;
 
 import java.util.List;
 import java.util.stream.Collectors;

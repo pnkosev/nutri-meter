@@ -38,6 +38,12 @@ public class User extends BaseEntity {
     @Column(name = "target_weight")
     private Double targetWeight;
 
+    @Column(name = "kilos_per_week")
+    private Double kilosPerWeek;
+
+    @Column(name = "kcal_from_target")
+    private Double kcalFromTarget;
+
     @Column(name = "height")
     private Double height;
 
@@ -52,7 +58,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ActivityLevel activityLevel;
 
-    @Column(name = "bmr")
+    @Column(name = "kcal_from_bmr")
     private Double bmr;
 
     @Column(name = "bmi")
@@ -61,8 +67,17 @@ public class User extends BaseEntity {
     @Column(name = "body_fat")
     private Double bodyFat;
 
-    @Column(name = "protein_target")
-    private Double proteinTarget;
+    @Column(name = "kcal_from_activity_level")
+    private Double kcalFromActivityLevel;
+
+    @Column(name = "total_kcal_target")
+    private Double totalKcalTarget;
+
+    @Column(name = "prteins_target_in_percentage")
+    private Double proteinTargetInPercentage;
+
+    @Column(name = "protein_target_in_kcal")
+    private Double proteinTargetInKcal;
 
     @Column(name = "cystein_rda")
     private Double cysteinRDA;
@@ -97,14 +112,20 @@ public class User extends BaseEntity {
     @Column(name = "valine_rda")
     private Double valineRDA;
 
-    @Column(name = "carbohydrate_target")
-    private Double carbohydrateTarget;
+    @Column(name = "carbs_target_in_percentage")
+    private Double carbohydrateTargetInPercentage;
+
+    @Column(name = "carbohydrate_target_in_kcal")
+    private Double carbohydrateTargetInKcal;
 
     @Column(name = "fiber_rda")
     private Double fiberRDA;
 
-    @Column(name = "lipid_target")
-    private Double lipidTarget;
+    @Column(name = "lipid_target_in_percentage")
+    private Double lipidTargetInPercentage;
+
+    @Column(name = "lipid_target_in_kcal")
+    private Double lipidTargetInKcal;
 
     @Column(name = "omega3_rda")
     private Double omega3RDA;
@@ -138,4 +159,90 @@ public class User extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "food_id", referencedColumnName = "id")
     )
     private List<Food> favoriteFoods;
+
+    private String getGoalAsString() {
+        if (this.targetWeight - this.weight > 0) {
+            return "gain";
+        } else if (this.targetWeight - this.weight < 0) {
+            return "lose";
+        } else {
+            return "maintain";
+        }
+    }
+
+    private int getYearsOld() {
+        return LocalDate.now().getYear() - this.birthday.getYear();
+    }
+
+    public AgeCategory updateAgeCategory() {
+        int yearsOld = this.getYearsOld();
+
+        if (yearsOld < 4) {
+            return AgeCategory.INFANT;
+        } else if (yearsOld < 9) {
+            return AgeCategory.CHILDREN;
+        } else if (yearsOld < 21) {
+            return AgeCategory.ADOLESCENT;
+        } else if (yearsOld < 59) {
+            return AgeCategory.ADULT;
+        } else {
+            return AgeCategory.ELDERLY;
+        }
+    }
+
+    public Double calculateBMR() {
+        return sex.name().equalsIgnoreCase("male")
+                ? (10 * this.weight) + (6.25 * this.height) - (5 * getYearsOld()) + 5
+                : (10 * this.weight) + (6.25 * this.height) - (5 * getYearsOld()) - 161;
+    }
+
+    public Double calculateBMI() {
+        return this.weight / Math.pow((this.height / 100), 2);
+    }
+
+    public Double calculateBodyFat() {
+        int yearsOld = this.getYearsOld();
+        switch (this.ageCategory.name().toLowerCase()) {
+            case "adolescent":
+                return sex.name().equalsIgnoreCase("male")
+                        ? 1.51 * bmi - 0.70 * yearsOld - 2.2
+                        : 1.51 * bmi - 0.70 * yearsOld + 1.4;
+            case "adult":
+                return sex.name().equalsIgnoreCase("male")
+                        ? 1.20 * bmi + 0.23 * yearsOld - 16.2
+                        : 1.20 * bmi + 0.23 * yearsOld - 5.4;
+            default: return null;
+        }
+    }
+
+    public Double calculateKcalFromActivityLevel() {
+        Double variable = 0.0;
+        switch (this.activityLevel.name().toLowerCase()) {
+            case "sedentary": variable = 1.2; break;
+            case "light": variable = 1.375; break;
+            case "moderate": variable = 1.55; break;
+            case "very": variable = 1.725; break;
+        }
+        return this.bmr * variable - this.bmr;
+    }
+
+    public Double calculateKcalFromTotal(Double percentage) {
+        return this.totalKcalTarget * percentage;
+    }
+
+    public Double calculateKcalFromWeightTarget() {
+        return 1000 * this.kilosPerWeek;
+    }
+
+    public Double calculateTotalKcal() {
+        Double total = this.bmr + this.kcalFromActivityLevel;
+
+        switch (this.getGoalAsString()) {
+            case "gain": total += this.kcalFromTarget; break;
+            case "lose": total -= this.kcalFromTarget; break;
+            default: break;
+        }
+
+        return total;
+    }
 }
