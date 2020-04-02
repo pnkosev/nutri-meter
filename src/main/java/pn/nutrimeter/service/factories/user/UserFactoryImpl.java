@@ -2,24 +2,32 @@ package pn.nutrimeter.service.factories.user;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import pn.nutrimeter.data.models.LifeStageGroup;
 import pn.nutrimeter.data.models.User;
-import pn.nutrimeter.data.models.enums.ActivityLevel;
-import pn.nutrimeter.data.models.enums.AgeCategory;
-import pn.nutrimeter.data.models.enums.Sex;
+import pn.nutrimeter.data.repositories.LifeStageGroupRepository;
+import pn.nutrimeter.data.repositories.MacroTargetRepository;
+import pn.nutrimeter.data.repositories.MicroTargetRepository;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.services.api.HashingService;
-
-import java.time.LocalDate;
 
 @Service
 public class UserFactoryImpl implements UserFactory {
 
     private final HashingService hashingService;
 
+    private final LifeStageGroupRepository lifeStageGroupRepository;
+
+    private final MicroTargetRepository microTargetRepository;
+
+    private final MacroTargetRepository macroTargetRepository;
+
     private final ModelMapper modelMapper;
 
-    public UserFactoryImpl(HashingService hashingService, ModelMapper modelMapper) {
+    public UserFactoryImpl(HashingService hashingService, LifeStageGroupRepository lifeStageGroupRepository, MicroTargetRepository microTargetRepository, MacroTargetRepository macroTargetRepository, ModelMapper modelMapper) {
         this.hashingService = hashingService;
+        this.lifeStageGroupRepository = lifeStageGroupRepository;
+        this.microTargetRepository = microTargetRepository;
+        this.macroTargetRepository = macroTargetRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -31,6 +39,12 @@ public class UserFactoryImpl implements UserFactory {
         user.setTargetWeight(user.getWeight());
 
         user.setAgeCategory(user.updateAgeCategory());
+
+        LifeStageGroup lifeStageGroup = this.lifeStageGroupRepository.findLifeStageGroupBySexAndAge(user.getSex(), user.getYearsOld());
+        user.setLifeStageGroup(lifeStageGroup);
+        user.setMicroTarget(this.microTargetRepository.findByLifeStageGroupId(lifeStageGroup.getId()));
+        user.setMacroTarget(this.macroTargetRepository.findByLifeStageGroupId(lifeStageGroup.getId()));
+
         user.setBmr(user.calculateBMR());
         user.setBmi(user.calculateBMI());
         user.setBodyFat(user.calculateBodyFat());

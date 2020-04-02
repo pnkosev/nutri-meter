@@ -164,7 +164,7 @@ public class User extends BaseEntity {
         }
     }
 
-    private int getYearsOld() {
+    public int getYearsOld() {
         return Period.between(this.birthday, LocalDate.now()).getYears();
     }
 
