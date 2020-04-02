@@ -46,7 +46,7 @@ public class UserRegisterServiceModel {
 
 //    private Double proteinTarget;
 //
-//    private Double cysteinRDA;
+//    private Double cysteineRDA;
 //
 //    private Double histidineRDA;
 //

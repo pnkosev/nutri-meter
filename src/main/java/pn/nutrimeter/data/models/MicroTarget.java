@@ -20,11 +20,8 @@ import java.util.List;
 @Table(name = "micro_targets")
 public class MicroTarget extends BaseEntity {
 
-    @Column(name = "age_category")
-    private AgeCategory ageCategory;
-
-    @Column(name = "sex_category")
-    private Sex sexCategory;
+    @Column(name = "life_stage_category_id")
+    private String lifeStageCategoryId;
 
     @Column(name = "vitamin_a_rda")
     private Double vitaminARDA;

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<th:block th:include="~{_shared/head}"/>
+<body>
+<th:block th:include="~{_shared/header}"/>
+<main class="mb-5">
+    <div class="container w-50 mt-5">
+        <form class="mx-auto w-100" th:action="@{/target/group/add}" th:method="post" th:object="${lifeStageGroupBindingModel}">
+            <th:block th:each="value,iter : ${T(pn.nutrimeter.data.models.enums.Sex).values()}">
+                <div class="form-group form-check sexInput">
+                    <input class="form-check-input" type="radio" name="sex" th:id="sex + ${iter.index}"
+                           th:value="${value}" th:checked="${iter.index == 0 ? 'true' : 'false'}">
+                    <label class="form-check-label" th:for="sex + ${iter.index}">
+                        [[${value}]]
+                    </label>
+                </div>
+            </th:block>
+            <div class="form-group lowerAgeBound">
+                <label for="lowerAgeBound">Lower Age Bound</label>
+                <span>
+                    <input type="number" class="form-control" id="lowerAgeBound" th:field="*{lowerAgeBound}">
+                </span>
+            </div>
+            <div class="form-group upperAgeBound">
+                <label for="upperAgeBound">Upper Age Bound</label>
+                <span>
+                    <input type="number" class="form-control" id="upperAgeBound" th:field="*{upperAgeBound}">
+                </span>
+            </div>
+            <div class="button-holder d-flex justify-content-center mt-4">
+                <button class="btn btn-secondary text-white mb-3" type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+</main>
+<th:block th:include="~{_shared/footer}"/>
+</body>
+</html>

@@ -49,7 +49,7 @@ public class UserRegisterBindingModel {
 
 //    private Double proteinTarget;
 //
-//    private Double cysteinRDA;
+//    private Double cysteineRDA;
 //
 //    private Double histidineRDA;
 //

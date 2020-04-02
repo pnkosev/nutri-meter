@@ -73,14 +73,14 @@ public class User extends BaseEntity {
     @Column(name = "total_kcal_target")
     private Double totalKcalTarget;
 
-    @Column(name = "prteins_target_in_percentage")
+    @Column(name = "proteins_target_in_percentage")
     private Double proteinTargetInPercentage;
 
     @Column(name = "protein_target_in_kcal")
     private Double proteinTargetInKcal;
 
-    @Column(name = "cystein_rda")
-    private Double cysteinRDA;
+    @Column(name = "cysteine_rda")
+    private Double cysteineRDA;
 
     @Column(name = "histidine_rda")
     private Double histidineRDA;
@@ -116,31 +116,24 @@ public class User extends BaseEntity {
     private Double carbohydrateTargetInPercentage;
 
     @Column(name = "carbohydrate_target_in_kcal")
-    private Double carbohydrateTargetInKcal;
-
-    @Column(name = "fiber_rda")
-    private Double fiberRDA;
+    private Double carbohydrateTargetInKcal;  // concerns the target as %
 
     @Column(name = "lipid_target_in_percentage")
     private Double lipidTargetInPercentage;
 
     @Column(name = "lipid_target_in_kcal")
-    private Double lipidTargetInKcal;
-
-    @Column(name = "omega3_rda")
-    private Double omega3RDA;
-
-    @Column(name = "omega6_rda")
-    private Double omega6RDA;
-
-    @Column(name = "saturated_rda")
-    private Double saturatedRDA;
-
-    @Column(name = "trans_fats_rda")
-    private Double transFatsRDA;
+    private Double lipidTargetInKcal;  // concerns the target as %
 
     @ManyToOne
-    @JoinColumn(name = "target_id", referencedColumnName = "id")
+    @JoinColumn(name = "life_group_stage_id", referencedColumnName = "id")
+    private LifeStageGroup lifeStageGroup;
+
+    @ManyToOne
+    @JoinColumn(name = "macro_target_id", referencedColumnName = "id")
+    private MacroTarget macroTarget;
+
+    @ManyToOne
+    @JoinColumn(name = "micro_target_id", referencedColumnName = "id")
     private MicroTarget microTarget;
 
     @OneToMany(mappedBy = "user")
