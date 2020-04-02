@@ -9,7 +9,7 @@
 <main class="mb-5">
     <h1 class="mt-5 mb-5 text-center">Create a macro target according to life stage group</h1>
     <div class="container w-50 mt-5">
-        <form class="mx-auto w-100" th:action="@{/target/macro/add}" th:method="post" th:object="${macroTargetBindingModel}">
+        <form class="mx-auto w-100" th:action="@{/target/macro/add}" th:method="post" th:object="${microTargetBindingModel}">
             <div class="form-group lifeStageGroupInput">
                 <label for="activity-level">Life Stage Group</label>
                 <select class="form-control" id="activity-level" th:field="*{lifeStageGroupId}">

@@ -45,6 +45,9 @@ public class MacroTarget extends BaseEntity {
     @Column(name = "trans_fat_rda")
     private Double transFatRDA;
 
+    @Column(name = "water_rda")
+    private Double waterRDA;
+
     @OneToMany(mappedBy = "macroTarget")
     private List<User> users;
 }

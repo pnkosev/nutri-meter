@@ -26,4 +26,6 @@ public class MacroTargetBindingModel {
     private Double saturatedFatRDA;
 
     private Double transFatRDA;
+
+    private Double waterRDA;
 }
