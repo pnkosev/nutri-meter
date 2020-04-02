@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import pn.nutrimeter.service.models.LifeStageGroupServiceModel;
 import pn.nutrimeter.service.models.MacroTargetServiceModel;
+import pn.nutrimeter.service.models.MicroTargetServiceModel;
 import pn.nutrimeter.service.services.api.LifeStageGroupService;
 import pn.nutrimeter.service.services.api.MacroTargetService;
+import pn.nutrimeter.service.services.api.MicroTargetService;
 import pn.nutrimeter.web.models.binding.LifeStageGroupBindingModel;
 import pn.nutrimeter.web.models.binding.MacroTargetBindingModel;
+import pn.nutrimeter.web.models.binding.MicroTargetBindingModel;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,11 +28,14 @@ public class TargetController {
 
     private final MacroTargetService macroTargetService;
 
+    private final MicroTargetService microTargetService;
+
     private final ModelMapper modelMapper;
 
-    public TargetController(LifeStageGroupService lifeStageGroupService, MacroTargetService macroTargetService, ModelMapper modelMapper) {
+    public TargetController(LifeStageGroupService lifeStageGroupService, MacroTargetService macroTargetService, MicroTargetService microTargetService, ModelMapper modelMapper) {
         this.lifeStageGroupService = lifeStageGroupService;
         this.macroTargetService = macroTargetService;
+        this.microTargetService = microTargetService;
         this.modelMapper = modelMapper;
     }
 
@@ -72,6 +78,30 @@ public class TargetController {
         }
 
         this.macroTargetService.create(this.modelMapper.map(macroTargetBindingModel, MacroTargetServiceModel.class));
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/micro/add")
+    public ModelAndView microTargetAdd(MicroTargetBindingModel microTargetBindingModel) {
+
+        List<LifeStageGroupServiceModel> lifeStageGroups = this.lifeStageGroupService.getAll();
+        ModelAndView mov = new ModelAndView("target/micro-target-add");
+        mov.addObject("lifeStageGroups", lifeStageGroups);
+
+        return mov;
+    }
+
+    @PostMapping("/micro/add")
+    public String microTargetAddPost(
+            @Valid MicroTargetBindingModel microTargetBindingModel,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "target/macro-target-add";
+        }
+
+        this.microTargetService.create(this.modelMapper.map(microTargetBindingModel, MicroTargetServiceModel.class));
 
         return "redirect:/";
     }

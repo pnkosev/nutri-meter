@@ -7,71 +7,267 @@
 <body>
 <th:block th:include="~{_shared/header}"/>
 <main class="mb-5">
-    <h1 class="mt-5 mb-5 text-center">Create a macro target according to life stage group</h1>
-    <div class="container w-50 mt-5">
-        <form class="mx-auto w-100" th:action="@{/target/macro/add}" th:method="post" th:object="${microTargetBindingModel}">
-            <div class="form-group lifeStageGroupInput">
-                <label for="activity-level">Life Stage Group</label>
-                <select class="form-control" id="activity-level" th:field="*{lifeStageGroupId}">
-                    <option th:each="group : ${lifeStageGroups}" th:value="${group.id}">[[${group.sex.name()}]] - AGE FROM [[${group.lowerAgeBound}]] TO [[${group.upperAgeBound}]]</option>
-                </select>
+    <h1 class="mt-5 mb-5 text-center">Create a micro target according to life stage group</h1>
+    <div class="container w-100 mt-5">
+
+        <form class="mx-auto w-50" th:action="@{/target/micro/add}" th:method="post" th:object="${microTargetBindingModel}">
+            <div class="row justify-content-center">
+                <div class="form-group lifeStageGroupInput w-100">
+                    <label for="activity-level">Life Stage Group</label>
+                    <select class="form-control" id="activity-level" th:field="*{lifeStageGroupId}">
+                        <option th:each="group : ${lifeStageGroups}" th:value="${group.id}">[[${group.sex.name()}]] - AGE FROM [[${group.lowerAgeBound}]] TO [[${group.upperAgeBound}]]</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group proteinRDAInput">
-                <label for="proteinRDA">Protein RDA</label>
-                <span>
-                    <input type="number" class="form-control" id="proteinRDA" th:field="*{proteinRDA}">
-                </span>
+
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <h3 class="text-center mb-3">Vitamins</h3>
+                    <div class="form-group vitaminARDAInput">
+                        <label for="vitaminARDA">Vitamin A RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminARDA" th:field="*{vitaminARDA}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminAULInput">
+                        <label for="vitaminAUL">Vitamin A Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminAUL" th:field="*{vitaminAUL}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB1RDAInput">
+                        <label for="vitaminB1RDA">Vitamin B1 RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB1RDA" th:field="*{vitaminB1RDA}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB1UlInput">
+                        <label for="vitaminB1UL">Vitamin B1 Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB1UL" th:field="*{vitaminB1UL}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB2RDAInput">
+                        <label for="vitaminB2RDA">Vitamin B2 RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB2RDA" th:field="*{vitaminB2RDA}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB2ULInput">
+                        <label for="vitaminB2UL">Vitamin B2 Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB2UL" th:field="*{vitaminB2UL}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB3RDAInput">
+                        <label for="vitaminB3RDA">Vitamin B3 RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB3RDA" th:field="*{vitaminB3RDA}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB3ULInput">
+                        <label for="vitaminB3UL">Vitamin B3 Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB3UL" th:field="*{vitaminB3UL}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB5RDAInput">
+                        <label for="vitaminB5RDA">Vitamin B5 RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB5RDA" th:field="*{vitaminB5RDA}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB5ULInput">
+                        <label for="vitaminB5UL">Vitamin B5 Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB5UL" th:field="*{vitaminB5UL}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB6RDAInput">
+                        <label for="vitaminB6RDA">Vitamin B6 RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB6RDA" th:field="*{vitaminB6RDA}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB6ULInput">
+                        <label for="vitaminB6UL">Vitamin B6 Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB6UL" th:field="*{vitaminB6UL}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB12RDAInput">
+                        <label for="vitaminB12RDA">Vitamin 12 RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB12RDA" th:field="*{vitaminB12RDA}">
+                        </span>
+                    </div>
+                    <div class="form-group vitaminB12ULInput">
+                        <label for="vitaminB12UL">Vitamin B12 Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="vitaminB12UL" th:field="*{vitaminB12UL}">
+                        </span>
+                    </div>
+                    <div class="form-group folateRDAInput">
+                        <label for="folateRDA">Folate RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="folateRDA" th:field="*{folateRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group folateULInput">
+                        <label for="folateUL">Folate Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="folateUL" th:field="*{folateUL}">
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3 class="text-center mb-3">Minerals</h3>
+                    <div class="form-group calciumRDAInput">
+                        <label for="calciumRDA">Calcium RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="calciumRDA" th:field="*{calciumRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group calciumULInput">
+                        <label for="calciumUL">Calcium Upepr Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="calciumUL" th:field="*{calciumUL}">
+                        </span>
+                    </div>
+                    <div class="form-group copperRDAInput">
+                        <label for="copperRDA">Copper RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="copperRDA" th:field="*{copperRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group copperULInput">
+                        <label for="copperUL">Copper Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="copperUL" th:field="*{copperUL}">
+                        </span>
+                    </div>
+                    <div class="form-group iodineRDAInput">
+                        <label for="iodineRDA">Iodine RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="iodineRDA" th:field="*{iodineRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group iodineULInput">
+                        <label for="iodineUL">Iodine Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="iodineUL" th:field="*{iodineUL}">
+                        </span>
+                    </div>
+                    <div class="form-group ironRDAInput">
+                        <label for="ironRDA">Iron RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="ironRDA" th:field="*{ironRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group ironULInput">
+                        <label for="ironUL">Iron Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="ironUL" th:field="*{ironUL}">
+                        </span>
+                    </div>
+                    <div class="form-group magnesiumRDAInput">
+                        <label for="magnesiumRDA">Magnesium RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="magnesiumRDA" th:field="*{magnesiumRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group magnesiumULInput">
+                        <label for="magnesiumUL">Magnesium Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="magnesiumUL" th:field="*{magnesiumUL}">
+                        </span>
+                    </div>
+                    <div class="form-group manganeseRDAInput">
+                        <label for="manganeseRDA">Manganese RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="manganeseRDA" th:field="*{manganeseRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group manganeseULInput">
+                        <label for="manganeseUL">Manganese Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="manganeseUL" th:field="*{manganeseUL}">
+                        </span>
+                    </div>
+                    <div class="form-group phosphorusRDAInput">
+                        <label for="phosphorusRDA">Phosphorus RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="phosphorusRDA" th:field="*{phosphorusRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group phosphorusULInput">
+                        <label for="phosphorusUL">Phosphorus Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="phosphorusUL" th:field="*{phosphorusUL}">
+                        </span>
+                    </div>
+                    <div class="form-group potassiumRDAInput">
+                        <label for="potassiumRDA">Potassium RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="potassiumRDA" th:field="*{potassiumRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group potassiumULInput">
+                        <label for="potassiumUL">Potassium Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="potassiumUL" th:field="*{potassiumUL}">
+                        </span>
+                    </div>
+                    <div class="form-group seleniumRDAInput">
+                        <label for="seleniumRDA">Selenium RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="seleniumRDA" th:field="*{seleniumRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group seleniumULInput">
+                        <label for="seleniumUL">Selenium Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="seleniumUL" th:field="*{seleniumUL}">
+                        </span>
+                    </div>
+                    <div class="form-group sodiumRDAInput">
+                        <label for="sodiumRDA">Sodium RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="sodiumRDA" th:field="*{sodiumRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group sodiumULInput">
+                        <label for="sodiumUL">Sodium Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="sodiumUL" th:field="*{sodiumUL}">
+                        </span>
+                    </div>
+                    <div class="form-group zincRDAInput">
+                        <label for="zincRDA">Zinc RDA</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="zincRDA" th:field="*{zincRDA}">
+                        </span>
+                    </div>
+                    <div class="form-group zincULInput">
+                        <label for="zincUL">Zinc Upper Limit</label>
+                        <span>
+                            <input type="number" step="0.01" class="form-control" id="zincUL" th:field="*{zincUL}">
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group carbohydrateRDAInput">
-                <label for="carbohydrateRDA">Carbohydrate RDA</label>
-                <span>
-                    <input type="number" step="0.01" class="form-control" id="carbohydrateRDA" th:field="*{carbohydrateRDA}">
-                </span>
+            <div class="row">
+                <div class="form-group waterRDAInput w-100">
+                    <label for="waterRDA">Water RDA</label>
+                    <span>
+                        <input type="number" step="0.01" class="form-control" id="waterRDA" th:field="*{waterRDA}">
+                    </span>
+                </div>
             </div>
-            <div class="form-group fiberRDAInput">
-                <label for="fiberRDA">Fiber RDA</label>
-                <span>
-                    <input type="number" step="0.01" class="form-control" id="fiberRDA" th:field="*{fiberRDA}">
-                </span>
-            </div>
-            <div class="form-group lipidRDAInput">
-                <label for="lipidRDA">Lipid RDA</label>
-                <span>
-                    <input type="number" step="0.01" class="form-control" id="lipidRDA" th:field="*{lipidRDA}">
-                </span>
-            </div>
-            <div class="form-group omega3RDAInput">
-                <label for="omega3RDA">Omega3 RDA</label>
-                <span>
-                    <input type="number" step="0.01" class="form-control" id="omega3RDA" th:field="*{omega3RDA}">
-                </span>
-            </div>
-            <div class="form-group omega6RDAInput">
-                <label for="omega6RDA">Omega6 RDA</label>
-                <span>
-                    <input type="number" step="0.01" class="form-control" id="omega6RDA" th:field="*{omega6RDA}">
-                </span>
-            </div>
-            <div class="form-group saturatedFatRDAInput">
-                <label for="saturatedFatRDA">Saturated Fat RDA</label>
-                <span>
-                    <input type="number" step="0.01" class="form-control" id="saturatedFatRDA" th:field="*{saturatedFatRDA}">
-                </span>
-            </div>
-            <div class="form-group transFatRDAInput">
-                <label for="transFatRDA">Trans Fat RDA</label>
-                <span>
-                    <input type="number" step="0.01" class="form-control" id="transFatRDA" th:field="*{transFatRDA}">
-                </span>
-            </div>
-            <div class="form-group waterRDAInput">
-                <label for="waterRDA">Water RDA</label>
-                <span>
-                    <input type="number" step="0.01" class="form-control" id="waterRDA" th:field="*{waterRDA}">
-                </span>
-            </div>
-            <div class="button-holder d-flex justify-content-center mt-4">
-                <button class="btn btn-secondary text-white mb-3" type="submit">Create</button>
+            <div class="row justify-content-center">
+                <div class="button-holder d-flex justify-content-center mt-4">
+                    <button class="btn btn-secondary text-white mb-3" type="submit">Create</button>
+                </div>
             </div>
         </form>
     </div>

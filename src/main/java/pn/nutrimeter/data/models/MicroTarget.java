@@ -20,8 +20,8 @@ import java.util.List;
 @Table(name = "micro_targets")
 public class MicroTarget extends BaseEntity {
 
-    @Column(name = "life_stage_category_id")
-    private String lifeStageCategoryId;
+    @Column(name = "life_stage_group_id")
+    private String lifeStageGroupId;
 
     @Column(name = "vitamin_a_rda")
     private Double vitaminARDA;
@@ -124,6 +124,12 @@ public class MicroTarget extends BaseEntity {
 
     @Column(name = "manganese_ul")
     private Double manganeseUL;
+
+    @Column(name = "phosphorus_rda")
+    private Double phosphorusRDA;
+
+    @Column(name = "phosphorus_ul")
+    private Double phosphorusUL;
 
     @Column(name = "potassium_rda")
     private Double potassiumRDA;
