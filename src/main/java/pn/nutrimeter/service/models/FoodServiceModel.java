@@ -67,6 +67,8 @@ public class FoodServiceModel {
 
     private Double transFats;
 
+    private Double cholesterol;
+
     private Double vitaminA;
 
     private Double vitaminB1;

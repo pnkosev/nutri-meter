@@ -98,6 +98,9 @@ public class Food extends BaseEntity {
     @Column(name = "trans_fats")
     private Double transFats;
 
+    @Column(name = "cholesterol")
+    private Double cholesterol;
+
     @Column(name = "vitamin_a")
     private Double vitaminA;
 
