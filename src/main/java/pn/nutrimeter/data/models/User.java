@@ -10,6 +10,7 @@ import pn.nutrimeter.data.models.enums.Sex;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 @Getter
@@ -164,7 +165,7 @@ public class User extends BaseEntity {
     }
 
     private int getYearsOld() {
-        return LocalDate.now().getYear() - this.birthday.getYear();
+        return Period.between(this.birthday, LocalDate.now()).getYears();
     }
 
     public AgeCategory updateAgeCategory() {

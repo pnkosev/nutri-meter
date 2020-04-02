@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<th:block th:include="~{_shared/head}"/>
+<body>
+<th:block th:include="~{_shared/header}"/>
+<main class="mb-5">
+    <h1 class="mt-5 mb-5 text-center">Create a macro target according to life stage group</h1>
+    <div class="container w-50 mt-5">
+        <form class="mx-auto w-100" th:action="@{/target/macro/add}" th:method="post" th:object="${macroTargetBindingModel}">
+            <div class="form-group lifeStageGroupInput">
+                <label for="activity-level">Life Stage Group</label>
+                <select class="form-control" id="activity-level" th:field="*{lifeStageGroupId}">
+                    <option th:each="group : ${lifeStageGroups}" th:value="${group.id}">[[${group.sex.name()}]] - AGE FROM [[${group.lowerAgeBound}]] TO [[${group.upperAgeBound}]]</option>
+                </select>
+            </div>
+            <div class="form-group proteinRDAInput">
+                <label for="proteinRDA">Protein RDA</label>
+                <span>
+                    <input type="number" class="form-control" id="proteinRDA" th:field="*{proteinRDA}">
+                </span>
+            </div>
+            <div class="form-group carbohydrateRDAInput">
+                <label for="carbohydrateRDA">Carbohydrate RDA</label>
+                <span>
+                    <input type="number" step="0.01" class="form-control" id="carbohydrateRDA" th:field="*{carbohydrateRDA}">
+                </span>
+            </div>
+            <div class="form-group fiberRDAInput">
+                <label for="fiberRDA">Fiber RDA</label>
+                <span>
+                    <input type="number" step="0.01" class="form-control" id="fiberRDA" th:field="*{fiberRDA}">
+                </span>
+            </div>
+            <div class="form-group lipidRDAInput">
+                <label for="lipidRDA">Lipid RDA</label>
+                <span>
+                    <input type="number" step="0.01" class="form-control" id="lipidRDA" th:field="*{lipidRDA}">
+                </span>
+            </div>
+            <div class="form-group omega3RDAInput">
+                <label for="omega3RDA">Omega3 RDA</label>
+                <span>
+                    <input type="number" step="0.01" class="form-control" id="omega3RDA" th:field="*{omega3RDA}">
+                </span>
+            </div>
+            <div class="form-group omega6RDAInput">
+                <label for="omega6RDA">Omega6 RDA</label>
+                <span>
+                    <input type="number" step="0.01" class="form-control" id="omega6RDA" th:field="*{omega6RDA}">
+                </span>
+            </div>
+            <div class="form-group saturatedFatRDAInput">
+                <label for="saturatedFatRDA">Saturated Fat RDA</label>
+                <span>
+                    <input type="number" step="0.01" class="form-control" id="saturatedFatRDA" th:field="*{saturatedFatRDA}">
+                </span>
+            </div>
+            <div class="form-group transFatRDAInput">
+                <label for="transFatRDA">Trans Fat RDA</label>
+                <span>
+                    <input type="number" step="0.01" class="form-control" id="transFatRDA" th:field="*{transFatRDA}">
+                </span>
+            </div>
+            <div class="button-holder d-flex justify-content-center mt-4">
+                <button class="btn btn-secondary text-white mb-3" type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</main>
+<th:block th:include="~{_shared/footer}"/>
+</body>
+</html>
