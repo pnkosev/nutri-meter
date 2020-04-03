@@ -8,6 +8,7 @@ import pn.nutrimeter.data.models.associations.DailyStoryFood;
 import pn.nutrimeter.data.models.base.BaseEntity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 public class DailyStory extends BaseEntity {
 
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

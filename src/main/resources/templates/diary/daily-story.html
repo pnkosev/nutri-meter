@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<th:block th:include="~{_shared/head}"/>
+<body>
+<th:block th:include="~{_shared/header}"/>
+<main>
+    <div class="container w-100">
+        <div class="row">
+            <div class="col-md-3">
+                <form th:action="@{/diary}">
+                    <a th:href="@{'/diary/' + ${yesterday}}"><</a>
+                    <span th:text="${today}"></span>
+                    <a th:href="@{'/diary/' + ${tomorrow}}">></a>
+                </form>
+            </div>
+            <div class="col-md-9">
+                Bla bla bla bla bla bla
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="row">
+                    stats
+                </div>
+                <div class="row">
+                    more stats
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <h4>Available foods</h4>
+                    <div class="container border border-primary mb-5">
+                        <th:block th:if="${availableFoods != null}">
+                            <ul>
+                                <li th:each="food : ${availableFoods}" th:text="${food.name}"></li>
+                            </ul>
+                        </th:block>
+                    </div>
+                    <th:block th:if="${dailyStoryFoodAss != null}">
+                        <div class="container border border-primary mb-5">
+                            <ul>
+                                <li th:each="food : ${dailyStoryFoodAss}" th:text="${food.getFoodServiceModel().getName()}"></li>
+                            </ul>
+                        </div>
+                    </th:block>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        1
+                    </div>
+                    <div class="col-md-6">
+                        2
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<th:block th:include="~{_shared/footer}"/>
+</body>
+</html>

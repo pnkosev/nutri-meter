@@ -64,11 +64,12 @@ public class UserController {
 
         UserAuthenticatedServiceModel loggedInUser = this.userService.login(this.modelMapper.map(userLoginBindingModel, UserLoginServiceModel.class));
 
-        if (loggedInUser == null) {
+        if (loggedInUser.getUsername() == null) {
             return "user/login";
         }
 
         session.setAttribute("username", loggedInUser.getUsername());
+        session.setAttribute("userId", loggedInUser.getUserId());
         return "redirect:/home";
     }
 

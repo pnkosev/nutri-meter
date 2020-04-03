@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserAuthenticatedServiceModel {
+public class DailyStoryFoodServiceModel {
 
-    private String username;
+    private Timestamp timeOfDay;
 
-    private String userId;
+    private FoodServiceModel foodServiceModel;
 }

@@ -45,6 +45,9 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<FoodServiceModel> getAll() {
-        return null;
+        return this.foodRepository.findAll()
+                .stream()
+                .map(f -> this.modelMapper.map(f, FoodServiceModel.class))
+                .collect(Collectors.toList());
     }
 }
