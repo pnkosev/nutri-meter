@@ -37,6 +37,7 @@ public class DailyStoryServiceImpl implements DailyStoryService {
             dailyStory = new DailyStory();
             dailyStory.setDate(date);
             dailyStory.setUser(this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!")));
+            this.dailyStoryRepository.saveAndFlush(dailyStory);
 
             return this.modelMapper.map(dailyStory, DailyStoryServiceModel.class);
         }
