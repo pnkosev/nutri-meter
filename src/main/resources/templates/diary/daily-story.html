@@ -42,7 +42,7 @@
                     <th:block th:if="${dailyStoryFoodAss != null}">
                         <div class="container border border-primary mb-5">
                             <ul>
-                                <li th:each="food : ${dailyStoryFoodAss}" th:text="${food.getFoodServiceModel().getName()}"></li>
+                                <li th:each="food : ${dailyStoryFoodAss}" th:text="${food.food.name}"></li>
                             </ul>
                         </div>
                     </th:block>

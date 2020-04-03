@@ -13,5 +13,5 @@ public class DailyStoryFoodServiceModel {
 
     private Timestamp timeOfDay;
 
-    private FoodServiceModel foodServiceModel;
+    private FoodServiceModel food;
 }
