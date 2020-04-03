@@ -24,6 +24,39 @@ public class MacroTarget extends BaseEntity {
     @Column(name = "protein_rda")
     private Double proteinRDA;
 
+    @Column(name = "cysteine_and_methionine_rda")
+    private Double cysteineMethionineRDA;
+
+    @Column(name = "histidine_rda")
+    private Double histidineRDA;
+
+    @Column(name = "isoleucine_rda")
+    private Double isoleucineRDA;
+
+    @Column(name = "leucine_rda")
+    private Double leucineRDA;
+
+    @Column(name = "lysine_rda")
+    private Double lysineRDA;
+
+    @Column(name = "methionine_rda")
+    private Double methionineRDA;
+
+    @Column(name = "phenylaline_and_tyrosine_rda")
+    private Double phenylalineTyrosineRDA;
+
+    @Column(name = "threonine_rda")
+    private Double threonineRDA;
+
+    @Column(name = "tryptophan_rda")
+    private Double tryptophanRDA;
+
+    @Column(name = "tyrosine_rda")
+    private Double tyrosineRDA;
+
+    @Column(name = "valine_rda")
+    private Double valineRDA;
+
     @Column(name = "carbohydrate_rda")
     private Double carbohydrateRDA;
 

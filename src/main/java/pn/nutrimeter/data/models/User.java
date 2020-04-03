@@ -80,39 +80,6 @@ public class User extends BaseEntity {
     @Column(name = "protein_target_in_kcal")
     private Double proteinTargetInKcal;
 
-    @Column(name = "cysteine_rda")
-    private Double cysteineRDA;
-
-    @Column(name = "histidine_rda")
-    private Double histidineRDA;
-
-    @Column(name = "isoleucine_rda")
-    private Double isoleucineRDA;
-
-    @Column(name = "leucine_rda")
-    private Double leucineRDA;
-
-    @Column(name = "lysine_rda")
-    private Double lysineRDA;
-
-    @Column(name = "methionine_rda")
-    private Double methionineRDA;
-
-    @Column(name = "phenylaline_rda")
-    private Double phenylalineRDA;
-
-    @Column(name = "threonine_rda")
-    private Double threonineRDA;
-
-    @Column(name = "tryptophan_rda")
-    private Double tryptophanRDA;
-
-    @Column(name = "tyrosine_rda")
-    private Double tyrosineRDA;
-
-    @Column(name = "valine_rda")
-    private Double valineRDA;
-
     @Column(name = "carbs_target_in_percentage")
     private Double carbohydrateTargetInPercentage;
 
