@@ -67,7 +67,7 @@ public class DailyStoryController {
         DailyStoryServiceModel dailyStory = this.dailyStoryService.getByDateAndUserId(today, userId);
         mov.addObject("dailyStory", dailyStory);
 
-        MacroTargetServiceModel macroTargetServiceModel = this.macroTargetService.getByUserId(userId);
+        MacroTargetServiceModel macroTargetServiceModel = this.macroTargetService.getByUserId(userId, dailyStory.getDailyWeight());
         MicroTargetServiceModel microTargetServiceModel = this.microTargetService.getByUserId(userId);
 
         mov.addObject("macroTarget", macroTargetServiceModel);

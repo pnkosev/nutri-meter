@@ -43,11 +43,10 @@ public class MacroTargetServiceImpl implements MacroTargetService {
     }
 
     @Override
-    public MacroTargetServiceModel getByUserId(String id) {
+    public MacroTargetServiceModel getByUserId(String id, double weight) {
         MacroTarget macroTarget = this.macroTargetRepository.findByUserId(id);
         MacroTargetServiceModel model = this.modelMapper.map(macroTarget, MacroTargetServiceModel.class);
-        User user = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!"));
 
-        return this.macroTargetServiceModelFactory.create(macroTarget, model, user.getWeight());
+        return this.macroTargetServiceModelFactory.create(macroTarget, model, weight);
     }
 }

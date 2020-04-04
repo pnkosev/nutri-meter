@@ -43,15 +43,14 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         Optional<DailyStory> dailyStoryOptional = this.dailyStoryRepository.findByDateAndUserId(date, id);
 
         DailyStory dailyStory;
+        LocalDate currentDate = LocalDate.now();
+        User user = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!"));
 
         if (dailyStoryOptional.isEmpty()) {
             dailyStory = new DailyStory();
             dailyStory.setDate(date);
-            User user = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!"));
 
-            if (LocalDate.now().equals(date)) {
-                dailyStory.setDailyWeight(user.getWeight());
-            }
+            dailyStory.setDailyWeight(user.getWeight());
 
             dailyStory.setUser(user);
             this.dailyStoryRepository.saveAndFlush(dailyStory);
@@ -61,8 +60,8 @@ public class DailyStoryServiceImpl implements DailyStoryService {
 
         dailyStory = dailyStoryOptional.get();
 
-        if (dailyStory.getDailyWeight() == null) {
-            dailyStory.setDailyWeight(this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!")).getWeight());
+        if (currentDate.equals(date) || currentDate.isAfter(date)) {
+            dailyStory.setDailyWeight(user.getWeight());
         }
 
         List<DailyStoryFoodServiceModel> dailyStoryFoodServiceModels = this.getModels(dailyStory);

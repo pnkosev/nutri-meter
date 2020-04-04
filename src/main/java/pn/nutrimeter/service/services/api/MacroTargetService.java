@@ -8,5 +8,5 @@ public interface MacroTargetService {
 
     MacroTargetServiceModel getByLifeGroupId(MacroTargetServiceModel macroTargetServiceModel);
 
-    MacroTargetServiceModel getByUserId(String id);
+    MacroTargetServiceModel getByUserId(String id, double weight);
 }
