@@ -3,7 +3,11 @@ package pn.nutrimeter.service.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.MacroTarget;
+import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.MacroTargetRepository;
+import pn.nutrimeter.data.repositories.UserRepository;
+import pn.nutrimeter.errors.UserNotFoundException;
+import pn.nutrimeter.service.factories.macro_target.MacroTargetServiceModelFactory;
 import pn.nutrimeter.service.models.MacroTargetServiceModel;
 import pn.nutrimeter.service.services.api.MacroTargetService;
 
@@ -12,10 +16,16 @@ public class MacroTargetServiceImpl implements MacroTargetService {
 
     private final MacroTargetRepository macroTargetRepository;
 
+    private final MacroTargetServiceModelFactory macroTargetServiceModelFactory;
+
+    private final UserRepository userRepository;
+
     private final ModelMapper modelMapper;
 
-    public MacroTargetServiceImpl(MacroTargetRepository macroTargetRepository, ModelMapper modelMapper) {
+    public MacroTargetServiceImpl(MacroTargetRepository macroTargetRepository, MacroTargetServiceModelFactory macroTargetServiceModelFactory, UserRepository userRepository, ModelMapper modelMapper) {
         this.macroTargetRepository = macroTargetRepository;
+        this.macroTargetServiceModelFactory = macroTargetServiceModelFactory;
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -30,5 +40,14 @@ public class MacroTargetServiceImpl implements MacroTargetService {
         MacroTarget macroTarget = this.macroTargetRepository.findByLifeStageGroupId(macroTargetServiceModel.getId());
 
         return this.modelMapper.map(macroTarget, MacroTargetServiceModel.class);
+    }
+
+    @Override
+    public MacroTargetServiceModel getByUserId(String id) {
+        MacroTarget macroTarget = this.macroTargetRepository.findByUserId(id);
+        MacroTargetServiceModel model = this.modelMapper.map(macroTarget, MacroTargetServiceModel.class);
+        User user = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!"));
+
+        return this.macroTargetServiceModelFactory.create(macroTarget, model, user.getWeight());
     }
 }

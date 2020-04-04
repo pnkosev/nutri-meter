@@ -7,4 +7,6 @@ public interface MicroTargetService {
     void create(MicroTargetServiceModel microTargetServiceModel);
 
     MicroTargetServiceModel getByLifeStageGroupId(MicroTargetServiceModel microTargetServiceModel);
+
+    MicroTargetServiceModel getByUserId(String id);
 }

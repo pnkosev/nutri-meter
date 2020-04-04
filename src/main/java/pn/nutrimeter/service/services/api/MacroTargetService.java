@@ -7,4 +7,6 @@ public interface MacroTargetService {
     void create(MacroTargetServiceModel macroTargetServiceModel);
 
     MacroTargetServiceModel getByLifeGroupId(MacroTargetServiceModel macroTargetServiceModel);
+
+    MacroTargetServiceModel getByUserId(String id);
 }

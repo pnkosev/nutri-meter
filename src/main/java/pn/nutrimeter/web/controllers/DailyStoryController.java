@@ -6,19 +6,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 import pn.nutrimeter.service.models.DailyStoryServiceModel;
+import pn.nutrimeter.service.models.MacroTargetServiceModel;
+import pn.nutrimeter.service.models.MicroTargetServiceModel;
 import pn.nutrimeter.service.services.api.DailyStoryService;
 import pn.nutrimeter.service.services.api.FoodService;
+import pn.nutrimeter.service.services.api.MacroTargetService;
+import pn.nutrimeter.service.services.api.MicroTargetService;
 import pn.nutrimeter.web.models.view.FoodSimpleViewModel;
 
 import javax.servlet.http.HttpSession;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Controller
@@ -28,11 +27,17 @@ public class DailyStoryController {
 
     private final DailyStoryService dailyStoryService;
 
+    private final MacroTargetService macroTargetService;
+
+    private final MicroTargetService microTargetService;
+
     private final ModelMapper modelMapper;
 
-    public DailyStoryController(FoodService foodService, DailyStoryService dailyStoryService, ModelMapper modelMapper) {
+    public DailyStoryController(FoodService foodService, DailyStoryService dailyStoryService, MacroTargetService macroTargetService, MicroTargetService microTargetService, ModelMapper modelMapper) {
         this.foodService = foodService;
         this.dailyStoryService = dailyStoryService;
+        this.macroTargetService = macroTargetService;
+        this.microTargetService = microTargetService;
         this.modelMapper = modelMapper;
     }
 
@@ -60,8 +65,13 @@ public class DailyStoryController {
         this.setDays(mov, today);
         String userId = session.getAttribute("userId").toString();
         DailyStoryServiceModel dailyStory = this.dailyStoryService.getByDateAndUserId(today, userId);
-
         mov.addObject("dailyStory", dailyStory);
+
+        MacroTargetServiceModel macroTargetServiceModel = this.macroTargetService.getByUserId(userId);
+        MicroTargetServiceModel microTargetServiceModel = this.microTargetService.getByUserId(userId);
+
+        mov.addObject("macroTarget", macroTargetServiceModel);
+        mov.addObject("microTarget", microTargetServiceModel);
 
         return mov;
     }

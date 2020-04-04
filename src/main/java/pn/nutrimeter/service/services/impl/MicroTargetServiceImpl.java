@@ -30,4 +30,9 @@ public class MicroTargetServiceImpl implements MicroTargetService {
 
         return this.modelMapper.map(microTarget, MicroTargetServiceModel.class);
     }
+
+    @Override
+    public MicroTargetServiceModel getByUserId(String id) {
+        return this.modelMapper.map(this.microTargetRepository.findByUserId(id), MicroTargetServiceModel.class);
+    }
 }
