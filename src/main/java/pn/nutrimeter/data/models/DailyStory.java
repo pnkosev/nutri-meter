@@ -22,6 +22,9 @@ public class DailyStory extends BaseEntity {
     @Column(name = "date")
     private LocalDate date;
 
+    @Column(name = "daily_weight")
+    private Double dailyWeight;
+
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

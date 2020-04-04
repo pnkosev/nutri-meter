@@ -14,6 +14,8 @@ public class DailyStoryServiceModel {
 
     private LocalDate date;
 
+    private Double dailyWeight;
+
     private List<DailyStoryFoodServiceModel> dailyStoryFoodAssociation;
 
     private Double kcal;

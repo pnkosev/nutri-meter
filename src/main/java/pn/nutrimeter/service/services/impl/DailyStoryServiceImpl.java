@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.DailyStory;
 import pn.nutrimeter.data.models.Food;
+import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.DailyStoryRepository;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.errors.UserNotFoundException;
@@ -46,13 +47,23 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         if (dailyStoryOptional.isEmpty()) {
             dailyStory = new DailyStory();
             dailyStory.setDate(date);
-            dailyStory.setUser(this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!")));
+            User user = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!"));
+
+            if (LocalDate.now().equals(date)) {
+                dailyStory.setDailyWeight(user.getWeight());
+            }
+
+            dailyStory.setUser(user);
             this.dailyStoryRepository.saveAndFlush(dailyStory);
 
             return this.modelMapper.map(dailyStory, DailyStoryServiceModel.class);
         }
 
         dailyStory = dailyStoryOptional.get();
+
+        if (dailyStory.getDailyWeight() == null) {
+            dailyStory.setDailyWeight(this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!")).getWeight());
+        }
 
         List<DailyStoryFoodServiceModel> dailyStoryFoodServiceModels = this.getModels(dailyStory);
         DailyStoryServiceModel dailyStoryServiceModel = this.modelMapper.map(dailyStory, DailyStoryServiceModel.class);
