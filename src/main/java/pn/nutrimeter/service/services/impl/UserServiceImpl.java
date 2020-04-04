@@ -5,17 +5,13 @@ import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.service.factories.user.UserFactory;
-import pn.nutrimeter.service.models.DailyStoryServiceModel;
 import pn.nutrimeter.service.models.UserAuthenticatedServiceModel;
 import pn.nutrimeter.service.models.UserLoginServiceModel;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.services.api.HashingService;
 import pn.nutrimeter.service.services.api.UserService;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {

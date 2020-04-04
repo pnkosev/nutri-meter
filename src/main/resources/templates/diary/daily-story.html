@@ -39,13 +39,117 @@
                             </ul>
                         </th:block>
                     </div>
-                    <th:block th:if="${dailyStoryFoodAss != null}">
-                        <div class="container border border-primary mb-5">
+                    <div class="container border border-primary mb-5">
+                        <th:block th:if="${dailyStory != null}">
                             <ul>
-                                <li th:each="food : ${dailyStoryFoodAss}" th:text="${food.food.name}"></li>
+                                <li th:each="food : ${dailyStory.getDailyStoryFoodAssociation()}">[[${food.name}]] - [[${food.gramsConsumed}]]</li>
                             </ul>
-                        </div>
-                    </th:block>
+                        </th:block>
+                    </div>
+                    <div class="container border border-primary mb-5">
+                        <th:block th:if="${dailyStory != null}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Calories Summary</h5>
+                                    <div>Total kcal consumed: <span th:text="${dailyStory.kcal}"></span></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Macro Targets</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h5>Nutrient targets:</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>General</h5>
+                                            <div>Energy: <span th:text="${dailyStory.kcal}"></span></div>
+                                            <div>Water: <span th:text="${dailyStory.kcal}"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>Proteins</h5>
+                                            <div>Total Proteins: <span th:text="${dailyStory.totalProteins}"></span></div>
+                                            <div>Cysteine: <span th:text="${dailyStory.cysteine}"></span></div>
+                                            <div>Histidine: <span th:text="${dailyStory.histidine}"></span></div>
+                                            <div>Isoleucine: <span th:text="${dailyStory.isoleucine}"></span></div>
+                                            <div>Leucine: <span th:text="${dailyStory.leucine}"></span></div>
+                                            <div>Lysine: <span th:text="${dailyStory.lysine}"></span></div>
+                                            <div>Methionine: <span th:text="${dailyStory.methionine}"></span></div>
+                                            <div>Phenylalanine: <span th:text="${dailyStory.phenylalanine}"></span></div>
+                                            <div>Threonine: <span th:text="${dailyStory.threonine}"></span></div>
+                                            <div>Tryptophan: <span th:text="${dailyStory.tryptophan}"></span></div>
+                                            <div>Tyrosine: <span th:text="${dailyStory.tyrosine}"></span></div>
+                                            <div>Valine: <span th:text="${dailyStory.valine}"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>Carbohydrates</h5>
+                                            <div>Total Carbs: <span th:text="${dailyStory.totalCarbohydrates}"></span></div>
+                                            <div>Fiber: <span th:text="${dailyStory.fiber}"></span></div>
+                                            <div>Starch: <span th:text="${dailyStory.starch}"></span></div>
+                                            <div>Sugars: <span th:text="${dailyStory.sugars}"></span></div>
+                                            <div>Added sugars: <span th:text="${dailyStory.addedSugars}"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>Lipids</h5>
+                                            <div>Total Fats: <span th:text="${dailyStory.totalCarbohydrates}"></span></div>
+                                            <div>Monounsaturated: <span th:text="${dailyStory.monounsaturated}"></span></div>
+                                            <div>Polyunsaturated: <span th:text="${dailyStory.polyunsaturated}"></span></div>
+                                            <div>Omega-3: <span th:text="${dailyStory.omega3}"></span></div>
+                                            <div>Omega-6: <span th:text="${dailyStory.omega6}"></span></div>
+                                            <div>Saturated: <span th:text="${dailyStory.saturated}"></span></div>
+                                            <div>Trans-fats: <span th:text="${dailyStory.transFats}"></span></div>
+                                            <div>Cholesterol: <span th:text="${dailyStory.cholesterol}"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>Vitamins</h5>
+                                            <div>B1: <span th:text="${dailyStory.vitaminB1}"></span></div>
+                                            <div>B2: <span th:text="${dailyStory.vitaminB2}"></span></div>
+                                            <div>B3: <span th:text="${dailyStory.vitaminB3}"></span></div>
+                                            <div>B5: <span th:text="${dailyStory.vitaminB5}"></span></div>
+                                            <div>B6: <span th:text="${dailyStory.vitaminB6}"></span></div>
+                                            <div>B12: <span th:text="${dailyStory.vitaminB12}"></span></div>
+                                            <div>Folate: <span th:text="${dailyStory.folate}"></span></div>
+                                            <div>Vitamin A: <span th:text="${dailyStory.vitaminA}"></span></div>
+                                            <div>Vitamin C: <span th:text="${dailyStory.vitaminC}"></span></div>
+                                            <div>Vitamin D: <span th:text="${dailyStory.vitaminD}"></span></div>
+                                            <div>Vitamin E: <span th:text="${dailyStory.vitaminE}"></span></div>
+                                            <div>Vitamin K: <span th:text="${dailyStory.vitaminK}"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h5>Minerals</h5>
+                                            <div>Calcium: <span th:text="${dailyStory.calcium}"></span></div>
+                                            <div>Copper: <span th:text="${dailyStory.copper}"></span></div>
+                                            <div>Iodine: <span th:text="${dailyStory.iodine}"></span></div>
+                                            <div>Iron: <span th:text="${dailyStory.iron}"></span></div>
+                                            <div>Magnesium: <span th:text="${dailyStory.magnesium}"></span></div>
+                                            <div>Manganese: <span th:text="${dailyStory.manganese}"></span></div>
+                                            <div>Phosphorus: <span th:text="${dailyStory.phosphorus}"></span></div>
+                                            <div>Potassium: <span th:text="${dailyStory.potassium}"></span></div>
+                                            <div>Selenium: <span th:text="${dailyStory.selenium}"></span></div>
+                                            <div>Soldium: <span th:text="${dailyStory.sodium}"></span></div>
+                                            <div>Zinc: <span th:text="${dailyStory.zinc}"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">

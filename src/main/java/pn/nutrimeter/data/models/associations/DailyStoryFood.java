@@ -20,6 +20,9 @@ public class DailyStoryFood {
     @Column(name = "time_of_day")
     private Timestamp timeOfDay;
 
+    @Column(name = "grams_consumed")
+    private Double gramsConsumed;
+
     @Id
     @ManyToOne
     @JoinColumn(name = "daily_story_id", referencedColumnName = "id")

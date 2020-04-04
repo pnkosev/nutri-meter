@@ -44,10 +44,9 @@ public class DailyStoryController {
     }
 
     @GetMapping("/diary/{date}")
-    public ModelAndView dailyStory(@PathVariable String date, HttpSession session) throws ParseException {
+    public ModelAndView dailyStory(@PathVariable String date, HttpSession session) {
 
         ModelAndView mov = new ModelAndView();
-        this.setDays(mov, date);
 
         List<FoodSimpleViewModel> foods = this.foodService.getAll()
                 .stream()
@@ -56,19 +55,18 @@ public class DailyStoryController {
         mov.addObject("availableFoods", foods);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate currentDate = LocalDate.parse(date, formatter);
+        // add a try-catch to the date parse and throw an error if such
+        LocalDate today = LocalDate.parse(date, formatter);
+        this.setDays(mov, today);
         String userId = session.getAttribute("userId").toString();
+        DailyStoryServiceModel dailyStory = this.dailyStoryService.getByDateAndUserId(today, userId);
 
-        DailyStoryServiceModel dailyStory = this.dailyStoryService.getByDateAndUserId(currentDate, userId);
-
-        mov.addObject("dailyStoryFoodAss", dailyStory.getDailyStoryFoodAssociation());
+        mov.addObject("dailyStory", dailyStory);
 
         return mov;
     }
 
-    private void setDays(ModelAndView mov, String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate today = LocalDate.parse(date, formatter);
+    private void setDays(ModelAndView mov, LocalDate today) {
         mov.addObject("today", today);
         LocalDate tomorrow = LocalDate.from(today).plusDays(1);
         LocalDate yesterday = LocalDate.from(today).minusDays(1);
