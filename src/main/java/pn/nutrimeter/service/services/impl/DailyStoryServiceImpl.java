@@ -15,6 +15,7 @@ import pn.nutrimeter.service.models.FoodServiceModel;
 import pn.nutrimeter.service.services.api.DailyStoryService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -43,7 +44,6 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         Optional<DailyStory> dailyStoryOptional = this.dailyStoryRepository.findByDateAndUserId(date, id);
 
         DailyStory dailyStory;
-        LocalDate currentDate = LocalDate.now();
         User user = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!"));
 
         if (dailyStoryOptional.isEmpty()) {
@@ -53,26 +53,30 @@ public class DailyStoryServiceImpl implements DailyStoryService {
             dailyStory.setDailyWeight(user.getWeight());
 
             dailyStory.setUser(user);
-            this.dailyStoryRepository.saveAndFlush(dailyStory);
+        } else {
+            dailyStory = dailyStoryOptional.get();
 
-            return this.modelMapper.map(dailyStory, DailyStoryServiceModel.class);
+            LocalDate currentDate = LocalDate.now();
+            if (currentDate.equals(date) || date.isAfter(currentDate)) {
+                dailyStory.setDailyWeight(user.getWeight());
+            }
         }
-
-        dailyStory = dailyStoryOptional.get();
-
-        if (currentDate.equals(date) || currentDate.isAfter(date)) {
-            dailyStory.setDailyWeight(user.getWeight());
-        }
+        this.dailyStoryRepository.saveAndFlush(dailyStory);
 
         List<DailyStoryFoodServiceModel> dailyStoryFoodServiceModels = this.getModels(dailyStory);
         DailyStoryServiceModel dailyStoryServiceModel = this.modelMapper.map(dailyStory, DailyStoryServiceModel.class);
         dailyStoryServiceModel.setDailyStoryFoodAssociation(dailyStoryFoodServiceModels);
 
-        return this.reduceNutrientsFromListOfFoods(dailyStoryServiceModel);
+        this.reduceNutrientsFromListOfFoods(dailyStoryServiceModel);
+
+        return dailyStoryServiceModel;
     }
 
     private List<DailyStoryFoodServiceModel> getModels(DailyStory dailyStory) {
-        return dailyStory.getDailyStoryFoodAssociation()
+        List<DailyStoryFoodServiceModel> newList = new ArrayList<>();
+        return dailyStory.getDailyStoryFoodAssociation() == null
+                ? newList
+                : dailyStory.getDailyStoryFoodAssociation()
                 .stream()
                 .map(ds -> {
                     double percentage = ds.getGramsConsumed() / 100;
