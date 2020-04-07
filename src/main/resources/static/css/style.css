@@ -38,3 +38,8 @@ footer {
     border-radius: .25rem;
     max-width: 100%;
 }
+
+table.custom-table td{
+    padding: 0 0 0 5px;
+    text-align: center;
+}

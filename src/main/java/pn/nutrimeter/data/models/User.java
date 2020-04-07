@@ -3,6 +3,7 @@ package pn.nutrimeter.data.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 import pn.nutrimeter.data.models.base.BaseEntity;
 import pn.nutrimeter.data.models.enums.ActivityLevel;
 import pn.nutrimeter.data.models.enums.AgeCategory;
@@ -12,13 +13,14 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
@@ -115,11 +117,39 @@ public class User extends BaseEntity {
 
     @ManyToMany
     @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+    )
+    private Set<Role> authorities;
+
+    @ManyToMany
+    @JoinTable(
             name = "users_foods",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "food_id", referencedColumnName = "id")
     )
     private List<Food> favoriteFoods;
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     private String getGoalAsString() {
         if (this.targetWeight - this.weight > 0) {

@@ -1,6 +1,8 @@
 package pn.nutrimeter.service.services.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.UserRepository;
@@ -47,5 +49,12 @@ public class UserServiceImpl implements UserService {
         }
 
         return this.modelMapper.map(user, UserAuthenticatedServiceModel.class);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("No such username!"));
     }
 }

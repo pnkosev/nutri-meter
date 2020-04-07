@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,7 +86,7 @@ public class DailyStoryServiceImpl implements DailyStoryService {
                 .collect(Collectors.toList());
     }
 
-    private DailyStoryServiceModel reduceNutrientsFromListOfFoods(DailyStoryServiceModel dailyStoryServiceModel) {
+    private void reduceNutrientsFromListOfFoods(DailyStoryServiceModel dailyStoryServiceModel) {
         List<DailyStoryFoodServiceModel> dailyStoryFoodAssociation = dailyStoryServiceModel.getDailyStoryFoodAssociation();
 
         dailyStoryServiceModel.setKcal(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getKcal).reduce(0.0, Double::sum));
@@ -138,7 +137,5 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         dailyStoryServiceModel.setSelenium(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getSelenium).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setSodium(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getSodium).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setZinc(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getZinc).reduce(0.0, Double::sum));
-
-        return dailyStoryServiceModel;
     }
 }
