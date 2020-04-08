@@ -56,27 +56,4 @@ public class UserController {
     public String login() {
         return "user/login";
     }
-
-    @PostMapping("/login")
-    public String loginPost(
-            HttpSession session,
-            @ModelAttribute UserLoginBindingModel userLoginBindingModel) {
-
-        UserAuthenticatedServiceModel loggedInUser = this.userService.login(this.modelMapper.map(userLoginBindingModel, UserLoginServiceModel.class));
-
-        if (loggedInUser.getUsername() == null) {
-            return "user/login";
-        }
-
-        session.setAttribute("username", loggedInUser.getUsername());
-        session.setAttribute("userId", loggedInUser.getUserId());
-        return "redirect:/home";
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-
-        return "redirect:/";
-    }
 }

@@ -83,6 +83,12 @@ public class MicroTarget extends BaseEntity {
     @Column(name = "vitamin_d_ul")
     private Double vitaminDUL;
 
+    @Column(name = "vitamin_e_rda")
+    private Double vitaminERDA;
+
+    @Column(name = "vitamin_e_ul")
+    private Double vitaminEUL;
+
     @Column(name = "vitamin_k_rda")
     private Double vitaminKRDA;
 
@@ -154,9 +160,6 @@ public class MicroTarget extends BaseEntity {
 
     @Column(name = "zinc_ul")
     private Double zincUL;
-
-    @Column(name = "water_rda")
-    private Double waterRDA;
 
     @OneToMany(mappedBy = "microTarget")
     private List<User> users;

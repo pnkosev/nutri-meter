@@ -36,9 +36,6 @@ public class MacroTarget extends BaseEntity {
     @Column(name = "lysine_rda")
     private Double lysineRDA;
 
-    @Column(name = "methionine_rda")
-    private Double methionineRDA;
-
     @Column(name = "phenylaline_and_tyrosine_rda")
     private Double phenylalineTyrosineRDA;
 
@@ -47,9 +44,6 @@ public class MacroTarget extends BaseEntity {
 
     @Column(name = "tryptophan_rda")
     private Double tryptophanRDA;
-
-    @Column(name = "tyrosine_rda")
-    private Double tyrosineRDA;
 
     @Column(name = "valine_rda")
     private Double valineRDA;

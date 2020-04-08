@@ -29,15 +29,12 @@ public class UserServiceImpl implements UserService {
 
     private final RoleService roleService;
 
-    private final HashingService hashingService;
-
     private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserFactory userFactory, RoleService roleService, HashingService hashingService, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserFactory userFactory, RoleService roleService, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.userFactory = userFactory;
         this.roleService = roleService;
-        this.hashingService = hashingService;
         this.modelMapper = modelMapper;
     }
 
@@ -56,19 +53,6 @@ public class UserServiceImpl implements UserService {
             user.getAuthorities().add(this.modelMapper.map(this.roleService.getByAuthority("USER"), Role.class));
         }
         this.userRepository.saveAndFlush(user);
-    }
-
-    @Override
-    public UserAuthenticatedServiceModel login(UserLoginServiceModel userLoginServiceModel) {
-        String hashedPassword = this.hashingService.hash(userLoginServiceModel.getPassword());
-        Optional<User> optionalUser = this.userRepository.findByUsernameAndPassword(userLoginServiceModel.getUsername(), hashedPassword);
-
-        User user = new User();
-        if (optionalUser.isPresent()) {
-            user = optionalUser.get();
-        }
-
-        return this.modelMapper.map(user, UserAuthenticatedServiceModel.class);
     }
 
     @Override

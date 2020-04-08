@@ -115,7 +115,7 @@ public class User extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<DailyStory> dailyStories;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -161,17 +161,17 @@ public class User extends BaseEntity implements UserDetails {
         }
     }
 
-    public int getYearsOld() {
+    public double getYearsOld() {
         return Period.between(this.birthday, LocalDate.now()).getYears();
     }
 
     public AgeCategory updateAgeCategory() {
-        int yearsOld = this.getYearsOld();
+        double yearsOld = this.getYearsOld();
 
         if (yearsOld < 4) {
             return AgeCategory.INFANT;
         } else if (yearsOld < 9) {
-            return AgeCategory.CHILDREN;
+            return AgeCategory.CHILD;
         } else if (yearsOld < 21) {
             return AgeCategory.ADOLESCENT;
         } else if (yearsOld < 59) {
@@ -192,7 +192,7 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public Double calculateBodyFat() {
-        int yearsOld = this.getYearsOld();
+        double yearsOld = this.getYearsOld();
         switch (this.ageCategory.name().toLowerCase()) {
             case "adolescent":
                 return sex.name().equalsIgnoreCase("male")

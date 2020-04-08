@@ -7,7 +7,6 @@ import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.LifeStageGroupRepository;
 import pn.nutrimeter.data.repositories.MacroTargetRepository;
 import pn.nutrimeter.data.repositories.MicroTargetRepository;
-import pn.nutrimeter.data.repositories.RoleRepository;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.services.api.HashingService;
 
@@ -45,7 +44,8 @@ public class UserFactoryImpl implements UserFactory {
 
         user.setAgeCategory(user.updateAgeCategory());
 
-        LifeStageGroup lifeStageGroup = this.lifeStageGroupRepository.findLifeStageGroupBySexAndAge(user.getSex(), user.getYearsOld());
+        double yearsOld = user.getYearsOld();
+        LifeStageGroup lifeStageGroup = this.lifeStageGroupRepository.findLifeStageGroupBySexAndAge(user.getSex(), yearsOld);
         user.setLifeStageGroup(lifeStageGroup);
         user.setMicroTarget(this.microTargetRepository.findByLifeStageGroupId(lifeStageGroup.getId()));
         user.setMacroTarget(this.macroTargetRepository.findByLifeStageGroupId(lifeStageGroup.getId()));

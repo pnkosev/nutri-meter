@@ -14,5 +14,5 @@ public interface LifeStageGroupRepository extends JpaRepository<LifeStageGroup, 
             "WHERE l.sex = :sex " +
             "AND l.lowerAgeBound <= :age " +
             "AND l.upperAgeBound >= :age")
-    LifeStageGroup findLifeStageGroupBySexAndAge(@Param("sex") Sex sex, @Param("age") int age);
+    LifeStageGroup findLifeStageGroupBySexAndAge(@Param("sex") Sex sex, @Param("age") double age);
 }

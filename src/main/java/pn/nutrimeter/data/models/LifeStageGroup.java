@@ -21,10 +21,10 @@ public class LifeStageGroup extends BaseEntity {
     private Sex sex;
 
     @Column(name = "lower_age_bound")
-    private Integer lowerAgeBound;
+    private Double lowerAgeBound;
 
     @Column(name = "upper_age_bound")
-    private Integer upperAgeBound;
+    private Double upperAgeBound;
 
     @OneToMany(mappedBy = "lifeStageGroup")
     private List<User> users;
