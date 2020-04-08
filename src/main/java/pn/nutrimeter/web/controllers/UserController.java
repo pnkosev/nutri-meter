@@ -44,7 +44,7 @@ public class UserController {
         }
 
         try {
-            this.userService.create(this.modelMapper.map(userRegisterBindingModel, UserRegisterServiceModel.class));
+            this.userService.register(this.modelMapper.map(userRegisterBindingModel, UserRegisterServiceModel.class));
             return "redirect:/login";
         } catch (IllegalArgumentException e) {
             return "user/register";

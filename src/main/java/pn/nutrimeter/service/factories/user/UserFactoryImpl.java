@@ -7,6 +7,7 @@ import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.LifeStageGroupRepository;
 import pn.nutrimeter.data.repositories.MacroTargetRepository;
 import pn.nutrimeter.data.repositories.MicroTargetRepository;
+import pn.nutrimeter.data.repositories.RoleRepository;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.services.api.HashingService;
 
@@ -23,7 +24,11 @@ public class UserFactoryImpl implements UserFactory {
 
     private final ModelMapper modelMapper;
 
-    public UserFactoryImpl(HashingService hashingService, LifeStageGroupRepository lifeStageGroupRepository, MicroTargetRepository microTargetRepository, MacroTargetRepository macroTargetRepository, ModelMapper modelMapper) {
+    public UserFactoryImpl(HashingService hashingService,
+                           LifeStageGroupRepository lifeStageGroupRepository,
+                           MicroTargetRepository microTargetRepository,
+                           MacroTargetRepository macroTargetRepository,
+                           ModelMapper modelMapper) {
         this.hashingService = hashingService;
         this.lifeStageGroupRepository = lifeStageGroupRepository;
         this.microTargetRepository = microTargetRepository;

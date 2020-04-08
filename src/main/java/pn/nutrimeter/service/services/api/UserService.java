@@ -7,7 +7,7 @@ import pn.nutrimeter.service.models.UserRegisterServiceModel;
 
 public interface UserService extends UserDetailsService {
 
-    void create(UserRegisterServiceModel userServiceModel);
+    void register(UserRegisterServiceModel userServiceModel);
 
     UserAuthenticatedServiceModel login(UserLoginServiceModel userLoginServiceModel);
 }
