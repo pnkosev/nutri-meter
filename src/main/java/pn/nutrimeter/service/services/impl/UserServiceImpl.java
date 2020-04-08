@@ -7,16 +7,15 @@ import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.Role;
 import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.UserRepository;
+import pn.nutrimeter.errors.ErrorConstants;
+import pn.nutrimeter.errors.UserNotFoundException;
 import pn.nutrimeter.service.factories.user.UserFactory;
-import pn.nutrimeter.service.models.UserAuthenticatedServiceModel;
-import pn.nutrimeter.service.models.UserLoginServiceModel;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
-import pn.nutrimeter.service.services.api.HashingService;
+import pn.nutrimeter.service.models.UserServiceModel;
 import pn.nutrimeter.service.services.api.RoleService;
 import pn.nutrimeter.service.services.api.UserService;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,9 +55,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserServiceModel getUserByUsername(String username) {
+        User user = this.userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(ErrorConstants.USERNAME_NOT_FOUND));
+        return this.modelMapper.map(user, UserServiceModel.class);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return this.userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("No such username!"));
+                .orElseThrow(() -> new UsernameNotFoundException(ErrorConstants.USERNAME_NOT_FOUND));
     }
 }

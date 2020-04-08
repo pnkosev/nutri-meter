@@ -4,17 +4,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-import pn.nutrimeter.service.models.UserAuthenticatedServiceModel;
-import pn.nutrimeter.service.models.UserLoginServiceModel;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.services.api.UserService;
-import pn.nutrimeter.web.models.binding.UserLoginBindingModel;
 import pn.nutrimeter.web.models.binding.UserRegisterBindingModel;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller

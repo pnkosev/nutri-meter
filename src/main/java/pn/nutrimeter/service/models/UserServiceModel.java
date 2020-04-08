@@ -4,12 +4,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserAuthenticatedServiceModel {
+public class UserServiceModel {
+
+    private String Id;
 
     private String username;
 
-    private String userId;
+    private Set<RoleServiceModel> authorities;
 }

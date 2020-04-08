@@ -8,13 +8,12 @@ import org.springframework.web.servlet.ModelAndView;
 import pn.nutrimeter.service.models.DailyStoryServiceModel;
 import pn.nutrimeter.service.models.MacroTargetServiceModel;
 import pn.nutrimeter.service.models.MicroTargetServiceModel;
-import pn.nutrimeter.service.services.api.DailyStoryService;
-import pn.nutrimeter.service.services.api.FoodService;
-import pn.nutrimeter.service.services.api.MacroTargetService;
-import pn.nutrimeter.service.services.api.MicroTargetService;
+import pn.nutrimeter.service.models.UserServiceModel;
+import pn.nutrimeter.service.services.api.*;
 import pn.nutrimeter.web.models.view.FoodSimpleViewModel;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -22,6 +21,8 @@ import java.util.stream.Collectors;
 
 @Controller
 public class DailyStoryController {
+
+    private final UserService userService;
 
     private final FoodService foodService;
 
@@ -33,7 +34,13 @@ public class DailyStoryController {
 
     private final ModelMapper modelMapper;
 
-    public DailyStoryController(FoodService foodService, DailyStoryService dailyStoryService, MacroTargetService macroTargetService, MicroTargetService microTargetService, ModelMapper modelMapper) {
+    public DailyStoryController(UserService userService,
+                                FoodService foodService,
+                                DailyStoryService dailyStoryService,
+                                MacroTargetService macroTargetService,
+                                MicroTargetService microTargetService,
+                                ModelMapper modelMapper) {
+        this.userService = userService;
         this.foodService = foodService;
         this.dailyStoryService = dailyStoryService;
         this.macroTargetService = macroTargetService;
@@ -49,7 +56,7 @@ public class DailyStoryController {
     }
 
     @GetMapping("/diary/{date}")
-    public ModelAndView dailyStory(@PathVariable String date, HttpSession session) {
+    public ModelAndView dailyStory(@PathVariable String date, Principal principal) {
 
         ModelAndView mov = new ModelAndView();
 
@@ -63,7 +70,8 @@ public class DailyStoryController {
         // add a try-catch to the date parse and throw an error if such
         LocalDate today = LocalDate.parse(date, formatter);
         this.setDays(mov, today);
-        String userId = session.getAttribute("userId").toString();
+        UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
+        String userId = userServiceModel.getId();
         DailyStoryServiceModel dailyStory = this.dailyStoryService.getByDateAndUserId(today, userId);
         mov.addObject("dailyStory", dailyStory);
 

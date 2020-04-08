@@ -7,6 +7,7 @@ import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.DailyStoryRepository;
 import pn.nutrimeter.data.repositories.UserRepository;
+import pn.nutrimeter.errors.ErrorConstants;
 import pn.nutrimeter.errors.UserNotFoundException;
 import pn.nutrimeter.service.factories.daily_story.DailyStoryFoodFactory;
 import pn.nutrimeter.service.models.DailyStoryFoodServiceModel;
@@ -43,7 +44,7 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         Optional<DailyStory> dailyStoryOptional = this.dailyStoryRepository.findByDateAndUserId(date, id);
 
         DailyStory dailyStory;
-        User user = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No such user found!"));
+        User user = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
 
         if (dailyStoryOptional.isEmpty()) {
             dailyStory = new DailyStory();
