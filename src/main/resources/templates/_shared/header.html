@@ -1,40 +1,48 @@
 <th:block>
     <header>
-        <nav class="navbar bg-dark navbar-expand-lg navbar-background bg-dark ">
-            <th:block th:if="${session.username == null}">
-                <a class="navbar-brand text-white h4" href="/">Nutrimeter</a>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <th:block sec:authorize="isAnonymous()">
+                <a class="navbar-brand text-white h4" th:href="@{/}">Nutrimeter</a>
             </th:block>
-            <th:block th:unless="${session.username == null}">
-                <a class="navbar-brand text-white h4" href="/home">Nutrimeter</a>
+            <th:block sec:authorize="isAuthenticated()">
+                <a class="navbar-brand text-white h4" th:href="@{/home}">Nutrimeter</a>
             </th:block>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
-                <ul class="navbar-nav row">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
 
-                    <th:block th:if="${session.username == null}">
-                        <li class="nav-item col-md-4">
-                            <a class="nav-link text-white active h5" href="/">Home</a>
+                    <th:block sec:authorize="isAnonymous()">
+                        <li class="nav-item active">
+                            <a class="nav-link text-white active h5" th:href="@{/}">Home</a>
                         </li>
-                        <li class="nav-item col-md-4">
-                            <a class="nav-link text-white active h5" href="/register">Register</a>
+                        <li class="nav-item active">
+                            <a class="nav-link text-white active h5" th:href="@{/register}">Register</a>
                         </li>
-                        <li class="nav-item col-md-4">
-                            <a class="nav-link text-white active h5" href="/login">Login</a>
+                        <li class="nav-item active">
+                            <a class="nav-link text-white active h5" th:href="@{/login}">Login</a>
                         </li>
                     </th:block>
 
-                    <th:block th:unless="${session.username == null}">
-                        <li class="nav-item col-md-4">
-                            <a class="nav-link text-white active h5" href="/home">Home</a>
+                    <th:block sec:authorize="isAuthenticated()">
+                        <li class="nav-item active">
+                            <a class="nav-link text-white active h5" th:href="@{/home}">Home</a>
                         </li>
-                        <li class="nav-item col-md-4">
-                            <a class="nav-link text-white active h5" href="/food/add">Food</a>
+                        <th:block sec:authorize="hasAuthority('ADMIN')">
+                            <li class="nav-item active">
+                                <a class="nav-link text-white active h5" th:href="@{/food/add}">Add Food</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link text-white active h5" th:href="@{/category/add}">Add Category</a>
+                            </li>
+                        </th:block>
+                        <li class="nav-item active">
+                            <a class="nav-link text-white active h5" th:href="@{/diary}">My Diary</a>
                         </li>
-                        <li class="nav-item col-md-4">
-                            <a class="nav-link text-white active h5" href="/logout">Logout</a>
+                        <li class="nav-item active">
+                            <a class="nav-link text-white active h5" th:href="@{/logout}">Logout</a>
                         </li>
                     </th:block>
 

@@ -30,7 +30,7 @@
         </dependency>
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -78,11 +78,6 @@
             <artifactId>modelmapper</artifactId>
             <version>2.3.2</version>
         </dependency>
-        <!--        <dependency>-->
-<!--            <groupId>commons-codec</groupId>-->
-<!--            <artifactId>commons-codec</artifactId>-->
-        <!--            <version>1.4</version>-->
-        <!--        </dependency>-->
     </dependencies>
 
     <build>
