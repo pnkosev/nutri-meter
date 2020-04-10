@@ -110,9 +110,6 @@ public class User extends BaseEntity implements UserDetails {
     private List<Food> customFoods;
 
     @OneToMany(mappedBy = "user")
-    private List<Recipe> recipes;
-
-    @OneToMany(mappedBy = "user")
     private List<DailyStory> dailyStories;
 
     @ManyToMany(fetch = FetchType.EAGER)

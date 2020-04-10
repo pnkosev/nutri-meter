@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pn.nutrimeter.data.models.associations.DailyStoryFood;
-import pn.nutrimeter.data.models.associations.RecipeFood;
+import pn.nutrimeter.data.models.associations.FoodIngredient;
 import pn.nutrimeter.data.models.base.BaseEntity;
 
 import javax.persistence.*;
@@ -178,13 +178,24 @@ public class Food extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "food")
-    private List<RecipeFood> recipeFoodAssociation;
+    private List<DailyStoryFood> dailyStoryFoodAssociation;
 
     @OneToMany(mappedBy = "food")
-    private List<DailyStoryFood> dailyStoryFoodAssociation;
+    private List<FoodIngredient> foodAssociation;
+
+    @OneToMany(mappedBy = "ingredient")
+    private List<FoodIngredient> ingredientAssociation;
 
     @ManyToMany(mappedBy = "favoriteFoods")
     private List<User> users;
+
+    @ManyToMany
+    @JoinTable(
+            name = "foods_daily_dozens",
+            joinColumns = @JoinColumn(name = "food_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "daily_dozen_id", referencedColumnName = "id")
+    )
+    private List<DailyDozen> dailyDozens;
 
     @ManyToMany
     @JoinTable(
@@ -201,12 +212,4 @@ public class Food extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "measure_id", referencedColumnName = "id")
     )
     private List<Measure> measures;
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "foods_ingredients",
-//            joinColumns = @JoinColumn(name = "food_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
-//    )
-//    private List<Food> ingredients;
 }

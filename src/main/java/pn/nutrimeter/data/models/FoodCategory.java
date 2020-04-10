@@ -29,7 +29,4 @@ public class FoodCategory extends BaseEntity {
 
     @ManyToMany(mappedBy = "foodCategories")
     private List<Food> foods;
-
-    @ManyToMany(mappedBy = "foodCategories")
-    private List<Recipe> recipes;
 }
