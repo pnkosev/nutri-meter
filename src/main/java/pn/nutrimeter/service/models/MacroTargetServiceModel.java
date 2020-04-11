@@ -43,9 +43,5 @@ public class MacroTargetServiceModel {
 
     private Double omega6RDA;
 
-    private Double saturatedFatRDA;
-
-    private Double transFatRDA;
-
     private Double waterRDA;
 }

@@ -21,8 +21,6 @@ public class MacroTargetServiceModelFactoryImpl implements MacroTargetServiceMod
         model.setValineRDA(macroTarget.getValineRDA() * weight);
         model.setValineRDA(macroTarget.getOmega3RDA() * weight);
         model.setValineRDA(macroTarget.getOmega6RDA() * weight);
-        model.setSaturatedFatRDA(MacroConstants.SATURATED_FATS_RDA);
-        model.setTransFatRDA(MacroConstants.TRANS_FATS_RDA);
 
         return model;
     }
