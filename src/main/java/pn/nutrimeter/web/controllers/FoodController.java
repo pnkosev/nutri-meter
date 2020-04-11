@@ -15,6 +15,7 @@ import pn.nutrimeter.web.models.binding.FoodCategoryCreateBindingModel;
 import pn.nutrimeter.web.models.binding.FoodCreateBindingModel;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -53,7 +54,10 @@ public class FoodController {
 
         FoodServiceModel foodServiceModel = this.modelMapper.map(foodCreateBindingModel, FoodServiceModel.class);
 
-        foodServiceModel.setFoodCategories(foodCreateBindingModel.getFoodCategories()
+        List<String> foodCategories = foodCreateBindingModel.getFoodCategories();
+
+        foodServiceModel.setFoodCategories(
+                foodCategories
                 .stream()
                 .map(id -> {
                     FoodCategoryServiceModel foodCategoryServiceModel = new FoodCategoryServiceModel();
@@ -64,7 +68,7 @@ public class FoodController {
 
         this.foodService.create(foodServiceModel);
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/home");
     }
 
     @GetMapping("/category/add")
@@ -83,6 +87,6 @@ public class FoodController {
 
         this.foodCategoryService.create(this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class));
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:/home");
     }
 }

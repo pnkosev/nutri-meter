@@ -68,7 +68,10 @@ public class DailyStoryFoodFactoryImpl implements DailyStoryFoodFactory {
         return dailyStoryFoodServiceModel;
     }
 
-    private double calcAmount(double ingredient, double gramsConsumedInPercentage) {
+    private double calcAmount(Double ingredient, double gramsConsumedInPercentage) {
+        if (ingredient == null) {
+            return 0.0;
+        }
         return ingredient * gramsConsumedInPercentage;
     }
 }
