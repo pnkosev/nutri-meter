@@ -29,7 +29,7 @@ public class DailyStory extends BaseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "dailyStory")
+    @OneToMany(mappedBy = "dailyStory", cascade = CascadeType.ALL)
     private List<DailyStoryFood> dailyStoryFoodAssociation;
 
     @OneToMany(mappedBy = "exercise")

@@ -9,6 +9,7 @@ import pn.nutrimeter.service.models.FoodServiceModel;
 import pn.nutrimeter.service.services.api.FoodService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,5 +50,11 @@ public class FoodServiceImpl implements FoodService {
                 .stream()
                 .map(f -> this.modelMapper.map(f, FoodServiceModel.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public FoodServiceModel getById(String id) {
+        Food food = this.foodRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("blabla"));
+        return this.modelMapper.map(food, FoodServiceModel.class);
     }
 }

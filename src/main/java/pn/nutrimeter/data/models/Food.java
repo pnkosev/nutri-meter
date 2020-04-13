@@ -177,7 +177,7 @@ public class Food extends BaseEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "food")
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
     private List<DailyStoryFood> dailyStoryFoodAssociation;
 
     @OneToMany(mappedBy = "food")

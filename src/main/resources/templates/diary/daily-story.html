@@ -31,7 +31,24 @@
             </div>
             <div class="col-md-9">
                 <div class="row">
-                    <h4>Available foods</h4>
+                    <button id="myBtn">Add Food</button>
+                    <div id="myModal" class="modal">
+                        <!-- Modal content -->
+                        <div class="modal-content w-50">
+                            <div class="justify-content-end">
+                                <span class="close">&times;</span>
+                            </div>
+                            <div class="container">
+                                <table class="table table-bordered text-center">
+                                    <tr>
+                                        <th scope="col" class="font-weight-bold" width="50%">Name</th>
+                                        <th scope="col" class="font-weight-bold" width="50%">Amount</th>
+                                    </tr>
+                                    <tbody id="table-food-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                     <div class="container border border-primary mb-5">
                         <th:block th:if="${availableFoods != null}">
                             <ul>
@@ -219,5 +236,6 @@
     </div>
 </main>
 <th:block th:include="~{_shared/footer}"/>
+<script src="/js/modal.js"></script>
 </body>
 </html>

@@ -4,21 +4,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class DailyStoryServiceModel {
+public class DailyStoryNutrientServiceModel {
 
-    private String id;
+    private Timestamp timeOfDay;
 
-    private LocalDate date;
+    private String name;
 
-    private Double dailyWeight;
-
-    private List<DailyStoryNutrientServiceModel> dailyStoryFoodAssociation;
+    private Double gramsConsumed;
 
     private Double kcal;
 

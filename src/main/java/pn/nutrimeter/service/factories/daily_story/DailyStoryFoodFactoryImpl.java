@@ -1,7 +1,7 @@
 package pn.nutrimeter.service.factories.daily_story;
 
 import org.springframework.stereotype.Service;
-import pn.nutrimeter.service.models.DailyStoryFoodServiceModel;
+import pn.nutrimeter.service.models.DailyStoryNutrientServiceModel;
 import pn.nutrimeter.service.models.FoodServiceModel;
 
 import java.sql.Timestamp;
@@ -9,8 +9,8 @@ import java.sql.Timestamp;
 @Service
 public class DailyStoryFoodFactoryImpl implements DailyStoryFoodFactory {
     @Override
-    public DailyStoryFoodServiceModel create(FoodServiceModel food, double gramsConsumedInPercentage, Timestamp timeOfDay) {
-        DailyStoryFoodServiceModel dailyStoryFoodServiceModel = new DailyStoryFoodServiceModel();
+    public DailyStoryNutrientServiceModel create(FoodServiceModel food, double gramsConsumedInPercentage, Timestamp timeOfDay) {
+        DailyStoryNutrientServiceModel dailyStoryFoodServiceModel = new DailyStoryNutrientServiceModel();
 
         dailyStoryFoodServiceModel.setTimeOfDay(timeOfDay);
         dailyStoryFoodServiceModel.setName(food.getName());

@@ -9,4 +9,6 @@ public interface FoodService {
     void create(FoodServiceModel foodServiceModel);
 
     List<FoodServiceModel> getAll();
+
+    FoodServiceModel getById(String id);
 }

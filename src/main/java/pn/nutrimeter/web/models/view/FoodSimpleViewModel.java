@@ -9,5 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FoodSimpleViewModel {
 
+    private String id;
+
     private String name;
 }
