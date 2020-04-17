@@ -1,7 +1,7 @@
 package pn.nutrimeter.service.factories.daily_story;
 
 import org.springframework.stereotype.Service;
-import pn.nutrimeter.service.models.DailyStoryNutrientServiceModel;
+import pn.nutrimeter.service.models.DailyStoryFoodServiceModel;
 import pn.nutrimeter.service.models.FoodServiceModel;
 
 import java.sql.Timestamp;
@@ -9,13 +9,13 @@ import java.sql.Timestamp;
 @Service
 public class DailyStoryFoodFactoryImpl implements DailyStoryFoodFactory {
     @Override
-    public DailyStoryNutrientServiceModel create(FoodServiceModel food, double gramsConsumedInPercentage, Timestamp timeOfDay) {
-        DailyStoryNutrientServiceModel dailyStoryFoodServiceModel = new DailyStoryNutrientServiceModel();
+    public DailyStoryFoodServiceModel create(FoodServiceModel food, double gramsConsumedInPercentage, Timestamp timeOfDay) {
+        DailyStoryFoodServiceModel dailyStoryFoodServiceModel = new DailyStoryFoodServiceModel();
 
         dailyStoryFoodServiceModel.setTimeOfDay(timeOfDay);
         dailyStoryFoodServiceModel.setName(food.getName());
         dailyStoryFoodServiceModel.setGramsConsumed(gramsConsumedInPercentage * 100);
-        dailyStoryFoodServiceModel.setKcal(food.getKcalPerHundredGrams() * gramsConsumedInPercentage);
+        dailyStoryFoodServiceModel.setKcal((food.getKcalPerHundredGrams() * gramsConsumedInPercentage));
         dailyStoryFoodServiceModel.setTotalProteins(this.calcAmount(food.getTotalProteins(), gramsConsumedInPercentage));
         dailyStoryFoodServiceModel.setCysteine(this.calcAmount(food.getCysteine(), gramsConsumedInPercentage));
         dailyStoryFoodServiceModel.setHistidine(this.calcAmount(food.getHistidine(), gramsConsumedInPercentage));

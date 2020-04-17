@@ -10,14 +10,10 @@ import pn.nutrimeter.service.models.MacroTargetServiceModel;
 import pn.nutrimeter.service.models.MicroTargetServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
 import pn.nutrimeter.service.services.api.*;
-import pn.nutrimeter.web.models.view.FoodSimpleViewModel;
 
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class DailyStoryController {
@@ -59,12 +55,6 @@ public class DailyStoryController {
     public ModelAndView dailyStory(@PathVariable String date, Principal principal) {
 
         ModelAndView mov = new ModelAndView();
-
-        List<FoodSimpleViewModel> foods = this.foodService.getAll()
-                .stream()
-                .map(f -> this.modelMapper.map(f, FoodSimpleViewModel.class))
-                .collect(Collectors.toList());
-        mov.addObject("availableFoods", foods);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         // add a try-catch to the date parse and throw an error if such

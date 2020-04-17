@@ -18,7 +18,7 @@ public class DailyStoryServiceModel {
 
     private Double dailyWeight;
 
-    private List<DailyStoryNutrientServiceModel> dailyStoryFoodAssociation;
+    private List<DailyStoryFoodServiceModel> dailyStoryFoodAssociation;
 
     private Double kcal;
 
