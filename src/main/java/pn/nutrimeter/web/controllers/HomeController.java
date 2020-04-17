@@ -15,10 +15,7 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public ModelAndView home(Principal principal) {
-        ModelAndView mov = new ModelAndView();
-        mov.addObject("name", principal.getName());
-        mov.setViewName("home");
-        return mov;
+    public String home() {
+        return "home";
     }
 }

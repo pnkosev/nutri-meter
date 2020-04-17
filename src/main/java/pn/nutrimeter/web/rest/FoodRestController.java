@@ -2,12 +2,8 @@ package pn.nutrimeter.web.rest;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
-import pn.nutrimeter.service.models.DailyStoryFoodServiceModel;
-import pn.nutrimeter.service.models.DailyStoryServiceModel;
-import pn.nutrimeter.service.models.FoodServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
 import pn.nutrimeter.service.services.api.DailyStoryFoodService;
-import pn.nutrimeter.service.services.api.DailyStoryService;
 import pn.nutrimeter.service.services.api.FoodService;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.web.models.binding.DailyFoodBindingModel;
@@ -27,16 +23,13 @@ public class FoodRestController {
 
     private final UserService userService;
 
-    private final DailyStoryService dailyStoryService;
-
     private final DailyStoryFoodService dailyStoryFoodService;
 
     private final ModelMapper modelMapper;
 
-    public FoodRestController(FoodService foodService, UserService userService, DailyStoryService dailyStoryService, DailyStoryFoodService dailyStoryFoodService, ModelMapper modelMapper) {
+    public FoodRestController(FoodService foodService, UserService userService, DailyStoryFoodService dailyStoryFoodService, ModelMapper modelMapper) {
         this.foodService = foodService;
         this.userService = userService;
-        this.dailyStoryService = dailyStoryService;
         this.dailyStoryFoodService = dailyStoryFoodService;
         this.modelMapper = modelMapper;
     }
