@@ -11,6 +11,7 @@ import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.web.models.binding.UserRegisterBindingModel;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -32,7 +33,8 @@ public class UserController {
     @PostMapping("/register")
     public String registerPost(
             @Valid UserRegisterBindingModel userRegisterBindingModel,
-            BindingResult bindingResult) {
+            BindingResult bindingResult,
+            Map<String, String> map) {
 
         if (bindingResult.hasErrors()) {
             return "user/register";
@@ -42,6 +44,7 @@ public class UserController {
             this.userService.register(this.modelMapper.map(userRegisterBindingModel, UserRegisterServiceModel.class));
             return "redirect:/login";
         } catch (IllegalArgumentException e) {
+            map.put("reason", e.getMessage());
             return "user/register";
         }
 

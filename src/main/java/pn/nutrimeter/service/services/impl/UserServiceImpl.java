@@ -1,5 +1,6 @@
 package pn.nutrimeter.service.services.impl;
 
+import org.apache.tomcat.jni.Error;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +15,7 @@ import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
 import pn.nutrimeter.service.services.api.RoleService;
 import pn.nutrimeter.service.services.api.UserService;
+import pn.nutrimeter.service.services.validation.UserValidationService;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,19 +28,34 @@ public class UserServiceImpl implements UserService {
 
     private final UserFactory userFactory;
 
+    private final UserValidationService userValidationService;
+
     private final RoleService roleService;
 
     private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserFactory userFactory, RoleService roleService, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserFactory userFactory, UserValidationService userValidationService, RoleService roleService, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.userFactory = userFactory;
+        this.userValidationService = userValidationService;
         this.roleService = roleService;
         this.modelMapper = modelMapper;
     }
 
     @Override
     public void register(UserRegisterServiceModel userRegisterServiceModel) {
+        if (!this.userValidationService.isNotNull(userRegisterServiceModel)) {
+            throw new IllegalArgumentException(ErrorConstants.USER_IS_NULL);
+        }
+
+        if (!this.userValidationService.isUsernameFree(userRegisterServiceModel.getUsername())) {
+            throw new IllegalArgumentException(ErrorConstants.USERNAME_IS_TAKEN);
+        }
+
+        if (!this.userValidationService.arePasswordsMatching(userRegisterServiceModel.getPassword(), userRegisterServiceModel.getConfirmPassword())) {
+            throw new IllegalArgumentException(ErrorConstants.PASSWORDS_DO_NOT_MATCH);
+        }
+
         this.roleService.seedRoles();
         User user = this.userFactory.create(userRegisterServiceModel);
         if (this.userRepository.count() == 0) {

@@ -11,6 +11,7 @@
     <h1 class="mt-5 mb-5 text-center">Create your account for free</h1>
     <section class="container w-25">
         <form th:action="@{/register}" th:method="post" th:object="${userRegisterBindingModel}">
+            <small class="error" th:if="${reason}">[[${reason}]]</small>
             <div class="form-group usernameInput">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" placeholder="Username"
@@ -27,14 +28,14 @@
             </div>
             <div class="form-group passwordInput">
                 <label for="password">Password</label>
-                <input type="text" class="form-control" id="password" placeholder="Password"
+                <input type="password" class="form-control" id="password" placeholder="Password"
                        th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
                        th:field="*{password}">
                 <small class="error" th:if="${#fields.errors('password')}" th:errors="*{password}"></small>
             </div>
             <div class="form-group confirmPasswordInput">
                 <label for="confirmPass">Confirm Password</label>
-                <input type="text" class="form-control" id="confirmPass" placeholder="Confirm password"
+                <input type="password" class="form-control" id="confirmPass" placeholder="Confirm password"
                        th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid'"
                        th:field="*{confirmPassword}">
                 <small class="error" th:if="${#fields.errors('confirmPassword')}" th:errors="*{confirmPassword}"></small>
