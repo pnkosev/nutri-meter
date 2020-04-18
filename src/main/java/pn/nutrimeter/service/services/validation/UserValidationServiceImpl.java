@@ -27,4 +27,7 @@ public class UserValidationServiceImpl implements UserValidationService {
     public boolean isUsernameFree(String username) {
         return !this.userRepository.existsByUsername(username);
     }
+
+    @Override
+    public boolean isEmailFree(String email) { return !this.userRepository.existsByEmail(email); }
 }

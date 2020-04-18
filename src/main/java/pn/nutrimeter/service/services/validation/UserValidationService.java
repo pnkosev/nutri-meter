@@ -8,5 +8,7 @@ public interface UserValidationService {
 
     boolean isUsernameFree(String username);
 
+    boolean isEmailFree(String email);
+
     boolean arePasswordsMatching(String password, String confirmPassword);
 }

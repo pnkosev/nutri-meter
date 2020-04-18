@@ -25,17 +25,17 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, updatable = false)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "sex", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Column(name = "sex")
     private Sex sex;
 
-    @Column(name = "weight")
+    @Column(name = "weight", nullable = false)
     private Double weight;
 
     @Column(name = "target_weight")
@@ -47,17 +47,17 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "kcal_from_target")
     private Double kcalFromTarget;
 
-    @Column(name = "height")
+    @Column(name = "height", nullable = false)
     private Double height;
 
-    @Column(name = "birthday")
+    @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
 
     @Column(name = "age_category")
     @Enumerated(EnumType.STRING)
     private AgeCategory ageCategory;
 
-    @Column(name = "activity_level")
+    @Column(name = "activity_level", nullable = false)
     @Enumerated(EnumType.STRING)
     private ActivityLevel activityLevel;
 

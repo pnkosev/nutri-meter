@@ -52,9 +52,14 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException(ErrorConstants.USERNAME_IS_TAKEN);
         }
 
+        if (!this.userValidationService.isEmailFree(userRegisterServiceModel.getEmail())) {
+            throw new IllegalArgumentException(ErrorConstants.EMAIL_IS_TAKEN);
+        }
+
         if (!this.userValidationService.arePasswordsMatching(userRegisterServiceModel.getPassword(), userRegisterServiceModel.getConfirmPassword())) {
             throw new IllegalArgumentException(ErrorConstants.PASSWORDS_DO_NOT_MATCH);
         }
+
 
         this.roleService.seedRoles();
         User user = this.userFactory.create(userRegisterServiceModel);
