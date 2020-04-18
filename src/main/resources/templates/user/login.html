@@ -11,13 +11,16 @@
     <h1 class="mt-5 mb-5 text-center">Login</h1>
     <section class="container w-25">
         <form th:action="@{/login}" th:method="post">
+            <div class="text-center" th:if="${param.error != null}">
+                <small class="error">Wrong username OR/AND password!</small>
+            </div>
             <div class="form-group usernameInput">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" placeholder="Enter username" name="username">
             </div>
             <div class="form-group passwordInput">
                 <label for="password">Password</label>
-                <input type="text" class="form-control" id="password" placeholder="Enter password" name="password">
+                <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
             </div>
             <div class="button-holder d-flex justify-content-center mt-4">
                 <button class="btn btn-secondary text-white mb-3" type="submit">Register</button>
