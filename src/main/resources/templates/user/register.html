@@ -13,19 +13,31 @@
         <form th:action="@{/register}" th:method="post" th:object="${userRegisterBindingModel}">
             <div class="form-group usernameInput">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter username" th:field="*{username}">
+                <input type="text" class="form-control" id="username" placeholder="Username"
+                       th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"
+                       th:field="*{username}">
+                <small class="error" th:if="${#fields.errors('username')}" th:errors="*{username}"></small>
             </div>
             <div class="form-group emailInput">
                 <label for="email">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter email" th:field="*{email}">
+                <input type="email" class="form-control" id="email" placeholder="example@domain.com"
+                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                       th:field="*{email}">
+                <small class="error" th:if="${#fields.errors('email')}" th:errors="*{email}"></small>
             </div>
             <div class="form-group passwordInput">
                 <label for="password">Password</label>
-                <input type="text" class="form-control" id="password" placeholder="Enter password" th:field="*{password}">
+                <input type="text" class="form-control" id="password" placeholder="Password"
+                       th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
+                       th:field="*{password}">
+                <small class="error" th:if="${#fields.errors('password')}" th:errors="*{password}"></small>
             </div>
             <div class="form-group confirmPasswordInput">
                 <label for="confirmPass">Confirm Password</label>
-                <input type="text" class="form-control" id="confirmPass" placeholder="Confirm password" th:field="*{confirmPassword}">
+                <input type="text" class="form-control" id="confirmPass" placeholder="Confirm password"
+                       th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid'"
+                       th:field="*{confirmPassword}">
+                <small class="error" th:if="${#fields.errors('confirmPassword')}" th:errors="*{confirmPassword}"></small>
             </div>
             <th:block th:each="value,iter : ${T(pn.nutrimeter.data.models.enums.Sex).values()}" th:if="${iter.index} < 2">
                 <div class="form-group form-check mt-3 sexInput">
@@ -38,7 +50,10 @@
             </th:block>
             <div class="form-group birthday">
                 <label for="birthday">Born</label>
-                <input type="date" class="form-control" id="birthday" name="birthday" th:field="*{birthday}">
+                <input type="date" class="form-control" id="birthday" name="birthday"
+                       th:classappend="${#fields.hasErrors('birthday')} ? 'is-invalid'"
+                       th:field="*{birthday}">
+                <small class="error" th:if="${#fields.errors('birthday')}" th:errors="*{birthday}"></small>
             </div>
             <div class="form-group activity-level">
                 <label for="activity-level">Activity Level</label>
@@ -48,7 +63,10 @@
             </div>
             <div class="form-group weightInput">
                 <label for="weight">Weight</label>
-                <input type="number" class="form-control" id="weight" th:field="*{weight}">
+                <input type="number" class="form-control" id="weight"
+                       th:classappend="${#fields.hasErrors('weight')} ? 'is-invalid'"
+                       th:field="*{weight}">
+                <small class="error" th:if="${#fields.errors('weight')}" th:errors="*{weight}"></small>
                 <select class="form-control">
                     <option>Kilos</option>
                     <option>Pounds</option>
@@ -57,7 +75,10 @@
             <div class="form-group weightInput">
                 <label for="height">Height</label>
                 <span>
-                    <input type="number" class="form-control" id="height" th:field="*{height}">
+                    <input type="number" class="form-control" id="height"
+                           th:classappend="${#fields.hasErrors('height')} ? 'is-invalid'"
+                           th:field="*{height}">
+                    <small class="error" th:if="${#fields.errors('height')}" th:errors="*{height}"></small>
                 </span>
             </div>
             <div class="button-holder d-flex justify-content-center mt-4">
