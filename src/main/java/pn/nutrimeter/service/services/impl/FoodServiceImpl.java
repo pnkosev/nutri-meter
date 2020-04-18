@@ -29,10 +29,7 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void create(FoodServiceModel foodServiceModel) {
-        foodServiceModel.setKcalPerHundredGrams(
-                (int) (foodServiceModel.getTotalCarbohydrates() * 4
-                        + foodServiceModel.getTotalProteins() * 4
-                        + foodServiceModel.getTotalLipids() * 9));
+        foodServiceModel.setKcalPerHundredGrams(this.getTotalKcal(foodServiceModel));
 
         Food food = this.modelMapper.map(foodServiceModel, Food.class);
 
@@ -56,5 +53,19 @@ public class FoodServiceImpl implements FoodService {
     public FoodServiceModel getById(String id) {
         Food food = this.foodRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("blabla"));
         return this.modelMapper.map(food, FoodServiceModel.class);
+    }
+
+    private int getTotalKcal(FoodServiceModel food) {
+        double proteins = food.getTotalProteins() == null
+                ? 0.0
+                : food.getTotalProteins();
+        double carbs = food.getTotalCarbohydrates() == null
+                ? 0.0
+                : food.getTotalCarbohydrates();
+        double lipids = food.getTotalLipids() == null
+                ? 0.0
+                : food.getTotalLipids();
+
+        return (int) (proteins * 4 + carbs * 4 + lipids * 9);
     }
 }

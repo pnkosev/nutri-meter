@@ -8,25 +8,34 @@
 <th:block th:include="~{_shared/header}"/>
 <main class="mb-5">
     <div class="container w-50 mt-5">
+        <h1 class="mt-5 mb-5 text-center">Add a food</h1>
         <form class="mx-auto w-100" th:action="@{/food/add}" th:method="post" th:object="${foodCreateBindingModel}">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Food Category" th:field="*{name}">
+                <input type="text" class="form-control" id="name" placeholder="Food name"
+                       th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                       th:field="*{name}">
+                <small class="error" th:if="${#fields.errors('name')}" th:errors="*{name}"></small>
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea class="form-control" id="description" placeholder="Description" rows="3" th:field="*{description}"></textarea>
+                <textarea class="form-control" id="description" placeholder="Description" rows="3"
+                          th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"
+                          th:field="*{description}"></textarea>
+                <small class="error" th:if="${#fields.errors('description')}" th:errors="*{description}"></small>
             </div>
             <div class="form-group">
                 <label for="categories">Select at least one category</label>
-                <select multiple class="form-control" id="categories" th:field="*{foodCategories}">
+                <select multiple class="form-control" id="categories"
+                        th:classappend="${#fields.hasErrors('foodCategories')} ? 'is-invalid'"
+                        th:field="*{foodCategories}">
                     <option class="multi-option"
                             th:each="category : ${foodCategories}"
                             th:value="${category.id}"
                             th:text="${category.name}">
-
                     </option>
                 </select>
+                <small class="error" th:if="${#fields.errors('foodCategories')}" th:errors="*{foodCategories}"></small>
             </div>
             <div class="row">
                 <div class="table-responsive col-md-6">
@@ -293,7 +302,7 @@
                         <tr>
                             <td>
                                 <label for="cholesterol">
-                                    cholesterol
+                                    Cholesterol
                                 </label>
                             </td>
                             <td>

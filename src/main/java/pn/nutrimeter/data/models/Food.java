@@ -20,7 +20,7 @@ public class Food extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "kcal_per_hundred_grams", nullable = false)
@@ -171,7 +171,7 @@ public class Food extends BaseEntity {
     private Double zinc;
 
     @Column(name = "is_custom")
-    private Double isCustom;
+    private boolean isCustom;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

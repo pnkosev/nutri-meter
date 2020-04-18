@@ -3,8 +3,14 @@ package pn.nutrimeter.web.models.binding;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.persistence.Column;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
@@ -12,12 +18,17 @@ import java.util.List;
 @NoArgsConstructor
 public class FoodCreateBindingModel {
 
+    @NotNull(message = "Food name is mandatory!")
+    @Length(min = 3, max = 30, message = "Food name should be between 3 and 30 symbols!")
     private String name;
 
+    @NotNull(message = "Description is mandatory!")
+    @Length(min = 3, max = 100, message = "Description should be between 3 and 100 symbols!")
     private String description;
 
     private Integer kcalPerHundredGrams;
 
+    @Range(min = 0, max = 100, message = "Proteins' level should be between 0 and 100!")
     private Double totalProteins;
 
     private Double cysteine;
@@ -42,6 +53,7 @@ public class FoodCreateBindingModel {
 
     private Double valine;
 
+    @Range(min = 0, max = 100, message = "Carbohydrates' level should be between 0 and 100!")
     private Double totalCarbohydrates;
 
     private Double fiber;
@@ -52,6 +64,7 @@ public class FoodCreateBindingModel {
 
     private Double addedSugars;
 
+    @Range(min = 0, max = 100, message = "Lipids' level should be between 0 and 100!")
     private Double totalLipids;
 
     private Double monounsaturated;
@@ -114,5 +127,6 @@ public class FoodCreateBindingModel {
 
     private Double zinc;
 
+    @Size(min = 1, message = "You must choose at least 1 category!")
     private List<String> foodCategories;
 }
