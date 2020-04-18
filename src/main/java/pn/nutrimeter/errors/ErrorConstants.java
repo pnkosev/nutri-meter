@@ -7,4 +7,6 @@ public class ErrorConstants {
     public static final String USERNAME_IS_TAKEN = "This username is already taken!";
     public static final String EMAIL_IS_TAKEN = "This email has already been used!";
     public static final String PASSWORDS_DO_NOT_MATCH = "Passwords do not match!";
+
+    public static final String INVALID_FOOD_MODEL = "Please fill all mandatory fields!";
 }

@@ -10,6 +10,9 @@
     <div class="container w-50 mt-5">
         <h1 class="mt-5 mb-5 text-center">Add a food</h1>
         <form class="mx-auto w-100" th:action="@{/food/add}" th:method="post" th:object="${foodCreateBindingModel}">
+            <div th:if="${msg}" class="text-center">
+                <small class="error" th:text="${msg}"></small>
+            </div>
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="name" placeholder="Food name"

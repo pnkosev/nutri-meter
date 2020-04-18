@@ -5,15 +5,18 @@ import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
+import pn.nutrimeter.errors.ErrorConstants;
 import pn.nutrimeter.service.models.FoodServiceModel;
 import pn.nutrimeter.service.services.api.FoodService;
+import pn.nutrimeter.service.services.validation.FoodValidationService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class FoodServiceImpl implements FoodService {
+
+    private final FoodValidationService foodValidationService;
 
     private final FoodRepository foodRepository;
 
@@ -21,7 +24,8 @@ public class FoodServiceImpl implements FoodService {
 
     private final ModelMapper modelMapper;
 
-    public FoodServiceImpl(FoodRepository foodRepository, FoodCategoryRepository foodCategoryRepository1, ModelMapper modelMapper) {
+    public FoodServiceImpl(FoodValidationService foodValidationService, FoodRepository foodRepository, FoodCategoryRepository foodCategoryRepository1, ModelMapper modelMapper) {
+        this.foodValidationService = foodValidationService;
         this.foodRepository = foodRepository;
         this.foodCategoryRepository = foodCategoryRepository1;
         this.modelMapper = modelMapper;
@@ -29,6 +33,10 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void create(FoodServiceModel foodServiceModel) {
+        if (!this.foodValidationService.isValid(foodServiceModel)) {
+            throw new IllegalArgumentException(ErrorConstants.INVALID_FOOD_MODEL);
+        }
+
         foodServiceModel.setKcalPerHundredGrams(this.getTotalKcal(foodServiceModel));
 
         Food food = this.modelMapper.map(foodServiceModel, Food.class);

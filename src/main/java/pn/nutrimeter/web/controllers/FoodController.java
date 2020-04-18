@@ -66,7 +66,14 @@ public class FoodController {
                 })
                 .collect(Collectors.toList()));
 
-        this.foodService.create(foodServiceModel);
+        try {
+            this.foodService.create(foodServiceModel);
+        } catch (IllegalArgumentException e) {
+            ModelAndView mov = new ModelAndView("/food/food-add");
+            mov.addObject("foodCategories", this.foodCategoryService.getAll());
+            mov.addObject("msg", e.getMessage());
+            return mov;
+        }
 
         return new ModelAndView("redirect:/home");
     }
