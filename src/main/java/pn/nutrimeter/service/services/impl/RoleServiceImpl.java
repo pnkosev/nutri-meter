@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class RoleServiceImpl implements RoleService {
+    private static final String ADMIN_ROLE = "ADMIN";
+    private static final String USER_ROLE = "USER";
 
     private final RoleRepository roleRepository;
 
@@ -25,8 +27,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void seedRoles() {
         if (this.roleRepository.count() == 0) {
-            this.roleRepository.saveAndFlush(new Role("ADMIN"));
-            this.roleRepository.saveAndFlush(new Role("USER"));
+            this.roleRepository.saveAndFlush(new Role(ADMIN_ROLE));
+            this.roleRepository.saveAndFlush(new Role(USER_ROLE));
         }
     }
 

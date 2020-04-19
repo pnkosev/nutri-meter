@@ -20,28 +20,20 @@ public class DailyStoryController {
 
     private final UserService userService;
 
-    private final FoodService foodService;
-
     private final DailyStoryService dailyStoryService;
 
     private final MacroTargetService macroTargetService;
 
     private final MicroTargetService microTargetService;
 
-    private final ModelMapper modelMapper;
-
     public DailyStoryController(UserService userService,
-                                FoodService foodService,
                                 DailyStoryService dailyStoryService,
                                 MacroTargetService macroTargetService,
-                                MicroTargetService microTargetService,
-                                ModelMapper modelMapper) {
+                                MicroTargetService microTargetService) {
         this.userService = userService;
-        this.foodService = foodService;
         this.dailyStoryService = dailyStoryService;
         this.macroTargetService = macroTargetService;
         this.microTargetService = microTargetService;
-        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/diary")
@@ -57,8 +49,9 @@ public class DailyStoryController {
         ModelAndView mov = new ModelAndView();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // add a try-catch to the date parse and throw an error if such
+        //add try catch
         LocalDate today = LocalDate.parse(date, formatter);
+
         this.setDays(mov, today);
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         String userId = userServiceModel.getId();

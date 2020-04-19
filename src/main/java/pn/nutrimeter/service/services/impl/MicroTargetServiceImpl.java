@@ -4,6 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.MicroTarget;
 import pn.nutrimeter.data.repositories.MicroTargetRepository;
+import pn.nutrimeter.error.ErrorConstants;
+import pn.nutrimeter.error.IdNotFoundException;
+import pn.nutrimeter.error.UserNotFoundException;
 import pn.nutrimeter.service.models.MicroTargetServiceModel;
 import pn.nutrimeter.service.services.api.MicroTargetService;
 
@@ -26,13 +29,16 @@ public class MicroTargetServiceImpl implements MicroTargetService {
 
     @Override
     public MicroTargetServiceModel getByLifeStageGroupId(MicroTargetServiceModel microTargetServiceModel) {
-        MicroTarget microTarget = this.microTargetRepository.findByLifeStageGroupId(microTargetServiceModel.getId());
+        MicroTarget microTarget = this.microTargetRepository
+                .findByLifeStageGroupId(microTargetServiceModel.getLifeStageGroupId())
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID));
 
         return this.modelMapper.map(microTarget, MicroTargetServiceModel.class);
     }
 
     @Override
     public MicroTargetServiceModel getByUserId(String id) {
-        return this.modelMapper.map(this.microTargetRepository.findByUserId(id), MicroTargetServiceModel.class);
+        MicroTarget microTarget = this.microTargetRepository.findByUserId(id);
+        return this.modelMapper.map(microTarget, MicroTargetServiceModel.class);
     }
 }

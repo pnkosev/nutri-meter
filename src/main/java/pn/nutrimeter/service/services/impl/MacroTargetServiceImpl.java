@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.MacroTarget;
 import pn.nutrimeter.data.repositories.MacroTargetRepository;
 import pn.nutrimeter.data.repositories.UserRepository;
+import pn.nutrimeter.error.ErrorConstants;
+import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.factories.macro_target.MacroTargetServiceModelFactory;
 import pn.nutrimeter.service.models.MacroTargetServiceModel;
 import pn.nutrimeter.service.services.api.MacroTargetService;
@@ -32,7 +34,8 @@ public class MacroTargetServiceImpl implements MacroTargetService {
     @Override
     public MacroTargetServiceModel getByLifeGroupId(MacroTargetServiceModel macroTargetServiceModel) {
 
-        MacroTarget macroTarget = this.macroTargetRepository.findByLifeStageGroupId(macroTargetServiceModel.getId());
+        MacroTarget macroTarget = this.macroTargetRepository
+                .findByLifeStageGroupId(macroTargetServiceModel.getLifeStageGroupId()).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID));
 
         return this.modelMapper.map(macroTarget, MacroTargetServiceModel.class);
     }

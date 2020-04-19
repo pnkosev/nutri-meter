@@ -9,5 +9,6 @@ public class UserPasswordValidator implements ConstraintValidator<UserPassword, 
 
    public boolean isValid(String password, ConstraintValidatorContext context) {
       return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,20}$");
+//      return true;
    }
 }

@@ -7,6 +7,9 @@ import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.LifeStageGroupRepository;
 import pn.nutrimeter.data.repositories.MacroTargetRepository;
 import pn.nutrimeter.data.repositories.MicroTargetRepository;
+import pn.nutrimeter.error.ErrorConstants;
+import pn.nutrimeter.error.IdNotFoundException;
+import pn.nutrimeter.error.LifeStageGroupNotFoundException;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.services.api.HashingService;
 
@@ -45,10 +48,12 @@ public class UserFactoryImpl implements UserFactory {
         user.setAgeCategory(user.updateAgeCategory());
 
         double yearsOld = user.getYearsOld();
-        LifeStageGroup lifeStageGroup = this.lifeStageGroupRepository.findLifeStageGroupBySexAndAge(user.getSex(), yearsOld);
+        LifeStageGroup lifeStageGroup = this.lifeStageGroupRepository
+                .findLifeStageGroupBySexAndAge(user.getSex(), yearsOld)
+                .orElseThrow(() -> new LifeStageGroupNotFoundException("No such life stage group found!"));
         user.setLifeStageGroup(lifeStageGroup);
-        user.setMicroTarget(this.microTargetRepository.findByLifeStageGroupId(lifeStageGroup.getId()));
-        user.setMacroTarget(this.macroTargetRepository.findByLifeStageGroupId(lifeStageGroup.getId()));
+        user.setMicroTarget(this.microTargetRepository.findByLifeStageGroupId(lifeStageGroup.getId()).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID)));
+        user.setMacroTarget(this.macroTargetRepository.findByLifeStageGroupId(lifeStageGroup.getId()).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID)));
 
         user.setBmr(user.calculateBMR());
         user.setBmi(user.calculateBMI());

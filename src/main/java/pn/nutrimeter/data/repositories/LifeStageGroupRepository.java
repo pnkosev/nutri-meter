@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import pn.nutrimeter.data.models.LifeStageGroup;
 import pn.nutrimeter.data.models.enums.Sex;
 
+import java.util.Optional;
+
 @Repository
 public interface LifeStageGroupRepository extends JpaRepository<LifeStageGroup, String> {
 
@@ -14,5 +16,5 @@ public interface LifeStageGroupRepository extends JpaRepository<LifeStageGroup, 
             "WHERE l.sex = :sex " +
             "AND l.lowerAgeBound <= :age " +
             "AND l.upperAgeBound >= :age")
-    LifeStageGroup findLifeStageGroupBySexAndAge(@Param("sex") Sex sex, @Param("age") double age);
+    Optional<LifeStageGroup> findLifeStageGroupBySexAndAge(@Param("sex") Sex sex, @Param("age") double age);
 }
