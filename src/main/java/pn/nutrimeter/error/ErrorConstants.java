@@ -1,6 +1,8 @@
-package pn.nutrimeter.errors;
+package pn.nutrimeter.error;
 
 public class ErrorConstants {
+    public static final String DEFAULT_ERROR_VIEW = "error/error";
+
     public static final String USERNAME_NOT_FOUND = "No such user found!";
     public static final String USER_ID_NOT_FOUND = "User with such id does not exist!";
     public static final String USER_IS_NULL = "All fields are mandatory in order to create an user!";

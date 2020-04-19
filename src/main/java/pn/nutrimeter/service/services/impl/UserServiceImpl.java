@@ -1,6 +1,5 @@
 package pn.nutrimeter.service.services.impl;
 
-import org.apache.tomcat.jni.Error;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -8,8 +7,8 @@ import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.Role;
 import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.UserRepository;
-import pn.nutrimeter.errors.ErrorConstants;
-import pn.nutrimeter.errors.UserNotFoundException;
+import pn.nutrimeter.error.ErrorConstants;
+import pn.nutrimeter.error.UserNotFoundException;
 import pn.nutrimeter.service.factories.user.UserFactory;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;

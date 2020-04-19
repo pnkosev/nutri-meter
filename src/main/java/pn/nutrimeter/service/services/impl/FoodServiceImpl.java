@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
-import pn.nutrimeter.errors.ErrorConstants;
+import pn.nutrimeter.error.ErrorConstants;
 import pn.nutrimeter.service.models.FoodServiceModel;
 import pn.nutrimeter.service.services.api.FoodService;
 import pn.nutrimeter.service.services.validation.FoodValidationService;
