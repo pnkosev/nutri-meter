@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import pn.nutrimeter.error.FoodAddFailureException;
+import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.models.FoodCategoryServiceModel;
 import pn.nutrimeter.service.models.FoodServiceModel;
 import pn.nutrimeter.service.services.api.FoodCategoryService;
@@ -68,7 +70,7 @@ public class FoodController {
 
         try {
             this.foodService.create(foodServiceModel);
-        } catch (IllegalArgumentException e) {
+        } catch (FoodAddFailureException | IdNotFoundException e) {
             ModelAndView mov = new ModelAndView("/food/food-add");
             mov.addObject("foodCategories", this.foodCategoryService.getAll());
             mov.addObject("msg", e.getMessage());

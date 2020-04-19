@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.FoodCategory;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
+import pn.nutrimeter.error.ErrorConstants;
+import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.models.FoodCategoryServiceModel;
 import pn.nutrimeter.service.services.api.FoodCategoryService;
 
@@ -29,7 +31,7 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 
     @Override
     public FoodCategoryServiceModel getById(String id) {
-        return this.modelMapper.map(this.foodCategoryRepository.findById(id), FoodCategoryServiceModel.class);
+        return this.modelMapper.map(this.foodCategoryRepository.findById(id).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_CATEGORY_ID)), FoodCategoryServiceModel.class);
     }
 
     @Override

@@ -8,6 +8,7 @@ import pn.nutrimeter.data.models.Role;
 import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.ErrorConstants;
+import pn.nutrimeter.error.UserAlreadyExistsException;
 import pn.nutrimeter.error.UserNotFoundException;
 import pn.nutrimeter.error.UserRegisterFailureException;
 import pn.nutrimeter.service.factories.user.UserFactory;
@@ -49,11 +50,11 @@ public class UserServiceImpl implements UserService {
         }
 
         if (!this.userValidationService.isUsernameFree(userRegisterServiceModel.getUsername())) {
-            throw new UserRegisterFailureException(ErrorConstants.USERNAME_IS_TAKEN);
+            throw new UserAlreadyExistsException(ErrorConstants.USERNAME_IS_TAKEN);
         }
 
         if (!this.userValidationService.isEmailFree(userRegisterServiceModel.getEmail())) {
-            throw new UserRegisterFailureException(ErrorConstants.EMAIL_IS_TAKEN);
+            throw new UserAlreadyExistsException(ErrorConstants.EMAIL_IS_TAKEN);
         }
 
         if (!this.userValidationService.arePasswordsMatching(userRegisterServiceModel.getPassword(), userRegisterServiceModel.getConfirmPassword())) {
