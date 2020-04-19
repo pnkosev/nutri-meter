@@ -5,7 +5,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import pn.nutrimeter.error.DateParseFailureException;
 import pn.nutrimeter.error.UserNotFoundException;
+
+import java.time.format.DateTimeParseException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -27,13 +30,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ModelAndView userNotFoundExceptionHandler(RuntimeException e) {
-        return this.getModelAndView(e);
-    }
+    public ModelAndView userNotFoundExceptionHandler(RuntimeException e) { return this.getModelAndView(e); }
+
+    @ExceptionHandler(DateParseFailureException.class)
+    public ModelAndView DateParseFailureExceptionHandler(DateTimeParseException e) { return this.getModelAndView(e); }
 
     private ModelAndView getModelAndView(Throwable e) {
         ModelAndView mav = new ModelAndView(DEFAULT_ERROR_VIEW);
         mav.addObject("message", e.getMessage());
         return mav;
     }
+
 }

@@ -2,9 +2,11 @@ package pn.nutrimeter.web.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
+import pn.nutrimeter.error.DateParseFailureException;
 import pn.nutrimeter.service.models.DailyStoryServiceModel;
 import pn.nutrimeter.service.models.MacroTargetServiceModel;
 import pn.nutrimeter.service.models.MicroTargetServiceModel;
@@ -14,6 +16,7 @@ import pn.nutrimeter.service.services.api.*;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 @Controller
 public class DailyStoryController {
@@ -49,8 +52,13 @@ public class DailyStoryController {
         ModelAndView mov = new ModelAndView();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        //add try catch
-        LocalDate today = LocalDate.parse(date, formatter);
+        LocalDate today;
+
+        try {
+            today = LocalDate.parse(date, formatter);
+        } catch (DateTimeParseException e) {
+            throw new DateParseFailureException("Please enter a valid date!", e.getParsedString(), e.getErrorIndex());
+        }
 
         this.setDays(mov, today);
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
