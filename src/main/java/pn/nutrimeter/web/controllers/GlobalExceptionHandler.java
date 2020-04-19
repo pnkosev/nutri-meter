@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-import pn.nutrimeter.error.ErrorConstants;
 import pn.nutrimeter.error.UserNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    public static final String DEFAULT_ERROR_VIEW = "error/error";
 
     @ExceptionHandler(Throwable.class)
     public ModelAndView defaultExceptionHandler(Throwable e) throws Throwable {
@@ -17,7 +17,13 @@ public class GlobalExceptionHandler {
             throw e;
         }
 
-        return this.getModelAndView(e);
+        Throwable throwable = e;
+
+        while (throwable.getCause() != null){
+            throwable = throwable.getCause();
+        }
+
+        return this.getModelAndView(throwable);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -26,7 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     private ModelAndView getModelAndView(Throwable e) {
-        ModelAndView mav = new ModelAndView(ErrorConstants.DEFAULT_ERROR_VIEW);
+        ModelAndView mav = new ModelAndView(DEFAULT_ERROR_VIEW);
         mav.addObject("message", e.getMessage());
         return mav;
     }
