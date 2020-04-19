@@ -14,13 +14,13 @@
                 <h1>Logged in users cannot go to "/", "/register" and "login"!</h1>
 
                 <div class="error-actions" sec:authorize="isAnonymous()">
-                    <a th:href="@{/}" class="btn btn-primary btn-lg">
+                    <a th:href="@{/}" class="btn btn-secondary btn-lg">
                         <span class="glyphicon glyphicon-home"></span>
                         Take Me Home
                     </a>
                 </div>
                 <div class="error-actions" sec:authorize="isAuthenticated()">
-                    <a th:href="@{/home}" class="btn btn-primary btn-lg">
+                    <a th:href="@{/home}" class="btn btn-secondary btn-lg">
                         <span class="glyphicon glyphicon-home"></span>
                         Take Me Home
                     </a>
