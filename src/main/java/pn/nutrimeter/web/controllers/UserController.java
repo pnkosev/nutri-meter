@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import pn.nutrimeter.error.UserRegisterFailureException;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.web.models.binding.UserRegisterBindingModel;
@@ -43,7 +44,7 @@ public class UserController {
         try {
             this.userService.register(this.modelMapper.map(userRegisterBindingModel, UserRegisterServiceModel.class));
             return "redirect:/login";
-        } catch (IllegalArgumentException e) {
+        } catch (UserRegisterFailureException e) {
             map.put("reason", e.getMessage());
             return "user/register";
         }

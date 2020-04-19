@@ -1,7 +1,6 @@
 package pn.nutrimeter.web.controllers;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,7 +79,6 @@ public class FoodController {
     }
 
     @GetMapping("/category/add")
-    @PreAuthorize("isAuthenticated()")
     public ModelAndView addCategory(FoodCategoryCreateBindingModel foodCategoryCreateBindingModel) {
         return new ModelAndView("food/food-category-add");
     }

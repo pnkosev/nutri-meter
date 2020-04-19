@@ -9,6 +9,7 @@ import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.ErrorConstants;
 import pn.nutrimeter.error.UserNotFoundException;
+import pn.nutrimeter.error.UserRegisterFailureException;
 import pn.nutrimeter.service.factories.user.UserFactory;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
@@ -44,19 +45,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void register(UserRegisterServiceModel userRegisterServiceModel) {
         if (!this.userValidationService.isNotNull(userRegisterServiceModel)) {
-            throw new IllegalArgumentException(ErrorConstants.USER_IS_NULL);
+            throw new UserRegisterFailureException(ErrorConstants.USER_IS_NULL);
         }
 
         if (!this.userValidationService.isUsernameFree(userRegisterServiceModel.getUsername())) {
-            throw new IllegalArgumentException(ErrorConstants.USERNAME_IS_TAKEN);
+            throw new UserRegisterFailureException(ErrorConstants.USERNAME_IS_TAKEN);
         }
 
         if (!this.userValidationService.isEmailFree(userRegisterServiceModel.getEmail())) {
-            throw new IllegalArgumentException(ErrorConstants.EMAIL_IS_TAKEN);
+            throw new UserRegisterFailureException(ErrorConstants.EMAIL_IS_TAKEN);
         }
 
         if (!this.userValidationService.arePasswordsMatching(userRegisterServiceModel.getPassword(), userRegisterServiceModel.getConfirmPassword())) {
-            throw new IllegalArgumentException(ErrorConstants.PASSWORDS_DO_NOT_MATCH);
+            throw new UserRegisterFailureException(ErrorConstants.PASSWORDS_DO_NOT_MATCH);
         }
 
 
