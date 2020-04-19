@@ -4,14 +4,15 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import pn.nutrimeter.data.models.MacroTarget;
 import pn.nutrimeter.data.models.Role;
 import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.UserRepository;
-import pn.nutrimeter.error.ErrorConstants;
-import pn.nutrimeter.error.UserAlreadyExistsException;
-import pn.nutrimeter.error.UserNotFoundException;
-import pn.nutrimeter.error.UserRegisterFailureException;
+import pn.nutrimeter.error.*;
+import pn.nutrimeter.service.factories.macro_target.MacroTargetServiceModelFactory;
 import pn.nutrimeter.service.factories.user.UserFactory;
+import pn.nutrimeter.service.models.MacroTargetServiceModel;
+import pn.nutrimeter.service.models.MicroTargetServiceModel;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
 import pn.nutrimeter.service.services.api.RoleService;
@@ -29,15 +30,18 @@ public class UserServiceImpl implements UserService {
 
     private final UserFactory userFactory;
 
+    private final MacroTargetServiceModelFactory macroTargetServiceModelFactory;
+
     private final UserValidationService userValidationService;
 
     private final RoleService roleService;
 
     private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserFactory userFactory, UserValidationService userValidationService, RoleService roleService, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserFactory userFactory, MacroTargetServiceModelFactory macroTargetServiceModelFactory, UserValidationService userValidationService, RoleService roleService, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.userFactory = userFactory;
+        this.macroTargetServiceModelFactory = macroTargetServiceModelFactory;
         this.userValidationService = userValidationService;
         this.roleService = roleService;
         this.modelMapper = modelMapper;
@@ -81,6 +85,21 @@ public class UserServiceImpl implements UserService {
     public UserServiceModel getUserByUsername(String username) {
         User user = this.userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(ErrorConstants.USERNAME_NOT_FOUND));
         return this.modelMapper.map(user, UserServiceModel.class);
+    }
+
+    @Override
+    public MacroTargetServiceModel getMacroTargetByUserId(String userId) {
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
+        MacroTarget macroTarget = user.getMacroTarget();
+        MacroTargetServiceModel model = this.modelMapper.map(macroTarget, MacroTargetServiceModel.class);
+
+        return this.macroTargetServiceModelFactory.create(macroTarget, model, user.getWeight());
+    }
+
+    @Override
+    public MicroTargetServiceModel getMicroTargetByUserId(String userId) {
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
+        return this.modelMapper.map(user.getMicroTarget(), MicroTargetServiceModel.class);
     }
 
     @Override

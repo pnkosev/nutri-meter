@@ -1,8 +1,6 @@
 package pn.nutrimeter.web.controllers;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,7 +9,8 @@ import pn.nutrimeter.service.models.DailyStoryServiceModel;
 import pn.nutrimeter.service.models.MacroTargetServiceModel;
 import pn.nutrimeter.service.models.MicroTargetServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
-import pn.nutrimeter.service.services.api.*;
+import pn.nutrimeter.service.services.api.DailyStoryService;
+import pn.nutrimeter.service.services.api.UserService;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -25,18 +24,9 @@ public class DailyStoryController {
 
     private final DailyStoryService dailyStoryService;
 
-    private final MacroTargetService macroTargetService;
-
-    private final MicroTargetService microTargetService;
-
-    public DailyStoryController(UserService userService,
-                                DailyStoryService dailyStoryService,
-                                MacroTargetService macroTargetService,
-                                MicroTargetService microTargetService) {
+    public DailyStoryController(UserService userService, DailyStoryService dailyStoryService) {
         this.userService = userService;
         this.dailyStoryService = dailyStoryService;
-        this.macroTargetService = macroTargetService;
-        this.microTargetService = microTargetService;
     }
 
     @GetMapping("/diary")
@@ -66,8 +56,8 @@ public class DailyStoryController {
         DailyStoryServiceModel dailyStory = this.dailyStoryService.getByDateAndUserId(today, userId);
         mov.addObject("dailyStory", dailyStory);
 
-        MacroTargetServiceModel macroTargetServiceModel = this.macroTargetService.getByUserId(userId, dailyStory.getDailyWeight());
-        MicroTargetServiceModel microTargetServiceModel = this.microTargetService.getByUserId(userId);
+        MacroTargetServiceModel macroTargetServiceModel = this.userService.getMacroTargetByUserId(userId);
+        MicroTargetServiceModel microTargetServiceModel = this.userService.getMicroTargetByUserId(userId);
 
         mov.addObject("macroTarget", macroTargetServiceModel);
         mov.addObject("microTarget", microTargetServiceModel);
