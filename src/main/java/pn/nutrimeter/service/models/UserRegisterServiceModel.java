@@ -8,6 +8,7 @@ import pn.nutrimeter.data.models.enums.AgeCategory;
 import pn.nutrimeter.data.models.enums.Sex;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -43,6 +44,8 @@ public class UserRegisterServiceModel {
     private Double bodyFat;
 
     private Double totalKcalTarget;
+
+    private Set<RoleServiceModel> authorities;
 
 //    private Double proteinTarget;
 //

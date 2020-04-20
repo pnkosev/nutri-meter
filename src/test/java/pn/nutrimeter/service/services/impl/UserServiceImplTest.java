@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import pn.nutrimeter.data.models.Role;
+import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.UserAlreadyExistsException;
 import pn.nutrimeter.error.UserRegisterFailureException;
@@ -116,14 +117,20 @@ class UserServiceImplTest {
 
     @Test
     public void register_firstValidUser_shouldReturnCorrect() {
-        Set<Role> authorities = new HashSet<>(Arrays.asList(new Role("USER"), new Role("ADMIN")));
+        Set<RoleServiceModel> authorities = new HashSet<>(
+                Arrays.asList(new RoleServiceModel("1", "USER"), new RoleServiceModel("2", "ADMIN")));
+        User user = new User();
+        user.setUsername(USERNAME);
+        user.setPassword(PASSWORD);
+        user.setEmail(EMAIL);
 
         when(this.userValidationService.isNotNull(this.user)).thenReturn(true);
         when(this.userValidationService.arePasswordsMatching(this.user)).thenReturn(true);
         when(this.userValidationService.isUsernameFree(this.user)).thenReturn(true);
         when(this.userValidationService.isEmailFree(this.user)).thenReturn(true);
+
         when(this.userRepository.count()).thenReturn(0L);
-//        when(this.roleService.getAllAuthority()).thenReturn(authorities);
+        when(this.roleService.getAllAuthority()).thenReturn(authorities);
 
     }
 }

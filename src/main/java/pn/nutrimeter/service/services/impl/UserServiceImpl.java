@@ -71,17 +71,15 @@ public class UserServiceImpl implements UserService {
         }
 
         this.roleService.seedRoles();
-        User user = this.userFactory.create(userRegisterServiceModel);
+
         if (this.userRepository.count() == 0) {
-            Set<Role> authorities = this.roleService.getAllAuthority()
-                    .stream()
-                    .map(a -> this.modelMapper.map(a, Role.class))
-                    .collect(Collectors.toSet());
-            user.setAuthorities(authorities);
+            userRegisterServiceModel.setAuthorities(this.roleService.getAllAuthority());
         } else {
-            user.setAuthorities(new HashSet<>());
-            user.getAuthorities().add(this.modelMapper.map(this.roleService.getByAuthority("USER"), Role.class));
+            userRegisterServiceModel.setAuthorities(new HashSet<>());
+            userRegisterServiceModel.getAuthorities().add(this.roleService.getByAuthority("USER"));
         }
+
+        User user = this.userFactory.create(userRegisterServiceModel);
         this.userRepository.saveAndFlush(user);
     }
 
