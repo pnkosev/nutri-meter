@@ -8,15 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pn.nutrimeter.data.models.Role;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.UserAlreadyExistsException;
 import pn.nutrimeter.error.UserRegisterFailureException;
 import pn.nutrimeter.service.factories.macro_target.MacroTargetServiceModelFactory;
 import pn.nutrimeter.service.factories.user.UserFactory;
+import pn.nutrimeter.service.models.RoleServiceModel;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.services.api.RoleService;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.service.services.validation.UserValidationService;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -108,5 +114,16 @@ class UserServiceImplTest {
         verify(this.userValidationService).isEmailFree(this.user);
     }
 
+    @Test
+    public void register_firstValidUser_shouldReturnCorrect() {
+        Set<Role> authorities = new HashSet<>(Arrays.asList(new Role("USER"), new Role("ADMIN")));
 
+        when(this.userValidationService.isNotNull(this.user)).thenReturn(true);
+        when(this.userValidationService.arePasswordsMatching(this.user)).thenReturn(true);
+        when(this.userValidationService.isUsernameFree(this.user)).thenReturn(true);
+        when(this.userValidationService.isEmailFree(this.user)).thenReturn(true);
+        when(this.userRepository.count()).thenReturn(0L);
+//        when(this.roleService.getAllAuthority()).thenReturn(authorities);
+
+    }
 }
