@@ -46,7 +46,5 @@ class UserFactoryImplTest {
         User user = new User();
 
         when(this.modelMapper.map(userModel, User.class)).thenReturn(user);
-
-
     }
 }

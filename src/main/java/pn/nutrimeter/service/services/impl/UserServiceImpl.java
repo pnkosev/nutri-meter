@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.MacroTarget;
 import pn.nutrimeter.data.models.Role;
 import pn.nutrimeter.data.models.User;
+import pn.nutrimeter.data.repositories.RoleRepository;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.*;
 import pn.nutrimeter.service.factories.macro_target.MacroTargetServiceModelFactory;
@@ -15,20 +16,17 @@ import pn.nutrimeter.service.models.MacroTargetServiceModel;
 import pn.nutrimeter.service.models.MicroTargetServiceModel;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
-import pn.nutrimeter.service.services.api.RoleService;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.service.services.validation.UserValidationService;
 
 import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final RoleService roleService;
-
     private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
 
     private final UserFactory userFactory;
 
@@ -38,14 +36,13 @@ public class UserServiceImpl implements UserService {
 
     private final ModelMapper modelMapper;
 
-    public UserServiceImpl(RoleService roleService,
-                           UserRepository userRepository,
-                           UserFactory userFactory,
+    public UserServiceImpl(UserRepository userRepository,
+                           RoleRepository roleRepository, UserFactory userFactory,
                            MacroTargetServiceModelFactory macroTargetServiceModelFactory,
                            UserValidationService userValidationService,
                            ModelMapper modelMapper) {
-        this.roleService = roleService;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.userFactory = userFactory;
         this.macroTargetServiceModelFactory = macroTargetServiceModelFactory;
         this.userValidationService = userValidationService;
@@ -70,16 +67,16 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistsException(ErrorConstants.EMAIL_IS_TAKEN);
         }
 
-        this.roleService.seedRoles();
+        User user = this.userFactory.create(userRegisterServiceModel);
 
+        this.seedRoles();
         if (this.userRepository.count() == 0) {
-            userRegisterServiceModel.setAuthorities(this.roleService.getAllAuthority());
+            user.setAuthorities(new HashSet<>(this.roleRepository.findAll()));
         } else {
-            userRegisterServiceModel.setAuthorities(new HashSet<>());
-            userRegisterServiceModel.getAuthorities().add(this.roleService.getByAuthority("USER"));
+            user.setAuthorities(new HashSet<>());
+            user.getAuthorities().add(this.roleRepository.findByAuthority("USER"));
         }
 
-        User user = this.userFactory.create(userRegisterServiceModel);
         this.userRepository.saveAndFlush(user);
     }
 
@@ -109,5 +106,12 @@ public class UserServiceImpl implements UserService {
         return this.userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(ErrorConstants.USERNAME_NOT_FOUND));
+    }
+
+    private void seedRoles() {
+        if (this.roleRepository.count() == 0) {
+            this.roleRepository.saveAndFlush(new Role("ADMIN"));
+            this.roleRepository.saveAndFlush(new Role("USER"));
+        }
     }
 }

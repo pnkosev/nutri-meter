@@ -8,25 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import pn.nutrimeter.data.models.Role;
 import pn.nutrimeter.data.models.User;
+import pn.nutrimeter.data.repositories.RoleRepository;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.UserAlreadyExistsException;
 import pn.nutrimeter.error.UserRegisterFailureException;
 import pn.nutrimeter.service.factories.macro_target.MacroTargetServiceModelFactory;
 import pn.nutrimeter.service.factories.user.UserFactory;
-import pn.nutrimeter.service.models.RoleServiceModel;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
-import pn.nutrimeter.service.services.api.RoleService;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.service.services.validation.UserValidationService;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -42,6 +37,9 @@ class UserServiceImplTest {
     UserRepository userRepository;
 
     @MockBean
+    RoleRepository roleRepository;
+
+    @MockBean
     UserFactory userFactory;
 
     @MockBean
@@ -49,9 +47,6 @@ class UserServiceImplTest {
 
     @MockBean
     UserValidationService userValidationService;
-
-    @MockBean
-    RoleService roleService;
 
     @MockBean
     ModelMapper modelMapper;
@@ -117,8 +112,6 @@ class UserServiceImplTest {
 
     @Test
     public void register_firstValidUser_shouldReturnCorrect() {
-        Set<RoleServiceModel> authorities = new HashSet<>(
-                Arrays.asList(new RoleServiceModel("1", "USER"), new RoleServiceModel("2", "ADMIN")));
         User user = new User();
         user.setUsername(USERNAME);
         user.setPassword(PASSWORD);
@@ -130,7 +123,6 @@ class UserServiceImplTest {
         when(this.userValidationService.isEmailFree(this.user)).thenReturn(true);
 
         when(this.userRepository.count()).thenReturn(0L);
-        when(this.roleService.getAllAuthority()).thenReturn(authorities);
 
     }
 }
