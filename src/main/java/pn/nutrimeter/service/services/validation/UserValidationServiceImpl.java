@@ -19,15 +19,15 @@ public class UserValidationServiceImpl implements UserValidationService {
     }
 
     @Override
-    public boolean arePasswordsMatching(String password, String confirmPassword) {
-        return password.equals(confirmPassword);
+    public boolean arePasswordsMatching(UserRegisterServiceModel user) {
+        return user.getPassword().equals(user.getConfirmPassword());
     }
 
     @Override
-    public boolean isUsernameFree(String username) {
-        return !this.userRepository.existsByUsername(username);
+    public boolean isUsernameFree(UserRegisterServiceModel user) {
+        return !this.userRepository.existsByUsername(user.getUsername());
     }
 
     @Override
-    public boolean isEmailFree(String email) { return !this.userRepository.existsByEmail(email); }
+    public boolean isEmailFree(UserRegisterServiceModel user) { return !this.userRepository.existsByEmail(user.getEmail()); }
 }

@@ -6,9 +6,9 @@ public interface UserValidationService {
 
     boolean isNotNull(UserRegisterServiceModel user);
 
-    boolean isUsernameFree(String username);
+    boolean isUsernameFree(UserRegisterServiceModel user);
 
-    boolean isEmailFree(String email);
+    boolean isEmailFree(UserRegisterServiceModel user);
 
-    boolean arePasswordsMatching(String password, String confirmPassword);
+    boolean arePasswordsMatching(UserRegisterServiceModel user);
 }

@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private final RoleService roleService;
+
     private final UserRepository userRepository;
 
     private final UserFactory userFactory;
@@ -34,16 +36,19 @@ public class UserServiceImpl implements UserService {
 
     private final UserValidationService userValidationService;
 
-    private final RoleService roleService;
-
     private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserFactory userFactory, MacroTargetServiceModelFactory macroTargetServiceModelFactory, UserValidationService userValidationService, RoleService roleService, ModelMapper modelMapper) {
+    public UserServiceImpl(RoleService roleService,
+                           UserRepository userRepository,
+                           UserFactory userFactory,
+                           MacroTargetServiceModelFactory macroTargetServiceModelFactory,
+                           UserValidationService userValidationService,
+                           ModelMapper modelMapper) {
+        this.roleService = roleService;
         this.userRepository = userRepository;
         this.userFactory = userFactory;
         this.macroTargetServiceModelFactory = macroTargetServiceModelFactory;
         this.userValidationService = userValidationService;
-        this.roleService = roleService;
         this.modelMapper = modelMapper;
     }
 
@@ -53,18 +58,17 @@ public class UserServiceImpl implements UserService {
             throw new UserRegisterFailureException(ErrorConstants.USER_IS_NULL);
         }
 
-        if (!this.userValidationService.isUsernameFree(userRegisterServiceModel.getUsername())) {
-            throw new UserAlreadyExistsException(ErrorConstants.USERNAME_IS_TAKEN);
-        }
-
-        if (!this.userValidationService.isEmailFree(userRegisterServiceModel.getEmail())) {
-            throw new UserAlreadyExistsException(ErrorConstants.EMAIL_IS_TAKEN);
-        }
-
-        if (!this.userValidationService.arePasswordsMatching(userRegisterServiceModel.getPassword(), userRegisterServiceModel.getConfirmPassword())) {
+        if (!this.userValidationService.arePasswordsMatching(userRegisterServiceModel)) {
             throw new UserRegisterFailureException(ErrorConstants.PASSWORDS_DO_NOT_MATCH);
         }
 
+        if (!this.userValidationService.isUsernameFree(userRegisterServiceModel)) {
+            throw new UserAlreadyExistsException(ErrorConstants.USERNAME_IS_TAKEN);
+        }
+
+        if (!this.userValidationService.isEmailFree(userRegisterServiceModel)) {
+            throw new UserAlreadyExistsException(ErrorConstants.EMAIL_IS_TAKEN);
+        }
 
         this.roleService.seedRoles();
         User user = this.userFactory.create(userRegisterServiceModel);
