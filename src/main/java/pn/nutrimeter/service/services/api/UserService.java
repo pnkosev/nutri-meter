@@ -12,7 +12,7 @@ public interface UserService extends UserDetailsService {
 
     UserServiceModel getUserByUsername(String username);
 
-    MacroTargetServiceModel getMacroTargetByUserId(String userId);
+    MacroTargetServiceModel getMacroTargetByUserId(String userId, double userWeight);
 
     MicroTargetServiceModel getMicroTargetByUserId(String userId);
 }

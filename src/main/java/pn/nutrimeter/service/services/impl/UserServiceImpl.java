@@ -88,12 +88,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MacroTargetServiceModel getMacroTargetByUserId(String userId) {
+    public MacroTargetServiceModel getMacroTargetByUserId(String userId, double userWeight) {
         User user = this.userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
         MacroTarget macroTarget = user.getMacroTarget();
         MacroTargetServiceModel model = this.modelMapper.map(macroTarget, MacroTargetServiceModel.class);
 
-        return this.macroTargetServiceModelFactory.create(macroTarget, model, user.getWeight());
+        return this.macroTargetServiceModelFactory.create(macroTarget, model, userWeight);
     }
 
     @Override
