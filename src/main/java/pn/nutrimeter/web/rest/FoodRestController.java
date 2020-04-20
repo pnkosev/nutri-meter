@@ -36,7 +36,7 @@ public class FoodRestController {
 
     @GetMapping("/foods")
     public List<FoodSimpleViewModel> allFoods() {
-        return this.foodService.getAll()
+        return this.foodService.getAllNonCustom()
                 .stream()
                 .map(f -> this.modelMapper.map(f, FoodSimpleViewModel.class))
                 .collect(Collectors.toList());

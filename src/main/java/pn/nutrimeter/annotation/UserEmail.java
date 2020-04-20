@@ -1,6 +1,6 @@
-package pn.nutrimeter.annotations;
+package pn.nutrimeter.annotation;
 
-import pn.nutrimeter.annotations.validators.UserPasswordValidator;
+import pn.nutrimeter.annotation.validators.UserEmailValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -10,11 +10,11 @@ import java.lang.annotation.*;
 @NotNull
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = UserPasswordValidator.class)
+@Constraint(validatedBy = UserEmailValidator.class)
 @Documented
-public @interface UserPassword {
+public @interface UserEmail {
 
-    String message() default "Password must have at least 1 lower, 1 upper case letters and 1 digit and must be between 8 and 20 characters!";
+    String message() default "Incorrect email format!";
 
     Class<?>[] groups() default {};
 

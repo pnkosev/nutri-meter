@@ -1,6 +1,6 @@
-package pn.nutrimeter.annotations;
+package pn.nutrimeter.annotation;
 
-import pn.nutrimeter.annotations.validators.DateBeforeTodayValidator;
+import pn.nutrimeter.annotation.validators.DateBeforeTodayValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

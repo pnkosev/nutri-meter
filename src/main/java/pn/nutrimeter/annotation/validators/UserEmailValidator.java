@@ -1,6 +1,6 @@
-package pn.nutrimeter.annotations.validators;
+package pn.nutrimeter.annotation.validators;
 
-import pn.nutrimeter.annotations.UserEmail;
+import pn.nutrimeter.annotation.UserEmail;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
