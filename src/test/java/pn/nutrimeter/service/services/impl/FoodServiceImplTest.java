@@ -36,6 +36,7 @@ class FoodServiceImplTest {
     @Autowired
     FoodCategoryRepository foodCategoryRepository;
 
+    // CANNOT AUTOWIRE - AS IF NO THERE WAS NO @Service... BUT THERE IS ONE, I DON'T GET IT
     @MockBean
     FoodValidationService foodValidationService;
 
