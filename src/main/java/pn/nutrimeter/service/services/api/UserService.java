@@ -8,7 +8,7 @@ import pn.nutrimeter.service.models.UserServiceModel;
 
 public interface UserService extends UserDetailsService {
 
-    void register(UserRegisterServiceModel userServiceModel);
+    UserRegisterServiceModel register(UserRegisterServiceModel userServiceModel);
 
     UserServiceModel getUserByUsername(String username);
 

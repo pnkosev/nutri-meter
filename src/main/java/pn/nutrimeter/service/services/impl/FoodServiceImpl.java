@@ -43,7 +43,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public void create(FoodServiceModel foodServiceModel) {
+    public FoodServiceModel create(FoodServiceModel foodServiceModel) {
         if (!this.foodValidationService.isValid(foodServiceModel)) {
             throw new FoodAddFailureException(ErrorConstants.INVALID_FOOD_MODEL);
         }
@@ -64,6 +64,8 @@ public class FoodServiceImpl implements FoodService {
                 .collect(Collectors.toList()));
 
         this.foodRepository.saveAndFlush(food);
+
+        return this.modelMapper.map(food, FoodServiceModel.class);
     }
 
     @Override

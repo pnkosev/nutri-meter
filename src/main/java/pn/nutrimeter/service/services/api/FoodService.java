@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FoodService {
 
-    void create(FoodServiceModel foodServiceModel);
+    FoodServiceModel create(FoodServiceModel foodServiceModel);
 
     List<FoodServiceModel> getAll();
 

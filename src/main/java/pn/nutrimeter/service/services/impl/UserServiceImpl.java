@@ -20,6 +20,8 @@ import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.service.services.validation.UserValidationService;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -50,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(UserRegisterServiceModel userRegisterServiceModel) {
+    public UserRegisterServiceModel register(UserRegisterServiceModel userRegisterServiceModel) {
         if (!this.userValidationService.isNotNull(userRegisterServiceModel)) {
             throw new UserRegisterFailureException(ErrorConstants.USER_IS_NULL);
         }
@@ -77,7 +79,7 @@ public class UserServiceImpl implements UserService {
             user.getAuthorities().add(this.roleRepository.findByAuthority("USER"));
         }
 
-        this.userRepository.saveAndFlush(user);
+        return this.modelMapper.map(this.userRepository.saveAndFlush(user), UserRegisterServiceModel.class);
     }
 
     @Override
