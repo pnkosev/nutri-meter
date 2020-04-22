@@ -10,10 +10,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.models.FoodCategory;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
 import pn.nutrimeter.error.FoodAddFailureException;
+import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.facades.AuthenticationFacade;
 import pn.nutrimeter.service.models.FoodCategoryServiceModel;
 import pn.nutrimeter.service.models.FoodServiceModel;
@@ -36,7 +38,7 @@ class FoodServiceImplTest {
     @Autowired
     FoodCategoryRepository foodCategoryRepository;
 
-    // CANNOT AUTOWIRE - AS IF NO THERE WAS NO @Service... BUT THERE IS ONE, I DON'T GET IT
+    // CANNOT AUTOWIRE - AS IF NO THERE WAS NO @Service... BUT THERE IS ONE, I DON'T GET IT (Maybe cuz of the @DataJpaTest???)
     @MockBean
     FoodValidationService foodValidationService;
 
@@ -54,12 +56,11 @@ class FoodServiceImplTest {
         this.modelMapper = new ModelMapper();
         this.foodService = new FoodServiceImpl(this.foodValidationService, this.foodRepository, this.foodCategoryRepository, this.authenticationFacade, this.modelMapper);
         this.addFoodCategory();
-        this.fillModel();
     }
 
     @Test
     public void create_withValidModelIfAdmin_shouldReturnCorrect() {
-        this.fillModel();
+        this.foodServiceModel = this.fillModel("food1");
         Set<String> roles = new HashSet<>(Arrays.asList("ADMIN", "USER"));
 
         when(this.foodValidationService.isValid(this.foodServiceModel)).thenReturn(true);
@@ -76,7 +77,7 @@ class FoodServiceImplTest {
 
     @Test
     public void create_withValidModelIfNotAdmin_shouldReturnCorrect() {
-        this.fillModel();
+        this.foodServiceModel = this.fillModel("food1");
         Set<String> roles = new HashSet<>();
         roles.add("USER");
 
@@ -98,18 +99,105 @@ class FoodServiceImplTest {
         assertThrows(FoodAddFailureException.class, () -> this.foodService.create(this.foodServiceModel));
     }
 
-    private void fillModel() {
-        this.foodServiceModel = new FoodServiceModel();
+    @Test
+    public void create_withNonExistingFoodCategory_shouldThrow() {
+        this.foodServiceModel = this.fillModel("food1");
+        FoodCategoryServiceModel foodCategoryServiceModel = new FoodCategoryServiceModel();
+        foodCategoryServiceModel.setId("123");
+        this.foodServiceModel.setFoodCategories(new ArrayList<>(Arrays.asList(foodCategoryServiceModel)));
+        Set<String> roles = new HashSet<>(Arrays.asList("ADMIN", "USER"));
 
-        this.foodServiceModel.setName("testFood");
-        this.foodServiceModel.setTotalProteins(1d);
-        this.foodServiceModel.setDescription("yummy");
-        this.foodServiceModel.setTotalCarbohydrates(1d);
-        this.foodServiceModel.setTotalLipids(1d);
+        when(this.foodValidationService.isValid(this.foodServiceModel)).thenReturn(true);
+        when(this.authenticationFacade.getRoles()).thenReturn(roles);
+
+        assertThrows(IdNotFoundException.class, () -> this.foodService.create(this.foodServiceModel));
+    }
+
+    @Test
+    public void getAll_withExistingFoodsInDB_shouldReturnAll() {
+        this.foodServiceModel = this.fillModel("food1");
+        this.foodServiceModel.setKcalPerHundredGrams(100);
+        FoodServiceModel food2 = this.fillModel("food2");
+        food2.setKcalPerHundredGrams(100);
+        FoodServiceModel food3 = this.fillModel("food3");
+        food3.setKcalPerHundredGrams(100);
+
+        List<FoodServiceModel> expected = new ArrayList<>(Arrays.asList(foodServiceModel, food2, food3));
+        expected.forEach(f -> this.foodRepository.save(this.modelMapper.map(f, Food.class)));
+
+        List<FoodServiceModel> actual = this.foodService.getAll();
+
+        assertEquals(expected.size(), actual.size());
+        assertEquals(expected.get(0).getName(), actual.get(0).getName());
+        assertEquals(expected.get(1).getName(), actual.get(1).getName());
+        assertEquals(expected.get(2).getName(), actual.get(2).getName());
+    }
+
+    @Test
+    public void getAll_withEmptyDB_shouldReturnZero() {
+        assertEquals(0, this.foodService.getAll().size());
+    }
+
+    @Test
+    public void getAllNonCustom__withExistingNonCustomFoodsInDB_shouldReturnAll() {
+        this.foodServiceModel = this.fillModel("food1");
+        this.foodServiceModel.setKcalPerHundredGrams(100);
+        this.foodServiceModel.setCustom(false);
+        FoodServiceModel food2 = this.fillModel("food2");
+        food2.setKcalPerHundredGrams(100);
+        food2.setCustom(true);
+        FoodServiceModel food3 = this.fillModel("food3");
+        food3.setKcalPerHundredGrams(100);
+        food3.setCustom(true);
+
+        List<FoodServiceModel> expected = new ArrayList<>(Arrays.asList(foodServiceModel, food2, food3));
+        expected.forEach(f -> this.foodRepository.save(this.modelMapper.map(f, Food.class)));
+
+        List<FoodServiceModel> actual = this.foodService.getAllNonCustom();
+
+        assertEquals(1, actual.size());
+        assertEquals(this.foodServiceModel.getName(), actual.get(0).getName());
+    }
+
+    @Test
+    public void getAllNonCustom_withEmptyDB_shouldReturnZero() {
+        assertEquals(0, this.foodService.getAllNonCustom().size());
+    }
+
+    @Test
+    public void getById_withValidId_shouldReturnCorrect() {
+        this.foodServiceModel = this.fillModel("food");
+        this.foodServiceModel.setKcalPerHundredGrams(100);
+
+        Food food = this.foodRepository.save(this.modelMapper.map(this.foodServiceModel, Food.class));
+
+        FoodServiceModel expected = this.modelMapper.map(food, FoodServiceModel.class);
+        FoodServiceModel actual = this.foodService.getById(food.getId());
+
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getDescription(), actual.getDescription());
+    }
+
+    @Test
+    public void getById_withInvalidId_shouldThrow() {
+        assertThrows(IdNotFoundException.class, () -> this.foodService.getById("123"));
+    }
+
+    private FoodServiceModel fillModel(String name) {
+        FoodServiceModel foodServiceModel = new FoodServiceModel();
+
+        foodServiceModel.setName(name);
+        foodServiceModel.setDescription("yummy");
+        foodServiceModel.setTotalProteins(1d);
+        foodServiceModel.setTotalCarbohydrates(1d);
+        foodServiceModel.setTotalLipids(1d);
         FoodCategoryServiceModel categoryServiceModel = this.modelMapper.map(this.foodCategoryRepository.findAll().get(0), FoodCategoryServiceModel.class);
         List<FoodCategoryServiceModel> categories = new ArrayList<>();
         categories.add(categoryServiceModel);
-        this.foodServiceModel.setFoodCategories(categories);
+        foodServiceModel.setFoodCategories(categories);
+
+        return foodServiceModel;
     }
 
     private void addFoodCategory() {
