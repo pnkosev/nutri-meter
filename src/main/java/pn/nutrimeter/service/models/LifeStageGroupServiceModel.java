@@ -14,7 +14,7 @@ public class LifeStageGroupServiceModel {
 
     private Sex sex;
 
-    private Integer lowerAgeBound;
+    private double lowerAgeBound;
 
-    private Integer upperAgeBound;
+    private double upperAgeBound;
 }
