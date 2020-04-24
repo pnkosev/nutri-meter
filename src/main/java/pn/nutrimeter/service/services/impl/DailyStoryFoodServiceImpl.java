@@ -1,6 +1,5 @@
 package pn.nutrimeter.service.services.impl;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.DailyStory;
 import pn.nutrimeter.data.models.Food;
@@ -8,6 +7,9 @@ import pn.nutrimeter.data.models.associations.DailyStoryFood;
 import pn.nutrimeter.data.repositories.DailyStoryFoodRepository;
 import pn.nutrimeter.data.repositories.DailyStoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
+import pn.nutrimeter.error.DailyStoryNotFoundException;
+import pn.nutrimeter.error.ErrorConstants;
+import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.services.api.DailyStoryFoodService;
 
 import java.time.LocalDate;
@@ -32,8 +34,8 @@ public class DailyStoryFoodServiceImpl implements DailyStoryFoodService {
 
         DailyStoryFood dailyStoryFood = new DailyStoryFood();
 
-        DailyStory dailyStory = this.dailyStoryRepository.findByDateAndUserId(date, userId).orElseThrow(() -> new IllegalArgumentException("blabla"));
-        Food food = this.foodRepository.findById(foodId).orElseThrow(() -> new IllegalArgumentException("blabla"));
+        DailyStory dailyStory = this.dailyStoryRepository.findByDateAndUserId(date, userId).orElseThrow(() -> new DailyStoryNotFoundException(ErrorConstants.DAILY_STORY_NOT_FOUND));
+        Food food = this.foodRepository.findById(foodId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
 
         dailyStoryFood.setGramsConsumed(quantity);
         dailyStoryFood.setFood(food);
