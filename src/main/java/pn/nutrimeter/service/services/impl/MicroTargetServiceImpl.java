@@ -28,9 +28,9 @@ public class MicroTargetServiceImpl implements MicroTargetService {
     }
 
     @Override
-    public MicroTargetServiceModel getByLifeStageGroupId(MicroTargetServiceModel microTargetServiceModel) {
+    public MicroTargetServiceModel getByLifeStageGroupId(String lifeStageGroupId) {
         MicroTarget microTarget = this.microTargetRepository
-                .findByLifeStageGroupId(microTargetServiceModel.getLifeStageGroupId())
+                .findByLifeStageGroupId(lifeStageGroupId)
                 .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID));
 
         return this.modelMapper.map(microTarget, MicroTargetServiceModel.class);

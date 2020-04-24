@@ -56,23 +56,22 @@ class MicroTargetServiceImplTest {
 
     @Test
     public void getByLifeStageGroupId_withValidId_shouldReturnCorrect() {
-        this.model.setLifeStageGroupId(ID);
         MicroTarget microTarget = mock(MicroTarget.class);
         microTarget.setLifeStageGroupId(ID);
         microTarget.setId(ID);
 
-        when(this.repository.findByLifeStageGroupId(this.model.getLifeStageGroupId())).thenReturn(Optional.of(microTarget));
+        when(this.repository.findByLifeStageGroupId(ID)).thenReturn(Optional.of(microTarget));
 
-        MicroTargetServiceModel actual = this.service.getByLifeStageGroupId(this.model);
+        MicroTargetServiceModel actual = this.service.getByLifeStageGroupId(ID);
 
-        verify(this.repository).findByLifeStageGroupId(model.getLifeStageGroupId());
+        verify(this.repository).findByLifeStageGroupId(ID);
         assertEquals(microTarget.getId(), actual.getId());
         assertEquals(microTarget.getLifeStageGroupId(), actual.getLifeStageGroupId());
     }
 
     @Test
     public void getByLifeStageGroupId_withNonExistingId_shouldThrow() {
-        assertThrows(IdNotFoundException.class, () -> this.service.getByLifeStageGroupId(this.model));
+        assertThrows(IdNotFoundException.class, () -> this.service.getByLifeStageGroupId(ID));
     }
 
     @Test

@@ -32,10 +32,11 @@ public class MacroTargetServiceImpl implements MacroTargetService {
     }
 
     @Override
-    public MacroTargetServiceModel getByLifeGroupId(MacroTargetServiceModel macroTargetServiceModel) {
+    public MacroTargetServiceModel getByLifeGroupId(String lifeStageGroupId) {
 
         MacroTarget macroTarget = this.macroTargetRepository
-                .findByLifeStageGroupId(macroTargetServiceModel.getLifeStageGroupId()).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID));
+                .findByLifeStageGroupId(lifeStageGroupId)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID));
 
         return this.modelMapper.map(macroTarget, MacroTargetServiceModel.class);
     }
