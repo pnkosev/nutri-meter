@@ -26,12 +26,14 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 
     @Override
     public void create(FoodCategoryServiceModel foodCategoryServiceModel) {
-        this.foodCategoryRepository.saveAndFlush(this.modelMapper.map(foodCategoryServiceModel, FoodCategory.class));
+        FoodCategory foodCategory = this.modelMapper.map(foodCategoryServiceModel, FoodCategory.class);
+        this.foodCategoryRepository.saveAndFlush(foodCategory);
     }
 
     @Override
     public FoodCategoryServiceModel getById(String id) {
-        return this.modelMapper.map(this.foodCategoryRepository.findById(id).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_CATEGORY_ID)), FoodCategoryServiceModel.class);
+        FoodCategory foodCategory = this.foodCategoryRepository.findById(id).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_CATEGORY_ID));
+        return this.modelMapper.map(foodCategory, FoodCategoryServiceModel.class);
     }
 
     @Override

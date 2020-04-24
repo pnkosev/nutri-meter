@@ -21,13 +21,10 @@ public class DailyStoryFoodServiceImpl implements DailyStoryFoodService {
 
     private final DailyStoryRepository dailyStoryRepository;
 
-    private final ModelMapper modelMapper;
-
-    public DailyStoryFoodServiceImpl(DailyStoryFoodRepository dailyStoryFoodRepository, FoodRepository foodRepository, DailyStoryRepository dailyStoryRepository, ModelMapper modelMapper) {
+    public DailyStoryFoodServiceImpl(DailyStoryFoodRepository dailyStoryFoodRepository, FoodRepository foodRepository, DailyStoryRepository dailyStoryRepository) {
         this.dailyStoryFoodRepository = dailyStoryFoodRepository;
         this.foodRepository = foodRepository;
         this.dailyStoryRepository = dailyStoryRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
