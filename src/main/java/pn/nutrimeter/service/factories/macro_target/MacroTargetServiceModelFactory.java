@@ -5,5 +5,5 @@ import pn.nutrimeter.service.models.MacroTargetServiceModel;
 
 public interface MacroTargetServiceModelFactory {
 
-    MacroTargetServiceModel create(MacroTarget macroTarget, MacroTargetServiceModel macroTargetServiceModel, double weight);
+    MacroTargetServiceModel create(MacroTarget macroTarget, double weight);
 }

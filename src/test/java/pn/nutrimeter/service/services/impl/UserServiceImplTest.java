@@ -6,17 +6,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pn.nutrimeter.data.models.MacroTarget;
+import pn.nutrimeter.data.models.MicroTarget;
 import pn.nutrimeter.data.models.Role;
 import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.RoleRepository;
 import pn.nutrimeter.data.repositories.UserRepository;
+import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.error.UserAlreadyExistsException;
+import pn.nutrimeter.error.UserNotFoundException;
 import pn.nutrimeter.error.UserRegisterFailureException;
 import pn.nutrimeter.service.factories.macro_target.MacroTargetServiceModelFactory;
 import pn.nutrimeter.service.factories.user.UserFactory;
-import pn.nutrimeter.service.models.RoleServiceModel;
-import pn.nutrimeter.service.models.UserRegisterServiceModel;
+import pn.nutrimeter.service.models.*;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.service.services.validation.UserValidationService;
 
@@ -31,6 +36,7 @@ import static org.mockito.Mockito.*;
 class UserServiceImplTest {
 
     private static final String USERNAME = "username";
+    private static final String ID = "123";
 
     private UserRegisterServiceModel user;
 
@@ -138,9 +144,88 @@ class UserServiceImplTest {
         assertEquals("USER", new ArrayList<>(actual.getAuthorities()).get(0).getAuthority());
     }
 
+    @Test
+    public void getUserByUsername_withExistingUsername_shouldReturnCorrect() {
+        User user = this.getUser();
+
+        when(this.userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+
+        UserServiceModel actual = this.userService.getUserByUsername(USERNAME);
+
+        assertEquals(USERNAME, actual.getUsername());
+    }
+
+    @Test
+    public void getUserByUsername_withNonExistingUsername_shouldThrow() {
+        assertThrows(UserNotFoundException.class, () -> this.userService.getUserByUsername(USERNAME));
+    }
+
+    @Test
+    public void getMacroTargetByUserId_withExistingUserId_shouldReturnCorrect() {
+        User user = this.getUser();
+        MacroTarget macroTarget = mock(MacroTarget.class);
+        user.setMacroTarget(macroTarget);
+        MacroTargetServiceModel model = mock(MacroTargetServiceModel.class);
+
+        when(this.userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(this.macroTargetFactory.create(macroTarget, 100.0)).thenReturn(model);
+
+        MacroTargetServiceModel actual = this.userService.getMacroTargetByUserId(user.getId(), 100.0);
+
+        verify(this.userRepository).findById(user.getId());
+        verify(this.macroTargetFactory).create(macroTarget, 100.0);
+        assertEquals(model, actual);
+    }
+
+    @Test
+    public void getMacroTargetByUserId_withNonExistingUserId_shouldThrow() {
+        assertThrows(IdNotFoundException.class, () -> this.userService.getMacroTargetByUserId(ID, 100.0));
+    }
+
+    @Test
+    public void getMicroTargetByUserId_withExistingUserId_shouldReturnCorrect() {
+        User user = this.getUser();
+        MicroTarget microTarget = new MicroTarget();
+        microTarget.setCalciumRDA(1000.0);
+        microTarget.setCopperRDA(100.0);
+        microTarget.setFolateRDA(100.0);
+        user.setMicroTarget(microTarget);
+
+        when(this.userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+
+        MicroTargetServiceModel actual = this.userService.getMicroTargetByUserId(user.getId());
+
+        verify(this.userRepository).findById(user.getId());
+        assertEquals(microTarget.getCalciumRDA(), actual.getCalciumRDA());
+        assertEquals(microTarget.getCopperRDA(), actual.getCopperRDA());
+        assertEquals(microTarget.getFolateRDA(), actual.getFolateRDA());
+    }
+
+    @Test
+    public void getMicroTargetByUserId_withNonExistingUserId_shouldThrow() {
+        assertThrows(IdNotFoundException.class, () -> this.userService.getMicroTargetByUserId(ID));
+    }
+
+    @Test
+    public void loadUserByUsername_withExistingUsername_shouldReturnCorrect() {
+        User user = getUser();
+
+        when(this.userRepository.findByUsername(USERNAME)).thenReturn(Optional.of(user));
+        UserDetails actual = this.userService.loadUserByUsername(USERNAME);
+
+        verify(this.userRepository).findByUsername(USERNAME);
+        assertEquals(user.getUsername(), actual.getUsername());
+    }
+
+    @Test
+    public void loadUserByUsername_withNonExistingUsername_shouldThrow() {
+        assertThrows(UsernameNotFoundException.class, () -> this.userService.loadUserByUsername(USERNAME));
+    }
+
     private User getUser() {
         User user = new User();
         user.setUsername(USERNAME);
+        user.setId(ID);
         return user;
     }
 }

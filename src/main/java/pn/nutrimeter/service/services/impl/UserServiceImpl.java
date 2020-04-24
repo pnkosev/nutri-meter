@@ -92,9 +92,8 @@ public class UserServiceImpl implements UserService {
     public MacroTargetServiceModel getMacroTargetByUserId(String userId, double userWeight) {
         User user = this.userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
         MacroTarget macroTarget = user.getMacroTarget();
-        MacroTargetServiceModel model = this.modelMapper.map(macroTarget, MacroTargetServiceModel.class);
 
-        return this.macroTargetServiceModelFactory.create(macroTarget, model, userWeight);
+        return this.macroTargetServiceModelFactory.create(macroTarget, userWeight);
     }
 
     @Override
@@ -104,7 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         return this.userRepository
                 .findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(ErrorConstants.USERNAME_NOT_FOUND));

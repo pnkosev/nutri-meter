@@ -43,8 +43,7 @@ public class MacroTargetServiceImpl implements MacroTargetService {
     @Override
     public MacroTargetServiceModel getByUserId(String id, double weight) {
         MacroTarget macroTarget = this.macroTargetRepository.findByUserId(id);
-        MacroTargetServiceModel model = this.modelMapper.map(macroTarget, MacroTargetServiceModel.class);
 
-        return this.macroTargetServiceModelFactory.create(macroTarget, model, weight);
+        return this.macroTargetServiceModelFactory.create(macroTarget, weight);
     }
 }
