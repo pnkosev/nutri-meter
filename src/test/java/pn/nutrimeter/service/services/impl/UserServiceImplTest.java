@@ -1,14 +1,11 @@
 package pn.nutrimeter.service.services.impl;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pn.nutrimeter.base.TestBase;
 import pn.nutrimeter.data.models.MacroTarget;
 import pn.nutrimeter.data.models.MicroTarget;
 import pn.nutrimeter.data.models.Role;
@@ -31,9 +28,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-class UserServiceImplTest {
+class UserServiceImplTest extends TestBase {
 
     private static final String USERNAME = "username";
     private static final String ID = "123";
@@ -58,8 +53,8 @@ class UserServiceImplTest {
     @Autowired
     UserService userService;
 
-    @BeforeEach
-    void setUp() {
+    @Override
+    protected void beforeEach() {
         this.user = mock(UserRegisterServiceModel.class);
 
         when(this.userValidationService.isNotNull(this.user)).thenReturn(true);

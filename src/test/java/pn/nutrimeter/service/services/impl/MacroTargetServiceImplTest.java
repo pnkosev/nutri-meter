@@ -1,14 +1,11 @@
 package pn.nutrimeter.service.services.impl;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import pn.nutrimeter.base.TestBase;
 import pn.nutrimeter.data.models.MacroTarget;
 import pn.nutrimeter.data.repositories.MacroTargetRepository;
 import pn.nutrimeter.error.IdNotFoundException;
@@ -21,9 +18,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-class MacroTargetServiceImplTest {
+class MacroTargetServiceImplTest extends TestBase {
 
     private static final String ID = "id";
 
@@ -38,8 +33,8 @@ class MacroTargetServiceImplTest {
 
     MacroTargetServiceModel model;
 
-    @BeforeEach
-    void setUp() {
+    @Override
+    protected void beforeEach() {
         this.model = mock(MacroTargetServiceModel.class);
     }
 

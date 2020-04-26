@@ -1,14 +1,10 @@
 package pn.nutrimeter.service.services.impl;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pn.nutrimeter.base.TestBase;
 import pn.nutrimeter.data.models.FoodCategory;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.error.IdNotFoundException;
@@ -22,9 +18,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-class FoodCategoryServiceImplTest {
+class FoodCategoryServiceImplTest extends TestBase {
 
     @MockBean
     FoodCategoryRepository repository;
@@ -35,8 +29,8 @@ class FoodCategoryServiceImplTest {
     FoodCategoryServiceModel model;
     FoodCategory foodCategory;
 
-    @BeforeEach
-    void setUp() {
+    @Override
+    protected void beforeEach() {
         this.model = getModel();
         this.foodCategory = getFoodCategory();
     }

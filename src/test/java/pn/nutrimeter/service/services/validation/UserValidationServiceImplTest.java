@@ -1,21 +1,16 @@
 package pn.nutrimeter.service.services.validation;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import pn.nutrimeter.base.TestBase;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-class UserValidationServiceImplTest {
+class UserValidationServiceImplTest extends TestBase {
 
     private static final String PASSWORD = "pass";
     private static final String USERNAME = "username";
@@ -29,8 +24,8 @@ class UserValidationServiceImplTest {
     @Autowired
     UserValidationService service;
 
-    @BeforeEach
-    void setUp() {
+    @Override
+    protected void beforeEach() {
         this.user = new UserRegisterServiceModel();
         this.user.setPassword(PASSWORD);
         this.user.setConfirmPassword(PASSWORD);
