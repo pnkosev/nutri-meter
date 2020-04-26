@@ -55,7 +55,7 @@ public class TargetController {
 
         this.lifeStageGroupService.create(this.modelMapper.map(lifeStageGroupBindingModel, LifeStageGroupServiceModel.class));
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 
     @GetMapping("/macro/add")
@@ -79,7 +79,7 @@ public class TargetController {
 
         this.macroTargetService.create(this.modelMapper.map(macroTargetBindingModel, MacroTargetServiceModel.class));
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 
     @GetMapping("/micro/add")
@@ -103,6 +103,6 @@ public class TargetController {
 
         this.microTargetService.create(this.modelMapper.map(microTargetBindingModel, MicroTargetServiceModel.class));
 
-        return "redirect:/";
+        return "redirect:/home";
     }
 }
