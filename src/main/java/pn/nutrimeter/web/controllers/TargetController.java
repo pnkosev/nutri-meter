@@ -1,6 +1,7 @@
 package pn.nutrimeter.web.controllers;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,17 +46,19 @@ public class TargetController {
     }
 
     @PostMapping("/group/add")
-    public String lifeStageGroupAddPost(
+    public ModelAndView lifeStageGroupAddPost(
             @Valid LifeStageGroupBindingModel lifeStageGroupBindingModel,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "target/life-stage-group-add";
+            ModelAndView mav = new ModelAndView("target/life-stage-group-add");
+            mav.setStatus(HttpStatus.UNPROCESSABLE_ENTITY);
+            return mav;
         }
 
         this.lifeStageGroupService.create(this.modelMapper.map(lifeStageGroupBindingModel, LifeStageGroupServiceModel.class));
 
-        return "redirect:/home";
+        return new ModelAndView("redirect:/home");
     }
 
     @GetMapping("/macro/add")

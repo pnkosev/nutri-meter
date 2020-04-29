@@ -6,7 +6,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import pn.nutrimeter.base.TestBase;
 
 @AutoConfigureMockMvc
-public class ViewTestBase extends TestBase {
+public class MvcTestBase extends TestBase {
     @Autowired
     protected MockMvc mockMvc;
 }

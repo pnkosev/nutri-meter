@@ -3,17 +3,12 @@ package pn.nutrimeter.web.rest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
-import org.springframework.security.test.context.support.WithMockUser;
 import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.repositories.FoodRepository;
 import pn.nutrimeter.web.base.RestApiTestBase;
 import pn.nutrimeter.web.models.view.FoodSimpleViewModel;
 
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,9 +21,6 @@ class FoodRestControllerTest extends RestApiTestBase {
     FoodRepository mockFoodRepository;
 
     @Autowired
-    TestRestTemplate restTemplate;
-
-    @Autowired
     FoodRestController foodRestController;
 
     @Override
@@ -38,10 +30,10 @@ class FoodRestControllerTest extends RestApiTestBase {
     }
 
     @Test
-    @WithMockUser("test")
     public void allFoods_whenNoFoods_shouldReturnEmptyList() {
         this.foods.clear();
 
+        // CANNOT GET THIS TO WORK FOR A SECURED/AUTHORIZED ROUTE ----- BUT IT WORKS FINE OTHERWISE
 //        FoodSimpleViewModel[] foods = getRestTemplate()
 //                .getForObject(getFullUrl("/api/foods"), FoodSimpleViewModel[].class);
 //
