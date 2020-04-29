@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 @Controller
-public class DailyStoryController {
+public class DailyStoryController extends BaseController {
 
     private final UserService userService;
 
@@ -30,16 +30,16 @@ public class DailyStoryController {
     }
 
     @GetMapping("/diary")
-    public String dailyStoryDefault() {
+    public ModelAndView dailyStoryDefault() {
         LocalDate today = LocalDate.now();
 
-        return "redirect:/diary/" + today;
+        return redirect("/diary/" + today);
     }
 
     @GetMapping("/diary/{date}")
     public ModelAndView dailyStory(@PathVariable String date, Principal principal) {
 
-        ModelAndView mov = new ModelAndView();
+        ModelAndView mav = new ModelAndView();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate today;
@@ -50,19 +50,19 @@ public class DailyStoryController {
             throw new DateParseFailureException("Please enter a valid date!", e.getParsedString(), e.getErrorIndex());
         }
 
-        this.setDays(mov, today);
+        this.setDays(mav, today);
         UserServiceModel userServiceModel = this.userService.getUserByUsername(principal.getName());
         String userId = userServiceModel.getId();
         DailyStoryServiceModel dailyStory = this.dailyStoryService.getByDateAndUserId(today, userId);
-        mov.addObject("dailyStory", dailyStory);
+        mav.addObject("dailyStory", dailyStory);
 
         MacroTargetServiceModel macroTargetServiceModel = this.userService.getMacroTargetByUserId(userId, dailyStory.getDailyWeight());
         MicroTargetServiceModel microTargetServiceModel = this.userService.getMicroTargetByUserId(userId);
 
-        mov.addObject("macroTarget", macroTargetServiceModel);
-        mov.addObject("microTarget", microTargetServiceModel);
+        mav.addObject("macroTarget", macroTargetServiceModel);
+        mav.addObject("microTarget", microTargetServiceModel);
 
-        return mov;
+        return view(mav, "diary/daily-story");
     }
 
     private void setDays(ModelAndView mov, LocalDate today) {
@@ -71,6 +71,5 @@ public class DailyStoryController {
         LocalDate yesterday = LocalDate.from(today).minusDays(1);
         mov.addObject("yesterday", yesterday);
         mov.addObject("tomorrow", tomorrow);
-        mov.setViewName("diary/daily-story");
     }
 }

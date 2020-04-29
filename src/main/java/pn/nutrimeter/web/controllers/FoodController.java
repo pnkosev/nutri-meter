@@ -1,6 +1,7 @@
 package pn.nutrimeter.web.controllers;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/food")
-public class FoodController {
+public class FoodController extends BaseController {
 
     private final FoodService foodService;
 
@@ -38,9 +39,9 @@ public class FoodController {
 
     @GetMapping("/add")
     public ModelAndView addFood(FoodCreateBindingModel foodCreateBindingModel) {
-        ModelAndView mov = new ModelAndView("/food/food-add");
-        mov.addObject("foodCategories", this.foodCategoryService.getAll());
-        return mov;
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("foodCategories", this.foodCategoryService.getAll());
+        return view(mav, "food/food-add");
     }
 
     @PostMapping("/add")
@@ -49,9 +50,9 @@ public class FoodController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            ModelAndView mov = new ModelAndView("/food/food-add");
-            mov.addObject("foodCategories", this.foodCategoryService.getAll());
-            return mov;
+            ModelAndView mav = new ModelAndView();
+            mav.addObject("foodCategories", this.foodCategoryService.getAll());
+            return view(mav, "food/food-add", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         FoodServiceModel foodServiceModel = this.modelMapper.map(foodCreateBindingModel, FoodServiceModel.class);
@@ -71,18 +72,18 @@ public class FoodController {
         try {
             this.foodService.create(foodServiceModel);
         } catch (FoodAddFailureException | IdNotFoundException e) {
-            ModelAndView mov = new ModelAndView("/food/food-add");
-            mov.addObject("foodCategories", this.foodCategoryService.getAll());
-            mov.addObject("msg", e.getMessage());
-            return mov;
+            ModelAndView mav = new ModelAndView();
+            mav.addObject("foodCategories", this.foodCategoryService.getAll());
+            mav.addObject("msg", e.getMessage());
+            return view(mav, "food/food-add", e.getHttpStatus());
         }
 
-        return new ModelAndView("redirect:/home");
+        return redirect("/home");
     }
 
     @GetMapping("/category/add")
     public ModelAndView addCategory(FoodCategoryCreateBindingModel foodCategoryCreateBindingModel) {
-        return new ModelAndView("food/food-category-add");
+        return view("food/food-category-add");
     }
 
     @PostMapping("/category/add")
@@ -91,11 +92,11 @@ public class FoodController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("food/food-category-add");
+            return view("food/food-category-add", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.foodCategoryService.create(this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class));
 
-        return new ModelAndView("redirect:/home");
+        return redirect("/home");
     }
 }

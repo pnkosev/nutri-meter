@@ -7,15 +7,15 @@ import org.springframework.web.servlet.ModelAndView;
 import java.security.Principal;
 
 @Controller
-public class HomeController {
+public class HomeController extends BaseController {
 
     @GetMapping("/")
-    public String index() {
-        return "index";
+    public ModelAndView index() {
+        return view("index");
     }
 
     @GetMapping("/home")
-    public String home() {
-        return "home";
+    public ModelAndView home() {
+        return view("home");
     }
 }

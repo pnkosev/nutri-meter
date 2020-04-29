@@ -1,6 +1,7 @@
 package pn.nutrimeter.web.controllers;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ import javax.validation.Valid;
 import java.util.Map;
 
 @Controller
-public class UserController {
+public class UserController extends BaseController {
 
     private final UserService userService;
 
@@ -29,31 +30,31 @@ public class UserController {
 
     @GetMapping("/register")
     public ModelAndView register(UserRegisterBindingModel userRegisterBindingModel) {
-        return new ModelAndView("user/register");
+        return view("user/register");
     }
 
     @PostMapping("/register")
-    public String registerPost(
+    public ModelAndView registerPost(
             @Valid UserRegisterBindingModel userRegisterBindingModel,
             BindingResult bindingResult,
             Map<String, String> map) {
 
         if (bindingResult.hasErrors()) {
-            return "user/register";
+            return view("user/register", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         try {
             this.userService.register(this.modelMapper.map(userRegisterBindingModel, UserRegisterServiceModel.class));
-            return "redirect:/login";
         } catch (UserRegisterFailureException | UserAlreadyExistsException e) {
             map.put("reason", e.getMessage());
-            return "user/register";
+            return view("user/register", e.getHttpStatus());
         }
 
+        return redirect("/login");
     }
 
     @GetMapping("/login")
-    public String login() {
-        return "user/login";
+    public ModelAndView login() {
+        return view("user/login");
     }
 }

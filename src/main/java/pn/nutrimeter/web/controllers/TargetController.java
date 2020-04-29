@@ -23,7 +23,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/target")
-public class TargetController {
+public class TargetController extends BaseController {
 
     private final LifeStageGroupService lifeStageGroupService;
 
@@ -41,8 +41,8 @@ public class TargetController {
     }
 
     @GetMapping("/group/add")
-    public String lifeStageGroupAdd(LifeStageGroupBindingModel lifeStageGroupBindingModel) {
-        return "target/life-stage-group-add";
+    public ModelAndView lifeStageGroupAdd(LifeStageGroupBindingModel lifeStageGroupBindingModel) {
+        return view("target/life-stage-group-add");
     }
 
     @PostMapping("/group/add")
@@ -51,61 +51,59 @@ public class TargetController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            ModelAndView mav = new ModelAndView("target/life-stage-group-add");
-            mav.setStatus(HttpStatus.UNPROCESSABLE_ENTITY);
-            return mav;
+            return view("target/life-stage-group-add", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.lifeStageGroupService.create(this.modelMapper.map(lifeStageGroupBindingModel, LifeStageGroupServiceModel.class));
 
-        return new ModelAndView("redirect:/home");
+        return redirect("/home");
     }
 
     @GetMapping("/macro/add")
     public ModelAndView macroTargetAdd(MacroTargetBindingModel macroTargetBindingModel) {
 
         List<LifeStageGroupServiceModel> lifeStageGroups = this.lifeStageGroupService.getAll();
-        ModelAndView mov = new ModelAndView("target/macro-target-add");
-        mov.addObject("lifeStageGroups", lifeStageGroups);
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("lifeStageGroups", lifeStageGroups);
 
-        return mov;
+        return view(mav, "target/macro-target-add");
     }
 
     @PostMapping("/macro/add")
-    public String macroTargetAddPost(
+    public ModelAndView macroTargetAddPost(
             @Valid MacroTargetBindingModel macroTargetBindingModel,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "target/macro-target-add";
+            return view("target/macro-target-add", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.macroTargetService.create(this.modelMapper.map(macroTargetBindingModel, MacroTargetServiceModel.class));
 
-        return "redirect:/home";
+        return redirect("/home");
     }
 
     @GetMapping("/micro/add")
     public ModelAndView microTargetAdd(MicroTargetBindingModel microTargetBindingModel) {
 
         List<LifeStageGroupServiceModel> lifeStageGroups = this.lifeStageGroupService.getAll();
-        ModelAndView mov = new ModelAndView("target/micro-target-add");
-        mov.addObject("lifeStageGroups", lifeStageGroups);
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("lifeStageGroups", lifeStageGroups);
 
-        return mov;
+        return view(mav, "target/micro-target-add");
     }
 
     @PostMapping("/micro/add")
-    public String microTargetAddPost(
+    public ModelAndView microTargetAddPost(
             @Valid MicroTargetBindingModel microTargetBindingModel,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "target/macro-target-add";
+            return view("target/macro-target-add", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.microTargetService.create(this.modelMapper.map(microTargetBindingModel, MicroTargetServiceModel.class));
 
-        return "redirect:/home";
+        return redirect("/home");
     }
 }
