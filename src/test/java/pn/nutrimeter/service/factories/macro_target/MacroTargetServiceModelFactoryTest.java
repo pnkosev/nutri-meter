@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class MacroTargetServiceModelFactoryImplTest {
+class MacroTargetServiceModelFactoryTest {
 
     private static final double WEIGHT = 100.0;
 

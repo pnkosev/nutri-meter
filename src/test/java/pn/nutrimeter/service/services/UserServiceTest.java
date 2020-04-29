@@ -1,4 +1,4 @@
-package pn.nutrimeter.service.services.impl;
+package pn.nutrimeter.service.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class UserServiceImplTest extends TestBase {
+class UserServiceTest extends TestBase {
 
     private static final String USERNAME = "username";
     private static final String ID = "123";

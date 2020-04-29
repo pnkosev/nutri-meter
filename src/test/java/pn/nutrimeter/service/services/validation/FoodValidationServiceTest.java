@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FoodValidationServiceImplTest extends TestBase {
+class FoodValidationServiceTest extends TestBase {
 
     @Autowired
     FoodValidationService foodValidationService;

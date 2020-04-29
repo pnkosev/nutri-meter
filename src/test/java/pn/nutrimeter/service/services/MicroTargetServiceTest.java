@@ -1,4 +1,4 @@
-package pn.nutrimeter.service.services.impl;
+package pn.nutrimeter.service.services;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class MicroTargetServiceImplTest extends TestBase {
+class MicroTargetServiceTest extends TestBase {
 
     private static final String ID = "id";
 

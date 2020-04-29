@@ -1,4 +1,4 @@
-package pn.nutrimeter.service.services.impl;
+package pn.nutrimeter.service.services;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class DailyStoryServiceImplTest extends TestBase {
+class DailyStoryServiceTest extends TestBase {
 
     private static final LocalDate DATE = LocalDate.now();
     private static final String ID = "ID";

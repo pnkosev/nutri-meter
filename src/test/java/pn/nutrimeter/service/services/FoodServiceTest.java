@@ -1,4 +1,4 @@
-package pn.nutrimeter.service.services.impl;
+package pn.nutrimeter.service.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +20,7 @@ import pn.nutrimeter.service.facades.AuthenticationFacade;
 import pn.nutrimeter.service.models.FoodCategoryServiceModel;
 import pn.nutrimeter.service.models.FoodServiceModel;
 import pn.nutrimeter.service.services.api.FoodService;
+import pn.nutrimeter.service.services.impl.FoodServiceImpl;
 import pn.nutrimeter.service.services.validation.FoodValidationService;
 
 import java.util.*;
@@ -30,7 +31,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-class FoodServiceImplTest {
+class FoodServiceTest {
 
     @Autowired
     FoodRepository foodRepository;
@@ -38,7 +39,7 @@ class FoodServiceImplTest {
     @Autowired
     FoodCategoryRepository foodCategoryRepository;
 
-    // CANNOT AUTOWIRE - AS IF NO THERE WAS NO @Service... BUT THERE IS ONE, I DON'T GET IT (Maybe cuz of the @DataJpaTest???)
+    // CANNOT AUTOWIRE - AS IF THERE WAS NO @Service... BUT THERE IS ONE, I DON'T GET IT (Maybe cuz of the @DataJpaTest???)
     @MockBean
     FoodValidationService foodValidationService;
 

@@ -10,7 +10,7 @@ import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserValidationServiceImplTest extends TestBase {
+class UserValidationServiceTest extends TestBase {
 
     private static final String PASSWORD = "pass";
     private static final String USERNAME = "username";

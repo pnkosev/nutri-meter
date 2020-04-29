@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class UserFactoryImplTest {
+public class UserFactoryTest {
 
     @MockBean
     HashingService hashingService;
