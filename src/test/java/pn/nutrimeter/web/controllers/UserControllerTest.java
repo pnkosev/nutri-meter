@@ -44,7 +44,7 @@ class UserControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser("test")
+    @WithMockUser
     public void register_withAuthenticatedUser_shouldReturnError() throws Exception {
         this.mockMvc
                 .perform(get(UserController.USER_REGISTER_URL))
@@ -52,7 +52,7 @@ class UserControllerTest extends MvcTestBase {
     }
 
     @Test
-    public void register_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirect() throws Exception {
+    public void registerPost_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirect() throws Exception {
         Role role = new Role("USER");
         User user = new User();
         LifeStageGroup lifeStageGroup = mock(LifeStageGroup.class);
@@ -81,7 +81,7 @@ class UserControllerTest extends MvcTestBase {
     }
 
     @Test
-    public void register_whenBindingResultHasErrors_shouldResultInInputError() throws Exception {
+    public void registerPost_whenBindingResultHasErrors_shouldResultInInputError() throws Exception {
         this.mockMvc
                 .perform(post(UserController.USER_REGISTER_URL)
                         .param("username", "u")
@@ -98,7 +98,7 @@ class UserControllerTest extends MvcTestBase {
     }
 
     @Test
-    public void register_whenPasswordsDoNotMatch_shouldResultInInputError() throws Exception {
+    public void registerPost_whenPasswordsDoNotMatch_shouldResultInInputError() throws Exception {
         this.mockMvc
                 .perform(post(UserController.USER_REGISTER_URL)
                         .param("username", "username")
@@ -115,7 +115,7 @@ class UserControllerTest extends MvcTestBase {
     }
 
     @Test
-    public void register_whenUsernameIsNotFree_shouldResultInInputError() throws Exception {
+    public void registerPost_whenUsernameIsNotFree_shouldResultInInputError() throws Exception {
         when(this.mockUserRepository.existsByUsername(any())).thenReturn(true);
 
         this.mockMvc
@@ -134,7 +134,7 @@ class UserControllerTest extends MvcTestBase {
     }
 
     @Test
-    public void register_whenEmailIsNotFree_shouldResultInInputError() throws Exception {
+    public void registerPost_whenEmailIsNotFree_shouldResultInInputError() throws Exception {
         when(this.mockUserRepository.existsByEmail(any())).thenReturn(true);
 
         this.mockMvc

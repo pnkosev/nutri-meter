@@ -25,6 +25,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/food")
 public class FoodController extends BaseController {
 
+    public static final String FOOD_ADD_URL = "/add";
+    public static final String FOOD_ADD_VIEW = "food/food-add";
+    public static final String FOOD_CATEGORY_ADD_URL = "/category/add";
+    public static final String FOOD_CATEGORY_ADD_VIEW = "food/food-category-add";
+    public static final String REDIRECT_URL = "/home";
+
     private final FoodService foodService;
 
     private final FoodCategoryService foodCategoryService;
@@ -37,14 +43,14 @@ public class FoodController extends BaseController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/add")
+    @GetMapping(FOOD_ADD_URL)
     public ModelAndView addFood(FoodCreateBindingModel foodCreateBindingModel) {
         ModelAndView mav = new ModelAndView();
         mav.addObject("foodCategories", this.foodCategoryService.getAll());
-        return view(mav, "food/food-add");
+        return view(mav, FOOD_ADD_VIEW);
     }
 
-    @PostMapping("/add")
+    @PostMapping(FOOD_ADD_URL)
     public ModelAndView addFoodPost(
             @Valid FoodCreateBindingModel foodCreateBindingModel,
             BindingResult bindingResult) {
@@ -52,7 +58,7 @@ public class FoodController extends BaseController {
         if (bindingResult.hasErrors()) {
             ModelAndView mav = new ModelAndView();
             mav.addObject("foodCategories", this.foodCategoryService.getAll());
-            return view(mav, "food/food-add", HttpStatus.UNPROCESSABLE_ENTITY);
+            return view(mav, FOOD_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         FoodServiceModel foodServiceModel = this.modelMapper.map(foodCreateBindingModel, FoodServiceModel.class);
@@ -75,28 +81,28 @@ public class FoodController extends BaseController {
             ModelAndView mav = new ModelAndView();
             mav.addObject("foodCategories", this.foodCategoryService.getAll());
             mav.addObject("msg", e.getMessage());
-            return view(mav, "food/food-add", e.getHttpStatus());
+            return view(mav, FOOD_ADD_VIEW, e.getHttpStatus());
         }
 
-        return redirect("/home");
+        return redirect(REDIRECT_URL);
     }
 
-    @GetMapping("/category/add")
+    @GetMapping(FOOD_CATEGORY_ADD_URL)
     public ModelAndView addCategory(FoodCategoryCreateBindingModel foodCategoryCreateBindingModel) {
-        return view("food/food-category-add");
+        return view(FOOD_CATEGORY_ADD_VIEW);
     }
 
-    @PostMapping("/category/add")
+    @PostMapping(FOOD_CATEGORY_ADD_URL)
     public ModelAndView addCategoryPost(
             @Valid FoodCategoryCreateBindingModel foodCategoryCreateBindingModel,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return view("food/food-category-add", HttpStatus.UNPROCESSABLE_ENTITY);
+            return view(FOOD_CATEGORY_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.foodCategoryService.create(this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class));
 
-        return redirect("/home");
+        return redirect(REDIRECT_URL);
     }
 }

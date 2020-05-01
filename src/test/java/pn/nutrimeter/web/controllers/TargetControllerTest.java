@@ -24,7 +24,7 @@ class TargetControllerTest extends MvcTestBase {
     List<LifeStageGroup> models;
 
     @Test
-    @WithMockUser("test")
+    @WithMockUser
     public void lifeStageGroupAdd_whenLoggedIn_shouldReturnCorrect() throws Exception {
         this.mockMvc.perform(get(BASE_TARGET_URL + TargetController.LIFE_STAGE_GROUP_ADD_URL))
                 .andExpect(status().isOk())
@@ -39,7 +39,7 @@ class TargetControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser("test")
+    @WithMockUser
     public void lifeStageGroupAddPost_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirectToHome() throws Exception {
         this.mockMvc
                 .perform(post(BASE_TARGET_URL + TargetController.LIFE_STAGE_GROUP_ADD_URL)
@@ -51,7 +51,7 @@ class TargetControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser("test")
+    @WithMockUser
     public void lifeStageGroupAddPost_whenBindingResultHasErrors_shouldResultInInputError() throws Exception {
         this.mockMvc
                 .perform(post(BASE_TARGET_URL + TargetController.LIFE_STAGE_GROUP_ADD_URL))
@@ -60,7 +60,7 @@ class TargetControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser("test")
+    @WithMockUser
     public void macroTargetAdd_whenLoggedIn_shouldReturnCorrect() throws Exception {
         this.models = List.of(
                 this.getLifeStageGroup(),
@@ -91,8 +91,8 @@ class TargetControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser("test")
-    public void macroTargetAdd_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirectToHome() throws Exception {
+    @WithMockUser
+    public void macroTargetAddPost_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirectToHome() throws Exception {
         this.mockMvc
                 .perform(post(BASE_TARGET_URL + TargetController.MACRO_TARGET_ADD_URL)
                     .param("proteinRDA", "20.0"))
@@ -101,8 +101,8 @@ class TargetControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser("test")
-    public void macroTargetAdd_whenBindingResultHasErrors_shouldResultInInputError() throws Exception {
+    @WithMockUser
+    public void macroTargetAddPost_whenBindingResultHasErrors_shouldResultInInputError() throws Exception {
         this.mockMvc
                 .perform(post(BASE_TARGET_URL + TargetController.MACRO_TARGET_ADD_URL))
                 .andExpect(status().isUnprocessableEntity())
@@ -110,7 +110,7 @@ class TargetControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser("test")
+    @WithMockUser
     public void microTargetAdd_whenLoggedIn_shouldReturnCorrect() throws Exception {
         this.models = List.of(
                 this.getLifeStageGroup(),
@@ -141,8 +141,8 @@ class TargetControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser("test")
-    public void microTargetAdd_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirectToHome() throws Exception {
+    @WithMockUser
+    public void microTargetAddPost_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirectToHome() throws Exception {
         this.mockMvc
                 .perform(post(BASE_TARGET_URL + TargetController.MICRO_TARGET_ADD_URL)
                         .param("vitaminARDA", "20.0"))
@@ -151,8 +151,8 @@ class TargetControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser("test")
-    public void microTargetAdd_whenBindingResultHasErrors_shouldResultInInputError() throws Exception {
+    @WithMockUser
+    public void microTargetAddPost_whenBindingResultHasErrors_shouldResultInInputError() throws Exception {
         this.mockMvc
                 .perform(post(BASE_TARGET_URL + TargetController.MICRO_TARGET_ADD_URL))
                 .andExpect(status().isUnprocessableEntity())

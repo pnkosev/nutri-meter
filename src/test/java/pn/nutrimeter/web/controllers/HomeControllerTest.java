@@ -20,7 +20,7 @@ class HomeControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser("test")
+    @WithMockUser
     public void home_withLoggedInUser_shouldReturnCorrect() throws Exception {
         this.mockMvc
                 .perform(get("/home"))
