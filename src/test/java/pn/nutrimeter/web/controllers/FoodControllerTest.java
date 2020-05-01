@@ -3,12 +3,16 @@ package pn.nutrimeter.web.controllers;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.models.FoodCategory;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
+import pn.nutrimeter.data.repositories.FoodRepository;
 import pn.nutrimeter.web.base.MvcTestBase;
 
 import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -19,6 +23,9 @@ class FoodControllerTest extends MvcTestBase {
 
     @MockBean
     FoodCategoryRepository mockFoodCategoryRepository;
+
+    @MockBean
+    FoodRepository mockFoodRepository;
 
     @Test
     @WithMockUser
@@ -46,17 +53,35 @@ class FoodControllerTest extends MvcTestBase {
 
     @Test
     @WithMockUser
-    public void addFoodPost_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirect() {
-//        this.mockMvc
-//                .perform(post(BASE_URL + FoodController.FOOD_CATEGORY_ADD_URL)
-//                        .param("name", "name")
-//                        .param("description", "description")
-//                        .param("totalProteins", "5")
-//                        .param("totalCarbohydrates", "5")
-//                        .param("totalLipids", "5")
-//                        .param("foodCategories", this.getFoodCategoryString()))
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(redirectedUrl(FoodController.REDIRECT_URL));
+    public void addFoodPost_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirect() throws Exception {
+        when(this.mockFoodCategoryRepository.findById(any())).thenReturn(Optional.of(new FoodCategory()));
+        when(this.mockFoodRepository.saveAndFlush(any())).thenReturn(new Food());
+
+        this.mockMvc
+                .perform(post(BASE_URL + FoodController.FOOD_ADD_URL)
+                        .param("name", "name")
+                        .param("description", "description")
+                        .param("totalProteins", "5")
+                        .param("totalCarbohydrates", "5")
+                        .param("totalLipids", "5")
+                        .param("foodCategories", this.getFoodCategoryString()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(FoodController.REDIRECT_URL));
+    }
+
+    @Test
+    @WithMockUser
+    public void addFoodPost_whenBindingResultHasErrors_shouldReturnCorrectAndRedirect() throws Exception {
+        this.mockMvc
+                .perform(post(BASE_URL + FoodController.FOOD_ADD_URL)
+                        .param("name", "n")
+                        .param("description", "description")
+                        .param("totalProteins", "5")
+                        .param("totalCarbohydrates", "5")
+                        .param("totalLipids", "5")
+                        .param("foodCategories", this.getFoodCategoryString()))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(view().name(FoodController.FOOD_ADD_VIEW));
     }
 
     @Test
@@ -97,5 +122,5 @@ class FoodControllerTest extends MvcTestBase {
 
     private FoodCategory getFoodCategory() { return new FoodCategory() {{ setName("NAME"); }}; }
 
-    private String getFoodCategoryString() { return "FOOD_CATEGORY"; }
+    private String getFoodCategoryString() { return "ID"; }
 }
