@@ -47,7 +47,7 @@ class TargetControllerTest extends MvcTestBase {
                         .param("lowerAgeBound", "10")
                         .param("upperAgeBound", "20"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(TargetController.HOME_URL_REDIRECT));
+                .andExpect(redirectedUrl(TargetController.REDIRECT_URL));
     }
 
     @Test
@@ -97,7 +97,7 @@ class TargetControllerTest extends MvcTestBase {
                 .perform(post(BASE_TARGET_URL + TargetController.MACRO_TARGET_ADD_URL)
                     .param("proteinRDA", "20.0"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(TargetController.HOME_URL_REDIRECT));
+                .andExpect(redirectedUrl(TargetController.REDIRECT_URL));
     }
 
     @Test
@@ -147,7 +147,7 @@ class TargetControllerTest extends MvcTestBase {
                 .perform(post(BASE_TARGET_URL + TargetController.MICRO_TARGET_ADD_URL)
                         .param("vitaminARDA", "20.0"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(TargetController.HOME_URL_REDIRECT));
+                .andExpect(redirectedUrl(TargetController.REDIRECT_URL));
     }
 
     @Test

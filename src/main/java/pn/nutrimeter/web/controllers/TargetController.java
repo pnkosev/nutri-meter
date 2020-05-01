@@ -31,7 +31,7 @@ public class TargetController extends BaseController {
     public static final String MICRO_TARGET_ADD_URL = "/micro/add";
     public static final String MACRO_TARGET_ADD_VIEW = "target/macro-target-add";
     public static final String MICRO_TARGET_ADD_VIEW = "target/micro-target-add";
-    public static final String HOME_URL_REDIRECT = "/home";
+    public static final String REDIRECT_URL = "/home";
 
     private final LifeStageGroupService lifeStageGroupService;
 
@@ -64,7 +64,7 @@ public class TargetController extends BaseController {
 
         this.lifeStageGroupService.create(this.modelMapper.map(lifeStageGroupBindingModel, LifeStageGroupServiceModel.class));
 
-        return redirect(HOME_URL_REDIRECT);
+        return redirect(REDIRECT_URL);
     }
 
     @GetMapping(MACRO_TARGET_ADD_URL)
@@ -88,7 +88,7 @@ public class TargetController extends BaseController {
 
         this.macroTargetService.create(this.modelMapper.map(macroTargetBindingModel, MacroTargetServiceModel.class));
 
-        return redirect(HOME_URL_REDIRECT);
+        return redirect(REDIRECT_URL);
     }
 
     @GetMapping(MICRO_TARGET_ADD_URL)
@@ -112,6 +112,6 @@ public class TargetController extends BaseController {
 
         this.microTargetService.create(this.modelMapper.map(microTargetBindingModel, MicroTargetServiceModel.class));
 
-        return redirect(HOME_URL_REDIRECT);
+        return redirect(REDIRECT_URL);
     }
 }

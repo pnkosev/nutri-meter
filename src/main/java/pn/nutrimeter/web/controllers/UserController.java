@@ -19,6 +19,12 @@ import java.util.Map;
 @Controller
 public class UserController extends BaseController {
 
+    public static final String USER_REGISTER_URL = "/register";
+    public static final String USER_REGISTER_VIEW = "user/register";
+    public static final String USER_LOGIN_URL = "/login";
+    public static final String USER_LOGIN_VIEW = "user/login";
+    public static final String REDIRECT_URL = "/login";
+
     private final UserService userService;
 
     private final ModelMapper modelMapper;
