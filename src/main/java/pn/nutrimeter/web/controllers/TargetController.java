@@ -25,6 +25,14 @@ import java.util.List;
 @RequestMapping("/target")
 public class TargetController extends BaseController {
 
+    public static final String LIFE_STAGE_GROUP_ADD_URL = "/group/add";
+    public static final String LIFE_STAGE_GROUP_ADD_VIEW = "target/life-stage-group-add";
+    public static final String MACRO_TARGET_ADD_URL = "/macro/add";
+    public static final String MICRO_TARGET_ADD_URL = "/micro/add";
+    public static final String MACRO_TARGET_ADD_VIEW = "target/macro-target-add";
+    public static final String MICRO_TARGET_ADD_VIEW = "target/micro-target-add";
+    public static final String HOME_URL_REDIRECT = "/home";
+
     private final LifeStageGroupService lifeStageGroupService;
 
     private final MacroTargetService macroTargetService;
@@ -40,70 +48,70 @@ public class TargetController extends BaseController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/group/add")
+    @GetMapping(LIFE_STAGE_GROUP_ADD_URL)
     public ModelAndView lifeStageGroupAdd(LifeStageGroupBindingModel lifeStageGroupBindingModel) {
-        return view("target/life-stage-group-add");
+        return view(LIFE_STAGE_GROUP_ADD_VIEW);
     }
 
-    @PostMapping("/group/add")
+    @PostMapping(LIFE_STAGE_GROUP_ADD_URL)
     public ModelAndView lifeStageGroupAddPost(
             @Valid LifeStageGroupBindingModel lifeStageGroupBindingModel,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return view("target/life-stage-group-add", HttpStatus.UNPROCESSABLE_ENTITY);
+            return view(LIFE_STAGE_GROUP_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.lifeStageGroupService.create(this.modelMapper.map(lifeStageGroupBindingModel, LifeStageGroupServiceModel.class));
 
-        return redirect("/home");
+        return redirect(HOME_URL_REDIRECT);
     }
 
-    @GetMapping("/macro/add")
+    @GetMapping(MACRO_TARGET_ADD_URL)
     public ModelAndView macroTargetAdd(MacroTargetBindingModel macroTargetBindingModel) {
 
         List<LifeStageGroupServiceModel> lifeStageGroups = this.lifeStageGroupService.getAll();
         ModelAndView mav = new ModelAndView();
         mav.addObject("lifeStageGroups", lifeStageGroups);
 
-        return view(mav, "target/macro-target-add");
+        return view(mav, MACRO_TARGET_ADD_VIEW);
     }
 
-    @PostMapping("/macro/add")
+    @PostMapping(MACRO_TARGET_ADD_URL)
     public ModelAndView macroTargetAddPost(
             @Valid MacroTargetBindingModel macroTargetBindingModel,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return view("target/macro-target-add", HttpStatus.UNPROCESSABLE_ENTITY);
+            return view(MACRO_TARGET_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.macroTargetService.create(this.modelMapper.map(macroTargetBindingModel, MacroTargetServiceModel.class));
 
-        return redirect("/home");
+        return redirect(HOME_URL_REDIRECT);
     }
 
-    @GetMapping("/micro/add")
+    @GetMapping(MICRO_TARGET_ADD_URL)
     public ModelAndView microTargetAdd(MicroTargetBindingModel microTargetBindingModel) {
 
         List<LifeStageGroupServiceModel> lifeStageGroups = this.lifeStageGroupService.getAll();
         ModelAndView mav = new ModelAndView();
         mav.addObject("lifeStageGroups", lifeStageGroups);
 
-        return view(mav, "target/micro-target-add");
+        return view(mav, MICRO_TARGET_ADD_VIEW);
     }
 
-    @PostMapping("/micro/add")
+    @PostMapping(MICRO_TARGET_ADD_URL)
     public ModelAndView microTargetAddPost(
             @Valid MicroTargetBindingModel microTargetBindingModel,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return view("target/macro-target-add", HttpStatus.UNPROCESSABLE_ENTITY);
+            return view(MICRO_TARGET_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.microTargetService.create(this.modelMapper.map(microTargetBindingModel, MicroTargetServiceModel.class));
 
-        return redirect("/home");
+        return redirect(HOME_URL_REDIRECT);
     }
 }

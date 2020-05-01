@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -11,6 +13,7 @@ public class MicroTargetBindingModel {
 
     private String lifeStageGroupId;
 
+    @NotNull
     private Double vitaminARDA;
 
     private Double vitaminAUL;
