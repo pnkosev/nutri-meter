@@ -43,9 +43,6 @@ class FoodServiceTest {
     @MockBean
     FoodValidationService foodValidationService;
 
-    @MockBean
-    AuthenticationFacade authenticationFacade;
-
     ModelMapper modelMapper;
 
     FoodService foodService;
@@ -55,42 +52,37 @@ class FoodServiceTest {
     @BeforeEach
     void setUp() {
         this.modelMapper = new ModelMapper();
-        this.foodService = new FoodServiceImpl(this.foodValidationService, this.foodRepository, this.foodCategoryRepository, this.authenticationFacade, this.modelMapper);
+        this.foodService = new FoodServiceImpl(this.foodValidationService, this.foodRepository, this.foodCategoryRepository, this.modelMapper);
         this.addFoodCategory();
     }
 
     @Test
     public void create_withValidModelIfAdmin_shouldReturnCorrect() {
         this.foodServiceModel = this.fillModel("food1");
-        Set<String> roles = new HashSet<>(Arrays.asList("ADMIN", "USER"));
 
         when(this.foodValidationService.isValid(this.foodServiceModel)).thenReturn(true);
-        when(this.authenticationFacade.getRoles()).thenReturn(roles);
 
         FoodServiceModel actual = this.foodService.create(this.foodServiceModel);
         FoodServiceModel expected = this.modelMapper.map(this.foodRepository.findAll().get(0), FoodServiceModel.class);
 
         assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.isCustom(), actual.isCustom());
-        assertFalse(actual.isCustom());
+        assertEquals(expected.getIsCustom(), actual.getIsCustom());
+        assertFalse(actual.getIsCustom());
         assertEquals(expected.getKcalPerHundredGrams(), actual.getKcalPerHundredGrams());
     }
 
     @Test
     public void create_withValidModelIfNotAdmin_shouldReturnCorrect() {
         this.foodServiceModel = this.fillModel("food1");
-        Set<String> roles = new HashSet<>();
-        roles.add("USER");
 
         when(this.foodValidationService.isValid(this.foodServiceModel)).thenReturn(true);
-        when(this.authenticationFacade.getRoles()).thenReturn(roles);
 
         FoodServiceModel actual = this.foodService.create(this.foodServiceModel);
         FoodServiceModel expected = this.modelMapper.map(this.foodRepository.findAll().get(0), FoodServiceModel.class);
 
         assertEquals(expected.getId(), actual.getId());
-        assertTrue(actual.isCustom());
-        assertEquals(expected.isCustom(), actual.isCustom());
+        assertTrue(actual.getIsCustom());
+        assertEquals(expected.getIsCustom(), actual.getIsCustom());
         assertEquals(expected.getKcalPerHundredGrams(), actual.getKcalPerHundredGrams());
     }
 
@@ -106,10 +98,8 @@ class FoodServiceTest {
         FoodCategoryServiceModel foodCategoryServiceModel = new FoodCategoryServiceModel();
         foodCategoryServiceModel.setId("123");
         this.foodServiceModel.setFoodCategories(new ArrayList<>(Arrays.asList(foodCategoryServiceModel)));
-        Set<String> roles = new HashSet<>(Arrays.asList("ADMIN", "USER"));
 
         when(this.foodValidationService.isValid(this.foodServiceModel)).thenReturn(true);
-        when(this.authenticationFacade.getRoles()).thenReturn(roles);
 
         assertThrows(IdNotFoundException.class, () -> this.foodService.create(this.foodServiceModel));
     }
@@ -143,13 +133,13 @@ class FoodServiceTest {
     public void getAllNonCustom__withExistingNonCustomFoodsInDB_shouldReturnAll() {
         this.foodServiceModel = this.fillModel("food1");
         this.foodServiceModel.setKcalPerHundredGrams(100);
-        this.foodServiceModel.setCustom(false);
+        this.foodServiceModel.setIsCustom(false);
         FoodServiceModel food2 = this.fillModel("food2");
         food2.setKcalPerHundredGrams(100);
-        food2.setCustom(true);
+        food2.setIsCustom(true);
         FoodServiceModel food3 = this.fillModel("food3");
         food3.setKcalPerHundredGrams(100);
-        food3.setCustom(true);
+        food3.setIsCustom(true);
 
         List<FoodServiceModel> expected = new ArrayList<>(Arrays.asList(foodServiceModel, food2, food3));
         expected.forEach(f -> this.foodRepository.save(this.modelMapper.map(f, Food.class)));

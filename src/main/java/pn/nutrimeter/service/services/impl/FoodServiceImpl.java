@@ -26,19 +26,15 @@ public class FoodServiceImpl implements FoodService {
 
     private final FoodCategoryRepository foodCategoryRepository;
 
-    private final AuthenticationFacade authenticationFacade;
-
     private final ModelMapper modelMapper;
 
     public FoodServiceImpl(FoodValidationService foodValidationService,
                            FoodRepository foodRepository,
-                           FoodCategoryRepository foodCategoryRepository1,
-                           AuthenticationFacade authenticationFacade,
+                           FoodCategoryRepository foodCategoryRepository,
                            ModelMapper modelMapper) {
         this.foodValidationService = foodValidationService;
         this.foodRepository = foodRepository;
-        this.foodCategoryRepository = foodCategoryRepository1;
-        this.authenticationFacade = authenticationFacade;
+        this.foodCategoryRepository = foodCategoryRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -48,9 +44,9 @@ public class FoodServiceImpl implements FoodService {
             throw new FoodAddFailureException(ErrorConstants.INVALID_FOOD_MODEL);
         }
 
-        Set<String> userRoles = this.authenticationFacade.getRoles();
+        Boolean isCustom = foodServiceModel.getIsCustom();
 
-        foodServiceModel.setCustom(!userRoles.contains("ADMIN"));
+        foodServiceModel.setIsCustom(isCustom == null || isCustom); // SETS IT TO TRUE IF THE CHECKBOX IS CHECKED OR NULL
 
         foodServiceModel.setKcalPerHundredGrams(this.getTotalKcal(foodServiceModel));
 

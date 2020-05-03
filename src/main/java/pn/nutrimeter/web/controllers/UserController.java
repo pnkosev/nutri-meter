@@ -75,6 +75,6 @@ public class UserController extends BaseController {
     @GetMapping("/user/all")
     @PageTitle("All Users")
     public ModelAndView allUsers() {
-        return view("user/all-users");
+        return view("user/users-all");
     }
 }

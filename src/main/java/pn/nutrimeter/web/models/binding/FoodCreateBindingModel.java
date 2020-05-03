@@ -23,6 +23,8 @@ public class FoodCreateBindingModel {
     @Length(min = 3, max = 100, message = "Description should be between 3 and 100 symbols!")
     private String description;
 
+    private Boolean isCustom;
+
     private Integer kcalPerHundredGrams;
 
     @Range(min = 0, max = 100, message = "Proteins' level should be between 0 and 100!")

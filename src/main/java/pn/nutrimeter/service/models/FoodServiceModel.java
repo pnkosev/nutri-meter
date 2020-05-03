@@ -17,6 +17,8 @@ public class FoodServiceModel {
 
     private String description;
 
+    private Boolean isCustom;
+
     private Integer kcalPerHundredGrams;
 
     private Double totalProteins;
@@ -114,8 +116,6 @@ public class FoodServiceModel {
     private Double sodium;
 
     private Double zinc;
-
-    private boolean isCustom;
 
     private List<FoodCategoryServiceModel> foodCategories;
 }

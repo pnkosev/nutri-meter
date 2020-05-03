@@ -40,9 +40,14 @@
                 </select>
                 <small class="error" th:if="${#fields.errors('foodCategories')}" th:errors="*{foodCategories}"></small>
             </div>
+            <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="isCustom" th:field="*{isCustom}">
+                    <label class="form-check-label" for="isCustom">is Custom?</label>
+                </div>
+            </th:block>
             <div class="row">
                 <div class="table-responsive col-md-6">
-
                     <table class="table table-striped carbohydrates">
                         <thead class="thead-dark">
                         <tr>
