@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import pn.nutrimeter.annotation.PageTitle;
 import pn.nutrimeter.service.models.LifeStageGroupServiceModel;
 import pn.nutrimeter.service.models.MacroTargetServiceModel;
 import pn.nutrimeter.service.models.MicroTargetServiceModel;
@@ -49,6 +50,7 @@ public class TargetController extends BaseController {
     }
 
     @GetMapping(LIFE_STAGE_GROUP_ADD_URL)
+    @PageTitle("Add Group")
     public ModelAndView lifeStageGroupAdd(LifeStageGroupBindingModel lifeStageGroupBindingModel) {
         return view(LIFE_STAGE_GROUP_ADD_VIEW);
     }
@@ -68,6 +70,7 @@ public class TargetController extends BaseController {
     }
 
     @GetMapping(MACRO_TARGET_ADD_URL)
+    @PageTitle("Add Macro Target")
     public ModelAndView macroTargetAdd(MacroTargetBindingModel macroTargetBindingModel) {
 
         List<LifeStageGroupServiceModel> lifeStageGroups = this.lifeStageGroupService.getAll();
@@ -92,6 +95,7 @@ public class TargetController extends BaseController {
     }
 
     @GetMapping(MICRO_TARGET_ADD_URL)
+    @PageTitle("Add Micro Target")
     public ModelAndView microTargetAdd(MicroTargetBindingModel microTargetBindingModel) {
 
         List<LifeStageGroupServiceModel> lifeStageGroups = this.lifeStageGroupService.getAll();

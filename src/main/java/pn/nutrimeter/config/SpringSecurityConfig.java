@@ -35,6 +35,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/favicon.ico", "/js/*", "/css/*", "/img/*").permitAll()
                     .antMatchers("/", "/register", "/login").anonymous()
                 .anyRequest().authenticated()
+//                .and()
+//                .exceptionHandling().accessDeniedPage("/unauthorized")
                 .and()
                     .formLogin()
                     .loginPage("/login")

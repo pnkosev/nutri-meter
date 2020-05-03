@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import pn.nutrimeter.annotation.PageTitle;
 import pn.nutrimeter.error.FoodAddFailureException;
 import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.models.FoodCategoryServiceModel;
@@ -44,6 +45,7 @@ public class FoodController extends BaseController {
     }
 
     @GetMapping(FOOD_ADD_URL)
+    @PageTitle("Add Food")
     public ModelAndView addFood(FoodCreateBindingModel foodCreateBindingModel) {
         ModelAndView mav = new ModelAndView();
         mav.addObject("foodCategories", this.foodCategoryService.getAll());
@@ -88,6 +90,7 @@ public class FoodController extends BaseController {
     }
 
     @GetMapping(FOOD_CATEGORY_ADD_URL)
+    @PageTitle("Add Category")
     public ModelAndView addCategory(FoodCategoryCreateBindingModel foodCategoryCreateBindingModel) {
         return view(FOOD_CATEGORY_ADD_VIEW);
     }

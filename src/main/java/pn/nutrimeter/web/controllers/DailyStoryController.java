@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
+import pn.nutrimeter.annotation.PageTitle;
 import pn.nutrimeter.error.DateParseFailureException;
 import pn.nutrimeter.service.models.DailyStoryServiceModel;
 import pn.nutrimeter.service.models.MacroTargetServiceModel;
@@ -30,6 +31,7 @@ public class DailyStoryController extends BaseController {
     }
 
     @GetMapping("/diary")
+    @PageTitle("diary")
     public ModelAndView dailyStoryDefault() {
         LocalDate today = LocalDate.now();
 
@@ -37,6 +39,7 @@ public class DailyStoryController extends BaseController {
     }
 
     @GetMapping("/diary/{date}")
+    @PageTitle("diary")
     public ModelAndView dailyStory(@PathVariable String date, Principal principal) {
 
         ModelAndView mav = new ModelAndView();

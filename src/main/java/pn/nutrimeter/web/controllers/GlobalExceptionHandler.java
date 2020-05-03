@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import pn.nutrimeter.annotation.PageTitle;
 import pn.nutrimeter.error.DateParseFailureException;
 import pn.nutrimeter.error.UserNotFoundException;
 
@@ -15,6 +16,7 @@ public class GlobalExceptionHandler {
     public static final String DEFAULT_ERROR_VIEW = "error/error";
 
     @ExceptionHandler(Throwable.class)
+    @PageTitle("Error")
     public ModelAndView defaultExceptionHandler(Throwable e) throws Throwable {
         if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
             throw e;
@@ -30,9 +32,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
+    @PageTitle("Error")
     public ModelAndView userNotFoundExceptionHandler(RuntimeException e) { return this.getModelAndView(e); }
 
     @ExceptionHandler(DateParseFailureException.class)
+    @PageTitle("Error")
     public ModelAndView DateParseFailureExceptionHandler(DateTimeParseException e) { return this.getModelAndView(e); }
 
     private ModelAndView getModelAndView(Throwable e) {

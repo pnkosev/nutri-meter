@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import pn.nutrimeter.annotation.PageTitle;
 import pn.nutrimeter.error.UserAlreadyExistsException;
 import pn.nutrimeter.error.UserRegisterFailureException;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
@@ -35,6 +36,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/register")
+    @PageTitle("Register")
     public ModelAndView register(UserRegisterBindingModel userRegisterBindingModel) {
         return view("user/register");
     }
@@ -60,6 +62,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/login")
+    @PageTitle("Login")
     public ModelAndView login() {
         return view("user/login");
     }
