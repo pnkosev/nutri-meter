@@ -22,9 +22,14 @@ import pn.nutrimeter.service.services.validation.UserValidationService;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final String ROLE_ROOT = "ROLE_ROOT";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String ROLE_USER = "ROLE_USER";
 
     private final UserRepository userRepository;
 
@@ -76,7 +81,7 @@ public class UserServiceImpl implements UserService {
             user.setAuthorities(new HashSet<>(this.roleRepository.findAll()));
         } else {
             user.setAuthorities(new HashSet<>());
-            user.getAuthorities().add(this.roleRepository.findByAuthority("USER"));
+            user.getAuthorities().add(this.roleRepository.findByAuthority(ROLE_USER));
         }
 
         return this.modelMapper.map(this.userRepository.saveAndFlush(user), UserRegisterServiceModel.class);
@@ -103,6 +108,52 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserServiceModel> getAllUsers() {
+        Role roleRoot = roleRepository.findByAuthority("ROLE_ROOT");
+
+        return this.userRepository
+                .findAllByAuthoritiesNotContaining(roleRoot)
+                .stream()
+                .map(u -> this.modelMapper.map(u, UserServiceModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserServiceModel promoteUser(String userId) {
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException("No such user found!"));
+
+        Set<Role> roles = user.getAuthorities();
+
+        Set<String> rolesAsString = roles.stream().map(Role::getAuthority).collect(Collectors.toSet());
+
+        if (!rolesAsString.contains(ROLE_ADMIN)) {
+            roles.add(this.roleRepository.findByAuthority(ROLE_ADMIN));
+
+            this.userRepository.saveAndFlush(user);
+        }
+
+        return this.modelMapper.map(user, UserServiceModel.class);
+    }
+
+    @Override
+    public UserServiceModel demoteUser(String userId) {
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException("No such user found!"));
+
+        Set<Role> roles = user.getAuthorities();
+
+        Set<String> rolesAsString = roles.stream().map(Role::getAuthority).collect(Collectors.toSet());
+
+        if (rolesAsString.contains(ROLE_ADMIN)) {
+            roles.clear();
+            roles.add(this.roleRepository.findByAuthority(ROLE_USER));
+
+            this.userRepository.saveAndFlush(user);
+        }
+
+        return this.modelMapper.map(user, UserServiceModel.class);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) {
         return this.userRepository
                 .findByUsername(username)
@@ -111,8 +162,9 @@ public class UserServiceImpl implements UserService {
 
     private void seedRoles() {
         if (this.roleRepository.count() == 0) {
-            this.roleRepository.saveAndFlush(new Role("ADMIN"));
-            this.roleRepository.saveAndFlush(new Role("USER"));
+            this.roleRepository.saveAndFlush(new Role(ROLE_ROOT));
+            this.roleRepository.saveAndFlush(new Role(ROLE_ADMIN));
+            this.roleRepository.saveAndFlush(new Role(ROLE_USER));
         }
     }
 }

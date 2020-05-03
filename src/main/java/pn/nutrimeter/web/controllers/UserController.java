@@ -2,6 +2,7 @@ package pn.nutrimeter.web.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +12,12 @@ import pn.nutrimeter.annotation.PageTitle;
 import pn.nutrimeter.error.UserAlreadyExistsException;
 import pn.nutrimeter.error.UserRegisterFailureException;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
+import pn.nutrimeter.service.models.UserServiceModel;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.web.models.binding.UserRegisterBindingModel;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -61,9 +64,17 @@ public class UserController extends BaseController {
         return redirect("/login");
     }
 
+
     @GetMapping("/login")
     @PageTitle("Login")
     public ModelAndView login() {
         return view("user/login");
+    }
+
+    @PreAuthorize("hasRole('ROLE_ROOT')")
+    @GetMapping("/user/all")
+    @PageTitle("All Users")
+    public ModelAndView allUsers() {
+        return view("user/all-users");
     }
 }

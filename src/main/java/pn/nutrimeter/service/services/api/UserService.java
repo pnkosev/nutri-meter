@@ -6,6 +6,8 @@ import pn.nutrimeter.service.models.MicroTargetServiceModel;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
 
+import java.util.List;
+
 public interface UserService extends UserDetailsService {
 
     UserRegisterServiceModel register(UserRegisterServiceModel userServiceModel);
@@ -15,4 +17,10 @@ public interface UserService extends UserDetailsService {
     MacroTargetServiceModel getMacroTargetByUserId(String userId, double userWeight);
 
     MicroTargetServiceModel getMicroTargetByUserId(String userId);
+
+    List<UserServiceModel> getAllUsers();
+
+    UserServiceModel promoteUser(String userId);
+
+    UserServiceModel demoteUser(String userId);
 }

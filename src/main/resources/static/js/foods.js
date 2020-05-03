@@ -44,16 +44,16 @@ const addFood = e => {
 };
 
 const setUpModal = () => {
-    // Get the modal
+    // Get the foods
     const modal = document.getElementById("myModal");
 
-// Get the button that opens the modal
+// Get the button that opens the foods
     const btn = document.getElementById("myBtn");
 
-// Get the <span> element that closes the modal
+// Get the <span> element that closes the foods
     const span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal
+// When the user clicks the button, open the foods
     btn.onclick = function () {
         modal.style.display = "block";
 
@@ -73,12 +73,12 @@ const setUpModal = () => {
             });
     };
 
-// When the user clicks on <span> (x), close the modal
+// When the user clicks on <span> (x), close the foods
     span.onclick = function () {
         modal.style.display = "none";
     };
 
-// When the user clicks anywhere outside of the modal, close it
+// When the user clicks anywhere outside of the foods, close it
     window.onclick = function (event) {
         if (event.target === modal) {
             modal.style.display = "none";
@@ -86,7 +86,7 @@ const setUpModal = () => {
     }
 };
 
-const modal = document.getElementById("myModal");
+const foods = document.getElementById("myModal");
 
 window.onload = () => {
     setUpModal();

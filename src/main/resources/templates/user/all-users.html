@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+>
+<th:block th:include="~{_shared/head}"/>
+<body>
+<script src="/js/users.js"></script>
+<th:block th:include="~{_shared/header}"/>
+<main class="mb-5">
+    <h1 class="mt-5 mb-5 text-center">All users</h1>
+    <section class="container w-25">
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="col-md-1 text-center">#</th>
+                <th class="col-md-5 text-center">Username</th>
+                <th class="col-md-2 text-center">Email</th>
+                <th class="col-md-2 text-center">Role</th>
+                <th class="col-md-2 text-center">Action</th>
+            </tr>
+            </thead>
+            <tbody id="users-container"></tbody>
+        </table>
+    </section>
+</main>
+<th:block th:include="~{_shared/footer}"/>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package pn.nutrimeter.service.models;
+package pn.nutrimeter.web.models.view;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserServiceModel {
+public class UserSimpleViewModel {
 
     private String Id;
 
@@ -17,5 +17,5 @@ public class UserServiceModel {
 
     private String email;
 
-    private Set<RoleServiceModel> authorities;
+    private Set<RoleViewModel> authorities;
 }
