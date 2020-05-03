@@ -2,6 +2,7 @@ package pn.nutrimeter.service.factories.user;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import pn.nutrimeter.annotation.Factory;
 import pn.nutrimeter.data.models.LifeStageGroup;
 import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.LifeStageGroupRepository;
@@ -13,7 +14,7 @@ import pn.nutrimeter.error.LifeStageGroupNotFoundException;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.services.api.HashingService;
 
-@Service
+@Factory
 public class UserFactoryImpl implements UserFactory {
 
     private final HashingService hashingService;

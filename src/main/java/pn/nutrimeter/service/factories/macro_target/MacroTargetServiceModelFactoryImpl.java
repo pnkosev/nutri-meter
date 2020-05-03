@@ -2,10 +2,11 @@ package pn.nutrimeter.service.factories.macro_target;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import pn.nutrimeter.annotation.Factory;
 import pn.nutrimeter.data.models.MacroTarget;
 import pn.nutrimeter.service.models.MacroTargetServiceModel;
 
-@Service
+@Factory
 public class MacroTargetServiceModelFactoryImpl implements MacroTargetServiceModelFactory {
 
     private final ModelMapper modelMapper;
