@@ -57,7 +57,7 @@ class FoodServiceTest {
     }
 
     @Test
-    public void create_withValidModelIfAdmin_shouldReturnCorrect() {
+    public void create_withValidModel_shouldReturnCorrect() {
         this.foodServiceModel = this.fillModel("food1");
 
         when(this.foodValidationService.isValid(this.foodServiceModel)).thenReturn(true);
@@ -66,23 +66,6 @@ class FoodServiceTest {
         FoodServiceModel expected = this.modelMapper.map(this.foodRepository.findAll().get(0), FoodServiceModel.class);
 
         assertEquals(expected.getId(), actual.getId());
-        assertEquals(expected.getIsCustom(), actual.getIsCustom());
-        assertFalse(actual.getIsCustom());
-        assertEquals(expected.getKcalPerHundredGrams(), actual.getKcalPerHundredGrams());
-    }
-
-    @Test
-    public void create_withValidModelIfNotAdmin_shouldReturnCorrect() {
-        this.foodServiceModel = this.fillModel("food1");
-
-        when(this.foodValidationService.isValid(this.foodServiceModel)).thenReturn(true);
-
-        FoodServiceModel actual = this.foodService.create(this.foodServiceModel);
-        FoodServiceModel expected = this.modelMapper.map(this.foodRepository.findAll().get(0), FoodServiceModel.class);
-
-        assertEquals(expected.getId(), actual.getId());
-        assertTrue(actual.getIsCustom());
-        assertEquals(expected.getIsCustom(), actual.getIsCustom());
         assertEquals(expected.getKcalPerHundredGrams(), actual.getKcalPerHundredGrams());
     }
 
