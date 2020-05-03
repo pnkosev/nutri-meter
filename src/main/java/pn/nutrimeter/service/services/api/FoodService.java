@@ -12,7 +12,7 @@ public interface FoodService {
 
     List<FoodServiceModel> getAllNonCustom();
 
-    List<FoodServiceModel> getAllCustomOfUser(String userId);
+    List<FoodServiceModel> getAllCustomOfUser();
 
     FoodServiceModel getById(String id);
 }

@@ -39,13 +39,32 @@
                                 <span class="close">&times;</span>
                             </div>
                             <div class="container">
-                                <table class="table table-bordered text-center">
-                                    <tr>
-                                        <th scope="col" class="font-weight-bold" style="width: 50%">Name</th>
-                                        <th scope="col" class="font-weight-bold" style="width: 50%">Amount</th>
-                                    </tr>
-                                    <tbody id="table-food-body"></tbody>
-                                </table>
+                                <nav>
+                                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                        <a class="nav-item nav-link active" id="nav-foods-all-tab" data-toggle="tab" href="#nav-foods-all" role="tab" aria-controls="nav-foods-all" aria-selected="true">All Foods</a>
+                                        <a class="nav-item nav-link" id="nav-foods-custom-tab" data-toggle="tab" href="#nav-foods-custom" role="tab" aria-controls="nav-foods-custom" aria-selected="false">Custom Foods</a>
+                                    </div>
+                                </nav>
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-foods-all" role="tabpanel" aria-labelledby="nav-foods-all">
+                                        <table class="table table-bordered text-center">
+                                            <tr>
+                                                <th scope="col" class="font-weight-bold" style="width: 50%">Name</th>
+                                                <th scope="col" class="font-weight-bold" style="width: 50%">Amount</th>
+                                            </tr>
+                                            <tbody id="table-foods-all"></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="nav-foods-custom" role="tabpanel" aria-labelledby="nav-foods-custom">
+                                        <table class="table table-bordered text-center">
+                                            <tr>
+                                                <th scope="col" class="font-weight-bold" style="width: 50%">Name</th>
+                                                <th scope="col" class="font-weight-bold" style="width: 50%">Amount</th>
+                                            </tr>
+                                            <tbody id="table-foods-custom"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

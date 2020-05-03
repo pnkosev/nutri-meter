@@ -14,12 +14,14 @@ import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.models.FoodCategory;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
+import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.FoodAddFailureException;
 import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.facades.AuthenticationFacade;
 import pn.nutrimeter.service.models.FoodCategoryServiceModel;
 import pn.nutrimeter.service.models.FoodServiceModel;
 import pn.nutrimeter.service.services.api.FoodService;
+import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.service.services.impl.FoodServiceImpl;
 import pn.nutrimeter.service.services.validation.FoodValidationService;
 
@@ -39,6 +41,12 @@ class FoodServiceTest {
     @Autowired
     FoodCategoryRepository foodCategoryRepository;
 
+    @Autowired
+    AuthenticationFacade authenticationFacade;
+
+    @Autowired
+    UserRepository userRepository;
+
     // CANNOT AUTOWIRE - AS IF THERE WAS NO @Service... BUT THERE IS ONE, I DON'T GET IT (Maybe cuz of the @DataJpaTest???)
     @MockBean
     FoodValidationService foodValidationService;
@@ -52,7 +60,7 @@ class FoodServiceTest {
     @BeforeEach
     void setUp() {
         this.modelMapper = new ModelMapper();
-        this.foodService = new FoodServiceImpl(this.foodValidationService, this.foodRepository, this.foodCategoryRepository, this.modelMapper);
+        this.foodService = new FoodServiceImpl(userRepository, this.authenticationFacade, this.foodValidationService, this.foodRepository, this.foodCategoryRepository, this.modelMapper);
         this.addFoodCategory();
     }
 

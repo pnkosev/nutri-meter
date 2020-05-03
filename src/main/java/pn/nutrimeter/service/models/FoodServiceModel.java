@@ -118,4 +118,6 @@ public class FoodServiceModel {
     private Double zinc;
 
     private List<FoodCategoryServiceModel> foodCategories;
+
+    private UserServiceModel user;
 }

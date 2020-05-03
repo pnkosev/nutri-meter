@@ -1,5 +1,6 @@
 const URLs = {
-    foods: '/api/foods',
+    allFoods: '/api/foods-all',
+    customFoods: '/api/foods-custom'
 };
 
 const createRow = i => {
@@ -43,6 +44,23 @@ const addFood = e => {
     return false;
 };
 
+const getFoods = (URL, table) => {
+    fetch(URL)
+        .then(res => res.json())
+        .then(data => {
+            let list = '';
+            data.forEach(f => {
+                list += createRow(f);
+            });
+
+            const foodContainer = document.getElementById(table);
+            foodContainer.innerHTML = list;
+
+            const forms = document.querySelectorAll('form');
+            forms.forEach(f => f.addEventListener('submit', addFood));
+        });
+};
+
 const setUpModal = () => {
     // Get the foods
     const modal = document.getElementById("myModal");
@@ -57,20 +75,13 @@ const setUpModal = () => {
     btn.onclick = function () {
         modal.style.display = "block";
 
-        fetch(URLs.foods)
-            .then(res => res.json())
-            .then(data => {
-                let list = '';
-                data.forEach(f => {
-                    list += createRow(f);
-                });
+        const navAllFoods = document.getElementById("nav-foods-all-tab");
+        const navCustomFoods = document.getElementById("nav-foods-custom-tab");
 
-                const foodContainer = document.getElementById("table-food-body");
-                foodContainer.innerHTML = list;
+        navAllFoods.addEventListener('click', () => getFoods(URLs.allFoods, 'table-foods-all'));
+        navCustomFoods.addEventListener('click', () => getFoods(URLs.customFoods, 'table-foods-custom'));
 
-                const forms = document.querySelectorAll('form');
-                forms.forEach(f => f.addEventListener('submit', addFood));
-            });
+        getFoods(URLs.allFoods, 'table-foods-all');
     };
 
 // When the user clicks on <span> (x), close the foods

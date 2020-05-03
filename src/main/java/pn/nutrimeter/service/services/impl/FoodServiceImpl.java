@@ -1,37 +1,48 @@
 package pn.nutrimeter.service.services.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.Food;
+import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
+import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.ErrorConstants;
 import pn.nutrimeter.error.FoodAddFailureException;
 import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.facades.AuthenticationFacade;
 import pn.nutrimeter.service.models.FoodServiceModel;
 import pn.nutrimeter.service.services.api.FoodService;
+import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.service.services.validation.FoodValidationService;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class FoodServiceImpl implements FoodService {
 
-    private final FoodValidationService foodValidationService;
-
     private final FoodRepository foodRepository;
 
     private final FoodCategoryRepository foodCategoryRepository;
 
+    private final UserRepository userRepository;
+
+    private final AuthenticationFacade authenticationFacade;
+
+    private final FoodValidationService foodValidationService;
+
     private final ModelMapper modelMapper;
 
-    public FoodServiceImpl(FoodValidationService foodValidationService,
+    public FoodServiceImpl(UserRepository userRepository,
+                           AuthenticationFacade authenticationFacade,
+                           FoodValidationService foodValidationService,
                            FoodRepository foodRepository,
                            FoodCategoryRepository foodCategoryRepository,
                            ModelMapper modelMapper) {
+        this.userRepository = userRepository;
+        this.authenticationFacade = authenticationFacade;
         this.foodValidationService = foodValidationService;
         this.foodRepository = foodRepository;
         this.foodCategoryRepository = foodCategoryRepository;
@@ -46,7 +57,7 @@ public class FoodServiceImpl implements FoodService {
 
         Boolean isCustom = foodServiceModel.getIsCustom();
 
-        foodServiceModel.setIsCustom(isCustom == null || isCustom); // SETS IT TO TRUE IF THE CHECKBOX IS CHECKED OR NULL
+        foodServiceModel.setIsCustom(isCustom == null || isCustom); // SETS IT TO TRUE IF THE CHECKBOX IS CHECKED OR NULL]
 
         foodServiceModel.setKcalPerHundredGrams(this.getTotalKcal(foodServiceModel));
 
@@ -58,6 +69,12 @@ public class FoodServiceImpl implements FoodService {
                         .findById(category.getId())
                         .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_CATEGORY_ID)))
                 .collect(Collectors.toList()));
+
+        if (food.isCustom()) {
+            String username = this.authenticationFacade.getUsername();
+            User user = this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No such username!"));
+            food.setUser(user);
+        }
 
         this.foodRepository.saveAndFlush(food);
 
@@ -81,8 +98,10 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public List<FoodServiceModel> getAllCustomOfUser(String userId) {
-        return this.foodRepository.findAllCustomOfUser(userId)
+    public List<FoodServiceModel> getAllCustomOfUser() {
+        String username = this.authenticationFacade.getUsername();
+
+        return this.foodRepository.findAllCustomOfUser(username)
                 .stream()
                 .map(f -> this.modelMapper.map(f, FoodServiceModel.class))
                 .collect(Collectors.toList());
