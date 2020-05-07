@@ -1,0 +1,96 @@
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 90vh;
+}
+
+#sidebar {
+    margin: 1em;
+    width: 400px;
+}
+
+.header {
+    padding: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.day-picker {
+    margin-top: 1em;
+}
+
+.stats {
+    padding: 2em;
+    text-align: center;
+}
+
+#view {
+    margin: 2em;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+#btn-holder {
+    padding: 1em;
+    display: flex;
+    justify-content: space-around;
+}
+
+.section-title {
+    background-color: rgba(184, 255, 0, 0.21);
+    margin: 0;
+    padding: 0.2em;
+    border-bottom: 1px solid #aaaaaa;
+}
+
+#consumed-foods {
+    height: 20vh;
+    border: 1px solid #aaaaaa;
+    border-radius: 0.25em;
+}
+
+#kcal-summary {
+    margin-top: 0.5rem;
+    height: 10vh;
+    border: 1px solid #aaaaaa;
+    border-radius: 0.25em;
+}
+
+#nutrients-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.nutrients {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.macro-nutrients {
+    margin-right: 0.25em;
+}
+
+.micro-nutrients {
+    margin-left: 0.25em;
+}
+
+.macro-nutrients,
+.micro-nutrients {
+    margin-top: 0.5rem;
+    padding: 0;
+    border: 1px solid #aaaaaa;
+    border-radius: 0.25em;
+}
+
+.nutrient-body {
+    padding: 0 0.25em 0 0.25em;
+}
+
+.nutrient-row {
+    display: flex;
+    justify-content: space-between;
+}

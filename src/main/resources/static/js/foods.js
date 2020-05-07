@@ -132,10 +132,10 @@ const getFoods = (URL, table) => {
 
 const setUpModal = () => {
     // Get the foods
-    const modal = document.getElementById('myModal');
+    const modal = document.getElementById('my-modal');
 
-    // Get the button that opens the foods
-    const btn = document.getElementById('myBtn');
+    // Get the button that opens the food tab
+    const btn = document.getElementById('add-food-btn');
 
     // Get the <span> element that closes the foods
     const span = document.getElementsByClassName('close')[0];
