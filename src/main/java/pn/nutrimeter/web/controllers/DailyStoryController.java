@@ -30,14 +30,6 @@ public class DailyStoryController extends BaseController {
         this.dailyStoryService = dailyStoryService;
     }
 
-    @GetMapping("/diary")
-    @PageTitle("diary")
-    public ModelAndView dailyStoryDefault() {
-        LocalDate today = LocalDate.now();
-
-        return redirect("/diary/" + today);
-    }
-
     @GetMapping("/diary/{date}")
     @PageTitle("diary")
     public ModelAndView dailyStory(@PathVariable String date, Principal principal) {
