@@ -14,5 +14,11 @@ public interface FoodService {
 
     List<FoodServiceModel> getAllCustomOfUser();
 
+    List<FoodServiceModel> getAllFavoritesOfUser();
+
     FoodServiceModel getById(String id);
+
+    FoodServiceModel addFoodAsFavorite(String foodId);
+
+    FoodServiceModel removeFoodAsFavorite(String foodId);
 }

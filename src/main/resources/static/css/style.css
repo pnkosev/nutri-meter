@@ -25,6 +25,10 @@ small.error {
 /*    background-size: cover;*/
 /*}*/
 
+span.checked {
+    color: orange;
+}
+
 textarea {
     resize: none;
 }

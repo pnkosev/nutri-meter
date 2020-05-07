@@ -19,6 +19,8 @@ public class FoodServiceModel {
 
     private Boolean isCustom;
 
+    private Boolean isFavorite;
+
     private Integer kcalPerHundredGrams;
 
     private Double totalProteins;

@@ -71,8 +71,7 @@ public class FoodServiceImpl implements FoodService {
                 .collect(Collectors.toList()));
 
         if (food.isCustom()) {
-            String username = this.authenticationFacade.getUsername();
-            User user = this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No such username!"));
+            User user = this.getUser();
             food.setUser(user);
         }
 
@@ -99,7 +98,7 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<FoodServiceModel> getAllCustomOfUser() {
-        String username = this.authenticationFacade.getUsername();
+        String username = this.getUsername();
 
         return this.foodRepository.findAllCustomOfUser(username)
                 .stream()
@@ -108,9 +107,58 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
+    public List<FoodServiceModel> getAllFavoritesOfUser() {
+        String username = this.getUsername();
+
+        return this.foodRepository.findAllFavorites(username)
+                .stream()
+                .map(f -> this.modelMapper.map(f, FoodServiceModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public FoodServiceModel getById(String id) {
         Food food = this.foodRepository.findById(id).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
+        FoodServiceModel foodServiceModel = this.modelMapper.map(food, FoodServiceModel.class);
+
+        User user = this.getUser();
+        if (user.getFavoriteFoods().contains(food)) {
+            foodServiceModel.setIsFavorite(true);
+        }
+
+        return foodServiceModel;
+    }
+
+    @Override
+    public FoodServiceModel addFoodAsFavorite(String foodId) {
+        Food food = this.foodRepository.findById(foodId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
+        User user = this.getUser();
+        user.getFavoriteFoods().add(food);
+        this.userRepository.saveAndFlush(user);
+
         return this.modelMapper.map(food, FoodServiceModel.class);
+    }
+
+    @Override
+    public FoodServiceModel removeFoodAsFavorite(String foodId) {
+        Food food = this.foodRepository.findById(foodId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
+        User user = this.getUser();
+
+        if (user.getFavoriteFoods().contains(food)) {
+            user.getFavoriteFoods().remove(food);
+            this.userRepository.saveAndFlush(user);
+        }
+
+        return this.modelMapper.map(food, FoodServiceModel.class);
+    }
+
+    private String getUsername() {
+        return this.authenticationFacade.getUsername();
+    }
+
+    private User getUser() {
+        String username = this.getUsername();
+        return this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(ErrorConstants.USERNAME_NOT_FOUND));
     }
 
     private int getTotalKcal(FoodServiceModel food) {

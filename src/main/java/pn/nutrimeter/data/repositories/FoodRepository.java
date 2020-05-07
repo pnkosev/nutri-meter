@@ -16,4 +16,7 @@ public interface FoodRepository extends JpaRepository<Food, String> {
 
     @Query("SELECT f FROM Food AS f WHERE f.user.username = :username")
     List<Food> findAllCustomOfUser(@Param("username") String username);
+
+    @Query("SELECT f FROM Food AS f JOIN f.users AS u WHERE u.username = :username")
+    List<Food> findAllFavorites(String username);
 }

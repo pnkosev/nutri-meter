@@ -43,14 +43,14 @@
                                     <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                                         <a class="nav-item nav-link active" id="nav-foods-all-tab" data-toggle="tab" href="#nav-foods-all" role="tab" aria-controls="nav-foods-all" aria-selected="true">All Foods</a>
                                         <a class="nav-item nav-link" id="nav-foods-custom-tab" data-toggle="tab" href="#nav-foods-custom" role="tab" aria-controls="nav-foods-custom" aria-selected="false">Custom Foods</a>
+                                        <a class="nav-item nav-link" id="nav-foods-favorite-tab" data-toggle="tab" href="#nav-foods-favorite" role="tab" aria-controls="nav-foods-favorite" aria-selected="false">Favorite Foods</a>
                                     </div>
                                 </nav>
                                 <div class="tab-content" id="nav-tabContent">
                                     <div class="tab-pane fade show active" id="nav-foods-all" role="tabpanel" aria-labelledby="nav-foods-all">
                                         <table class="table table-bordered text-center">
                                             <tr>
-                                                <th scope="col" class="font-weight-bold" style="width: 50%">Name</th>
-                                                <th scope="col" class="font-weight-bold" style="width: 50%">Amount</th>
+                                                <th scope="col" class="font-weight-bold">Name</th>
                                             </tr>
                                             <tbody id="table-foods-all"></tbody>
                                         </table>
@@ -64,7 +64,18 @@
                                             <tbody id="table-foods-custom"></tbody>
                                         </table>
                                     </div>
+                                    <div class="tab-pane fade" id="nav-foods-favorite" role="tabpanel" aria-labelledby="nav-foods-favorite">
+                                        <table class="table table-bordered text-center">
+                                            <tr>
+                                                <th scope="col" class="font-weight-bold" style="width: 50%">Name</th>
+                                                <th scope="col" class="font-weight-bold" style="width: 50%">Amount</th>
+                                            </tr>
+                                            <tbody id="table-foods-favorite"></tbody>
+                                        </table>
+                                    </div>
                                 </div>
+                            </div>
+                            <div id="food-add-block" style="display: none">
                             </div>
                         </div>
                     </div>

@@ -7,12 +7,14 @@ import pn.nutrimeter.service.services.api.DailyStoryFoodService;
 import pn.nutrimeter.service.services.api.FoodService;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.web.models.binding.DailyFoodBindingModel;
+import pn.nutrimeter.web.models.view.FoodDetailedViewModel;
 import pn.nutrimeter.web.models.view.FoodSimpleViewModel;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -48,6 +50,31 @@ public class FoodRestController {
                 .stream()
                 .map(f -> this.modelMapper.map(f, FoodSimpleViewModel.class))
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/foods-favorite")
+    public List<FoodSimpleViewModel> allFavoriteFoods() {
+        return this.foodService.getAllFavoritesOfUser()
+                .stream()
+                .map(f -> this.modelMapper.map(f, FoodSimpleViewModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @PostMapping("/foods-favorite")
+    public void toggleFavoriteFood(@RequestBody Map<String, String> payload) {
+        String foodId = payload.get("foodId");
+        boolean isFavorite = payload.get("isFavorite").equalsIgnoreCase("true");
+
+        if (isFavorite) {
+            this.foodService.addFoodAsFavorite(foodId);
+        } else {
+            this.foodService.removeFoodAsFavorite(foodId);
+        }
+    }
+
+    @GetMapping("/food/{foodId}")
+    public FoodDetailedViewModel getFood(@PathVariable String foodId) {
+        return this.modelMapper.map(this.foodService.getById(foodId), FoodDetailedViewModel.class);
     }
 
     @PostMapping("/food/{foodId}")
