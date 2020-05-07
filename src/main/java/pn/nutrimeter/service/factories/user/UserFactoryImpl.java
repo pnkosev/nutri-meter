@@ -1,10 +1,10 @@
 package pn.nutrimeter.service.factories.user;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
 import pn.nutrimeter.annotation.Factory;
 import pn.nutrimeter.data.models.LifeStageGroup;
 import pn.nutrimeter.data.models.User;
+import pn.nutrimeter.data.models.enums.Sex;
 import pn.nutrimeter.data.repositories.LifeStageGroupRepository;
 import pn.nutrimeter.data.repositories.MacroTargetRepository;
 import pn.nutrimeter.data.repositories.MicroTargetRepository;
@@ -13,9 +13,14 @@ import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.error.LifeStageGroupNotFoundException;
 import pn.nutrimeter.service.models.UserRegisterServiceModel;
 import pn.nutrimeter.service.services.api.HashingService;
+import pn.nutrimeter.service.services.api.UserCalculationService;
 
 @Factory
 public class UserFactoryImpl implements UserFactory {
+
+    private static final Double DEFAULT_KILOS_PER_WEEK = 0.0;
+
+    private final UserCalculationService userCalculationService;
 
     private final HashingService hashingService;
 
@@ -27,11 +32,13 @@ public class UserFactoryImpl implements UserFactory {
 
     private final ModelMapper modelMapper;
 
-    public UserFactoryImpl(HashingService hashingService,
+    public UserFactoryImpl(UserCalculationService userCalculationService,
+                           HashingService hashingService,
                            LifeStageGroupRepository lifeStageGroupRepository,
                            MicroTargetRepository microTargetRepository,
                            MacroTargetRepository macroTargetRepository,
                            ModelMapper modelMapper) {
+        this.userCalculationService = userCalculationService;
         this.hashingService = hashingService;
         this.lifeStageGroupRepository = lifeStageGroupRepository;
         this.microTargetRepository = microTargetRepository;
@@ -42,33 +49,36 @@ public class UserFactoryImpl implements UserFactory {
     @Override
     public User create(UserRegisterServiceModel userRegisterServiceModel) {
         User user = this.modelMapper.map(userRegisterServiceModel, User.class);
+        double userWeight = user.getWeight();
+        double userHeight = user.getHeight();
+        Sex userSex = user.getSex();
+        String userSexAsString = userSex.name();
 
         user.setPassword(this.hashingService.hash(userRegisterServiceModel.getPassword()));
-        user.setTargetWeight(user.getWeight());
+        user.setTargetWeight(userWeight);
 
-        user.setAgeCategory(user.updateAgeCategory());
+        double yearsOld = this.userCalculationService.getYearsOld(user.getBirthday());
 
-        double yearsOld = user.getYearsOld();
+        user.setAgeCategory(this.userCalculationService.updateAgeCategory(yearsOld));
+
         LifeStageGroup lifeStageGroup = this.lifeStageGroupRepository
-                .findLifeStageGroupBySexAndAge(user.getSex(), yearsOld)
+                .findLifeStageGroupBySexAndAge(userSex, yearsOld)
                 .orElseThrow(() -> new LifeStageGroupNotFoundException("No such life stage group found!"));
         user.setLifeStageGroup(lifeStageGroup);
-        user.setMicroTarget(this.microTargetRepository.findByLifeStageGroupId(lifeStageGroup.getId()).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID)));
-        user.setMacroTarget(this.macroTargetRepository.findByLifeStageGroupId(lifeStageGroup.getId()).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID)));
+        user.setMicroTarget(this.microTargetRepository
+                .findByLifeStageGroupId(lifeStageGroup.getId())
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID)));
+        user.setMacroTarget(this.macroTargetRepository
+                .findByLifeStageGroupId(lifeStageGroup.getId())
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_LIFE_STAGE_GROUP_ID)));
 
-        user.setBmr(user.calculateBMR());
-        user.setBmi(user.calculateBMI());
-        user.setBodyFat(user.calculateBodyFat());
-        user.setKcalFromActivityLevel(user.calculateKcalFromActivityLevel());
-        user.setKilosPerWeek(UserConstants.DEFAULT_KILOS_PER_WEEK);
-        user.setKcalFromTarget(user.calculateKcalFromWeightTarget());
-        user.setTotalKcalTarget(user.calculateTotalKcal());
-        user.setProteinTargetInPercentage(UserConstants.DEFAULT_PROTEIN_PERCENTAGE);
-        user.setProteinTargetInKcal(user.calculateKcalFromTotal(user.getProteinTargetInPercentage()));
-        user.setCarbohydrateTargetInPercentage(UserConstants.DEFAULT_CARBOHYDRATE_PERCENTAGE);
-        user.setCarbohydrateTargetInKcal(user.calculateKcalFromTotal(user.getCarbohydrateTargetInPercentage()));
-        user.setLipidTargetInPercentage(UserConstants.DEFAULT_LIPID_PERCENTAGE);
-        user.setLipidTargetInKcal(user.calculateKcalFromTotal(user.getLipidTargetInPercentage()));
+        user.setBmr(this.userCalculationService.calculateBMR(userSexAsString, userWeight, userHeight, yearsOld));
+        user.setBmi(this.userCalculationService.calculateBMI(userWeight, userHeight));
+        user.setBodyFat(this.userCalculationService.calculateBodyFat(yearsOld, user.getAgeCategory().name(), userSexAsString, user.getBmi()));
+        user.setKcalFromActivityLevel(this.userCalculationService.calculateKcalFromActivityLevel(user.getActivityLevel().name(), user.getBmr()));
+        user.setKilosPerWeek(DEFAULT_KILOS_PER_WEEK);
+        user.setKcalFromTarget(this.userCalculationService.calculateKcalFromWeightTarget(user.getKilosPerWeek()));
+        user.setTotalKcalTarget(this.userCalculationService.calculateTotalKcal(user.getBmr(), user.getKcalFromActivityLevel(), user.getTargetWeight(), userWeight, user.getKcalFromTarget()));
 
         return user;
     }
