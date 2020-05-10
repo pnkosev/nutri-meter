@@ -34,7 +34,7 @@ class MacroTargetServiceModelFactoryTest {
         when(macroTarget.getIsoleucineRDA()).thenReturn(1.0);
         when(macroTarget.getLeucineRDA()).thenReturn(1.0);
         when(macroTarget.getLysineRDA()).thenReturn(1.0);
-        when(macroTarget.getPhenylalineTyrosineRDA()).thenReturn(1.0);
+        when(macroTarget.getPhenylalanineTyrosineRDA()).thenReturn(1.0);
         when(macroTarget.getThreonineRDA()).thenReturn(1.0);
         when(macroTarget.getTryptophanRDA()).thenReturn(1.0);
         when(macroTarget.getValineRDA()).thenReturn(1.0);
@@ -48,7 +48,7 @@ class MacroTargetServiceModelFactoryTest {
         assertEquals(100, actual.getIsoleucineRDA());
         assertEquals(100, actual.getLeucineRDA());
         assertEquals(100, actual.getLysineRDA());
-        assertEquals(100, actual.getPhenylalineTyrosineRDA());
+        assertEquals(100, actual.getPhenylalanineTyrosineRDA());
         assertEquals(100, actual.getThreonineRDA());
         assertEquals(100, actual.getTryptophanRDA());
         assertEquals(100, actual.getValineRDA());

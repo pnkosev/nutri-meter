@@ -2,7 +2,6 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    height: 90vh;
 }
 
 #sidebar {
@@ -61,13 +60,11 @@ main {
 
 #nutrients-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
 }
 
 .nutrients {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
+    flex: 1 0 auto;
 }
 
 .macro-nutrients {
@@ -93,4 +90,8 @@ main {
 .nutrient-row {
     display: flex;
     justify-content: space-between;
+}
+
+.nutrient-name {
+    width: 100px;
 }

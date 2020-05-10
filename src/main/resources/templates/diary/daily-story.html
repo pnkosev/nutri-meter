@@ -53,22 +53,264 @@
                     <h5 class="text-center section-title">Proteins</h5>
                     <div id="proteins-body" class="nutrient-body">
                         <div class="nutrient-row">
-                            <span>Total proteins</span>
-                            <span th:text="${dailyStory.totalProteins}"></span>
-                            <span th:text="${#numbers.formatDecimal(dailyStory.totalProteins / macroTarget.proteinRDA * 100, 1, 2)} + '%'"></span>
+                            <span class="nutrient-name">Total proteins</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.totalProteins, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.totalProteins / macroTarget.proteinRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Cysteine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.cysteine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.cysteine / macroTarget.cysteineMethionineRDA / 2 * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Methionine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.methionine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.methionine / macroTarget.cysteineMethionineRDA / 2 * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Histidine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.histidine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.histidine / macroTarget.histidineRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Isoleucine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.isoleucine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.isoleucine / macroTarget.isoleucineRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Leucine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.leucine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.leucine / macroTarget.leucineRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Lysine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.lysine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.lysine / macroTarget.lysineRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Phenylalanine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.phenylalanine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.phenylalanine / macroTarget.phenylalanineTyrosineRDA / 2 * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Tyrosine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.tyrosine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.tyrosine / macroTarget.phenylalanineTyrosineRDA / 2 * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Threonine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.threonine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.threonine / macroTarget.threonineRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Tryptophan</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.tryptophan, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.tryptophan / macroTarget.tryptophanRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Valine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.valine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.valine / macroTarget.valineRDA * 100, 1, 1)} + '%'"></span>
                         </div>
                     </div>
                 </section>
                 <section id="carbs" class="macro-nutrients">
-
+                    <h5 class="text-center section-title">Carbohydrates</h5>
+                    <div id="carbs-body" class="nutrient-body">
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Total carbs</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.totalCarbohydrates, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.totalCarbohydrates / macroTarget.carbohydrateRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Fiber</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.fiber, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.fiber / macroTarget.fiberRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Starch</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.starch, 1, 1)} + 'g'"></span>
+                            <span>N/A</span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Sugars</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.sugars, 1, 1)} + 'g'"></span>
+                            <span>N/A</span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Added sugars</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.addedSugars, 1, 1)} + 'g'"></span>
+                            <span>N/A</span>
+                        </div>
+                    </div>
                 </section>
                 <section id="lipids" class="macro-nutrients">
-
+                    <h5 class="text-center section-title">Lipids</h5>
+                    <div id="lipids-body" class="nutrient-body">
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Total lipids</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.totalLipids, 1, 1)} + 'g'"></span>
+                            <span>N/A</span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Monounsaturated</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.monounsaturated, 1, 1)} + 'g'"></span>
+                            <span>N/A</span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Polyunsaturated</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.polyunsaturated, 1, 1)} + 'g'"></span>
+                            <span>N/A</span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Omega-3</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.omega3, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.omega3 / macroTarget.omega3RDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Omega-6</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.omega6, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.omega6 / macroTarget.omega6RDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Trans fats</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.transFats, 1, 1)} + 'g'"></span>
+                            <span>N/A</span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Cholesterol</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.cholesterol, 1, 1)} + 'g'"></span>
+                            <span>N/A</span>
+                        </div>
+                    </div>
                 </section>
             </section>
             <section id="micro" class="nutrients">
-                <section id="vitamins" class="micro-nutrients"></section>
-                <section id="minerals" class="micro-nutrients"></section>
+                <section id="vitamins" class="micro-nutrients">
+                    <h5 class="text-center section-title">Vitamins</h5>
+                    <div id="vitamins-body" class="nutrient-body">
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin A</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminA, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminA / microTarget.vitaminARDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin B1</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB1, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB1 / microTarget.vitaminB1RDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin B2</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB2, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB2 / microTarget.vitaminB2RDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin B3</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB3, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB3 / microTarget.vitaminB3RDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin B5</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB5, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB5 / microTarget.vitaminB5RDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin B6</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB6, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB6 / microTarget.vitaminB6RDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin B12</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB12, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminB12 / microTarget.vitaminB12RDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Folate</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.folate, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.folate / microTarget.folateRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin C</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminC, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminC / microTarget.vitaminCRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin D</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminD, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminD / microTarget.vitaminDRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin E</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminE, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminE / microTarget.vitaminERDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Vitamin K</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminK, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.vitaminK / microTarget.vitaminKRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                    </div>
+                </section>
+                <section id="minerals" class="micro-nutrients">
+                    <h5 class="text-center section-title">Minerals</h5>
+                    <div id="minerals-body" class="nutrient-body">
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Calcium</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.calcium, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.calcium / microTarget.calciumRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Copper</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.copper, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.copper / microTarget.copperRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Iodine</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.iodine, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.iodine / microTarget.iodineRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Iron</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.iron, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.iron / microTarget.ironRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Magnesium</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.magnesium, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.magnesium / microTarget.magnesiumRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Manganese</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.manganese, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.manganese / microTarget.manganeseRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Phosphorus</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.phosphorus, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.phosphorus / microTarget.phosphorusRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Potassium</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.potassium, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.potassium / microTarget.potassiumRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Selenium</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.selenium, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.selenium / microTarget.seleniumRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Sodium</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.sodium, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.sodium / microTarget.sodiumRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                        <div class="nutrient-row">
+                            <span class="nutrient-name">Zinc</span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.zinc, 1, 1)} + 'g'"></span>
+                            <span th:text="${#numbers.formatDecimal(dailyStory.zinc / microTarget.zincRDA * 100, 1, 1)} + '%'"></span>
+                        </div>
+                    </div>
+                </section>
             </section>
         </section>
     </section>

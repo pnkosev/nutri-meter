@@ -53,6 +53,10 @@ public class MicroTargetServiceModel {
 
     private Double vitaminDUL;
 
+    private Double vitaminERDA;
+
+    private Double vitaminEUL;
+
     private Double vitaminKRDA;
 
     private Double vitaminKUL;

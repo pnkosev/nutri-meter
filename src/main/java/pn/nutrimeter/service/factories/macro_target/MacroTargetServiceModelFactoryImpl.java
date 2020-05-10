@@ -24,7 +24,7 @@ public class MacroTargetServiceModelFactoryImpl implements MacroTargetServiceMod
         model.setIsoleucineRDA(macroTarget.getIsoleucineRDA() * weight);
         model.setLeucineRDA(macroTarget.getLeucineRDA() * weight);
         model.setLysineRDA(macroTarget.getLysineRDA() * weight);
-        model.setPhenylalineTyrosineRDA(macroTarget.getPhenylalineTyrosineRDA() * weight);
+        model.setPhenylalanineTyrosineRDA(macroTarget.getPhenylalanineTyrosineRDA() * weight);
         model.setThreonineRDA(macroTarget.getThreonineRDA() * weight);
         model.setTryptophanRDA(macroTarget.getTryptophanRDA() * weight);
         model.setValineRDA(macroTarget.getValineRDA() * weight);

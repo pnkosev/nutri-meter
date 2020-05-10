@@ -25,7 +25,7 @@ public class MacroTargetServiceModel {
 
     private Double lysineRDA;
 
-    private Double phenylalineTyrosineRDA;
+    private Double phenylalanineTyrosineRDA;
 
     private Double threonineRDA;
 
