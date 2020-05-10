@@ -3,6 +3,17 @@ body {
     flex-direction: column;
     height: 100%;
     min-height: 100vh;
+    background-image: url('../img/background-img.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 17px;
+}
+
+input, textarea, select, table {
+    background-color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .w-15 {

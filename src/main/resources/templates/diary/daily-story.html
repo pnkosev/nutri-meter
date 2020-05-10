@@ -10,12 +10,15 @@
 <main>
     <section id="sidebar">
         <div class="header">
-            <h1>Daily story</h1>
             <div class="day-picker">
                 <form th:action="@{/diary}">
-                    <a th:href="@{'/diary/' + ${yesterday}}"><</a>
-                    <span th:text="${today}"></span>
-                    <a th:href="@{'/diary/' + ${tomorrow}}">></a>
+                    <a th:href="@{'/diary/' + ${yesterday}}">
+                        <i class="fa fa-chevron-left"></i>
+                    </a>
+                    <span th:text="${#temporals.format(today,'MMM dd, yyyy')}"></span>
+                    <a th:href="@{'/diary/' + ${tomorrow}}">
+                        <i class="fa fa-chevron-right"></i>
+                    </a>
                 </form>
             </div>
         </div>
@@ -30,16 +33,28 @@
     </section>
     <section id="view">
         <div id="btn-holder">
-            <button id="add-food-btn">Add Food</button>
-            <button id="add-exercise-btn">Add Exercise</button>
-            <button id="add-note-btn">Add note</button>
+            <button id="add-food-btn">
+                <i class="fa fa-pepper-hot"></i>
+                Add Food
+            </button>
+            <button id="add-exercise-btn">
+                <i class="fas fa-running"></i>
+                Add Exercise
+            </button>
+            <button id="add-note-btn">
+                <i class="fa fa-sticky-note" aria-hidden="true"></i>
+                Add note
+            </button>
         </div>
         <section id="consumed-foods">
             <h5 class="section-title text-center">Foods consumed throughout the day:</h5>
-            <div id="consumed-foods-body" class="container w-auto">
+            <div id="consumed-foods-body">
                 <th:block th:if="${dailyStory != null}">
                     <ul>
-                        <li th:each="food : ${dailyStory.getDailyStoryFoodAssociation()}">[[${food.name}]] - [[${food.gramsConsumed}]]</li>
+                        <li th:class="consumed-food-item" th:each="food : ${dailyStory.getDailyStoryFoodAssociation()}">
+                            <i class="fas fa-apple-alt"></i>
+                            [[${food.name}]] - [[${food.gramsConsumed}]]
+                        </li>
                     </ul>
                 </th:block>
             </div>
