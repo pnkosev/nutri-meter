@@ -5,14 +5,12 @@ const URLs = {
     favoriteFoods: '/api/foods-favorite',
 };
 
-const createRow = i => {
-    let columns =
-        `<td class="food-line">
-            ${i.name}
-            <input type="hidden" value="${i.id}">
-         </td>`;
-
-    return `<tr>${columns}</tr>`;
+const createRow = (f, i) => {
+    if (i % 2 === 0) {
+        return `<li class="food-line even-row">${f.name}<input type="hidden" value="${f.id}"></li>`;
+    } else {
+        return `<li class="food-line odd-row">${f.name}<input type="hidden" value="${f.id}"></li>`;
+    }
 };
 
 const addFood = e => {
@@ -74,8 +72,24 @@ const toggleAsFavorite = (e, foodId) => {
 };
 
 const displayBlock = (e) => {
-    const foodId = e.target.children[0].value;
+    const li = e.target;
     const foodAddBlock = document.getElementById('food-add-block');
+
+    if (li.classList.contains('selected')) {
+        li.classList.remove('selected');
+        foodAddBlock.style.display = 'none';
+        return false;
+    } else {
+        [...li.parentNode.children].forEach(li => {
+            if (li.classList.contains('selected')) {
+                li.classList.remove('selected');
+            }
+        });
+        foodAddBlock.style.display = 'block';
+        li.classList.add('selected');
+    }
+
+    const foodId = li.children[0].value;
 
     fetch(URLs.food + `/${foodId}`)
         .then(res => res.json())
@@ -102,8 +116,6 @@ const displayBlock = (e) => {
             const form = document.getElementById('food-add-form');
             form.addEventListener('submit', addFood);
         });
-
-    foodAddBlock.style.display = 'block';
 };
 
 const getFoods = (URL, table) => {
@@ -115,8 +127,8 @@ const getFoods = (URL, table) => {
         .then(res => res.json())
         .then(data => {
             let list = '';
-            data.forEach(f => {
-                list += createRow(f);
+            data.forEach((f, i) => {
+                list += createRow(f, i);
             });
 
             const foodContainer = document.getElementById(table);
@@ -138,7 +150,7 @@ const setUpModal = () => {
     const btn = document.getElementById('add-food-btn');
 
     // Get the <span> element that closes the foods
-    const span = document.getElementsByClassName('close')[0];
+    const closeBtn = document.getElementsByClassName('close')[0];
 
     // When the user clicks the button, open the foods
     btn.onclick = function () {
@@ -156,7 +168,7 @@ const setUpModal = () => {
     };
 
 // When the user clicks on <span> (x), close the foods
-    span.onclick = function () {
+    closeBtn.onclick = function () {
         modal.style.display = "none";
     };
 
