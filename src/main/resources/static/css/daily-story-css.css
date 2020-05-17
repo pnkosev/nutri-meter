@@ -219,3 +219,13 @@ li.food-line.odd-row {
 li.selected {
     background-color: #b3b3b3 !important;
 }
+
+#food-add-form > input {
+    max-width: 100px;
+}
+
+@media only screen and (max-width: 500px) {
+    div .modal-content {
+        width: 80% !important;
+    }
+}
