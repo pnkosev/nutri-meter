@@ -186,6 +186,9 @@ public class Food extends BaseEntity {
     @OneToMany(mappedBy = "ingredient")
     private List<FoodIngredient> ingredientAssociation;
 
+    @OneToMany(mappedBy = "food")
+    private List<Measure> measures;
+
     @ManyToMany(mappedBy = "favoriteFoods")
     private List<User> users;
 
@@ -204,12 +207,4 @@ public class Food extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "food_category_id", referencedColumnName = "id")
     )
     private List<FoodCategory> foodCategories;
-
-    @ManyToMany
-    @JoinTable(
-            name = "foods_measures",
-            joinColumns = @JoinColumn(name = "food_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "measure_id", referencedColumnName = "id")
-    )
-    private List<Measure> measures;
 }
