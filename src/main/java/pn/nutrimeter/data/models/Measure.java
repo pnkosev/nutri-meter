@@ -6,6 +6,7 @@ import lombok.Setter;
 import pn.nutrimeter.data.models.base.BaseEntity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,7 +21,6 @@ public class Measure extends BaseEntity {
     @Column(name = "equivalent_in_grams")
     private Double equivalentInGrams;
 
-    @ManyToOne
-    @JoinColumn(name = "food_id", referencedColumnName = "id")
-    private Food food;
+    @ManyToMany(mappedBy = "measures")
+    private List<Food> foods;
 }

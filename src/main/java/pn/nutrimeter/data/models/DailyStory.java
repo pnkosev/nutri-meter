@@ -34,4 +34,7 @@ public class DailyStory extends BaseEntity {
 
     @OneToMany(mappedBy = "exercise")
     private List<DailyStoryExercise> dailyStoryExerciseAssociation;
+
+    @OneToMany(mappedBy = "dailyStory")
+    private List<Note> notes;
 }
