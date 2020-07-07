@@ -21,12 +21,6 @@ public class FoodCategory extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "recommended_daily_servings")
-    private Integer recommendedDailyServings;
-
-    @Column(name = "amount_in_grams")
-    private Double amountInGrams;
-
     @ManyToMany(mappedBy = "foodCategories")
     private List<Food> foods;
 }

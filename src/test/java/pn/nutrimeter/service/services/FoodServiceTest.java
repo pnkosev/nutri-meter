@@ -186,8 +186,6 @@ class FoodServiceTest {
         FoodCategory category = new FoodCategory();
         category.setName("Fruits");
         category.setDescription("yummy");
-        category.setRecommendedDailyServings(5);
-        category.setAmountInGrams(500d);
         this.foodCategoryRepository.saveAndFlush(category);
     }
 }

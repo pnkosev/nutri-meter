@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class FoodCategoryServiceModel {
+public class TagServiceModel {
 
     private String id;
 

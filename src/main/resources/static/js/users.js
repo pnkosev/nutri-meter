@@ -32,7 +32,7 @@ const mote = e => {
 
     fetch(URL, {method: 'post'})
         .then(() => {
-            window.location = '/user/all';
+            window.location = '/admin-tool';
         });
 
     return false;

@@ -27,6 +27,8 @@ public class UserController extends BaseController {
     public static final String USER_REGISTER_VIEW = "user/register";
     public static final String USER_LOGIN_URL = "/login";
     public static final String USER_LOGIN_VIEW = "user/login";
+    public static final String ADMIN_TOOL_URL = "/admin-tool";
+    public static final String ADMIN_TOOL_VIEW = "user/admin-tool";
     public static final String REDIRECT_URL = "/login";
 
     private final UserService userService;
@@ -38,43 +40,43 @@ public class UserController extends BaseController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/register")
+    @GetMapping(USER_REGISTER_URL)
     @PageTitle("Register")
     public ModelAndView register(UserRegisterBindingModel userRegisterBindingModel) {
-        return view("user/register");
+        return view(USER_REGISTER_VIEW);
     }
 
-    @PostMapping("/register")
+    @PostMapping(USER_REGISTER_URL)
     public ModelAndView registerPost(
             @Valid UserRegisterBindingModel userRegisterBindingModel,
             BindingResult bindingResult,
             Map<String, String> map) {
 
         if (bindingResult.hasErrors()) {
-            return view("user/register", HttpStatus.UNPROCESSABLE_ENTITY);
+            return view(USER_REGISTER_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         try {
             this.userService.register(this.modelMapper.map(userRegisterBindingModel, UserRegisterServiceModel.class));
         } catch (UserRegisterFailureException | UserAlreadyExistsException e) {
             map.put("reason", e.getMessage());
-            return view("user/register", e.getHttpStatus());
+            return view(USER_REGISTER_VIEW, e.getHttpStatus());
         }
 
-        return redirect("/login");
+        return redirect(USER_LOGIN_URL);
     }
 
 
-    @GetMapping("/login")
+    @GetMapping(USER_LOGIN_URL)
     @PageTitle("Login")
     public ModelAndView login() {
-        return view("user/login");
+        return view(USER_LOGIN_VIEW);
     }
 
     @PreAuthorize("hasRole('ROLE_ROOT')")
-    @GetMapping("/user/all")
-    @PageTitle("All Users")
+    @GetMapping(ADMIN_TOOL_URL)
+    @PageTitle("Admin tool")
     public ModelAndView allUsers() {
-        return view("user/users-all");
+        return view(ADMIN_TOOL_VIEW);
     }
 }

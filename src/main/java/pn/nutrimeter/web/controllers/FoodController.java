@@ -13,10 +13,13 @@ import pn.nutrimeter.error.FoodAddFailureException;
 import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.models.FoodCategoryServiceModel;
 import pn.nutrimeter.service.models.FoodServiceModel;
+import pn.nutrimeter.service.models.TagServiceModel;
 import pn.nutrimeter.service.services.api.FoodCategoryService;
 import pn.nutrimeter.service.services.api.FoodService;
+import pn.nutrimeter.service.services.api.TagService;
 import pn.nutrimeter.web.models.binding.FoodCategoryCreateBindingModel;
 import pn.nutrimeter.web.models.binding.FoodCreateBindingModel;
+import pn.nutrimeter.web.models.binding.TagCreateBindingModel;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,16 +34,21 @@ public class FoodController extends BaseController {
     public static final String FOOD_CATEGORY_ADD_URL = "/category/add";
     public static final String FOOD_CATEGORY_ADD_VIEW = "food/food-category-add";
     public static final String REDIRECT_URL = "/home";
+    public static final String FOOD_TAG_ADD_URL = "/tag/add";
+    public static final String FOOD_TAG_ADD_VIEW = "food/tag-add";
 
     private final FoodService foodService;
 
     private final FoodCategoryService foodCategoryService;
 
+    private final TagService tagService;
+
     private final ModelMapper modelMapper;
 
-    public FoodController(FoodService foodService, FoodCategoryService foodCategoryService, ModelMapper modelMapper) {
+    public FoodController(FoodService foodService, FoodCategoryService foodCategoryService, TagService tagService, ModelMapper modelMapper) {
         this.foodService = foodService;
         this.foodCategoryService = foodCategoryService;
+        this.tagService = tagService;
         this.modelMapper = modelMapper;
     }
 
@@ -105,6 +113,26 @@ public class FoodController extends BaseController {
         }
 
         this.foodCategoryService.create(this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class));
+
+        return redirect(REDIRECT_URL);
+    }
+
+    @GetMapping(FOOD_TAG_ADD_URL)
+    @PageTitle("Add Tag")
+    public ModelAndView addTag(TagCreateBindingModel tagCreateBindingModel) {
+        return view(FOOD_TAG_ADD_VIEW);
+    }
+
+    @PostMapping(FOOD_TAG_ADD_URL)
+    public ModelAndView addTagPost(
+            @Valid TagCreateBindingModel tagCreateBindingModel,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return view(FOOD_TAG_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        this.tagService.create(this.modelMapper.map(tagCreateBindingModel, TagServiceModel.class));
 
         return redirect(REDIRECT_URL);
     }

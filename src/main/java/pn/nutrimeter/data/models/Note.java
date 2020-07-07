@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(name = "notes")
 public class Note extends BaseEntity {
 
-    @Column
+    @Column(name = "content")
     private String content;
 
     @ManyToOne
