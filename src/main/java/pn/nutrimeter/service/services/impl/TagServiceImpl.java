@@ -7,6 +7,9 @@ import pn.nutrimeter.data.repositories.TagRepository;
 import pn.nutrimeter.service.models.TagServiceModel;
 import pn.nutrimeter.service.services.api.TagService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class TagServiceImpl implements TagService {
 
@@ -23,5 +26,19 @@ public class TagServiceImpl implements TagService {
     public void create(TagServiceModel tagServiceModel) {
         Tag tag = this.modelMapper.map(tagServiceModel, Tag.class);
         this.tagRepository.saveAndFlush(tag);
+    }
+
+    @Override
+    public List<TagServiceModel> getAll() {
+        return this.tagRepository
+                .findAll()
+                .stream()
+                .map(t -> this.modelMapper.map(t, TagServiceModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteTag(String tagId) {
+        this.tagRepository.delete(this.tagRepository.findById(tagId).get());
     }
 }

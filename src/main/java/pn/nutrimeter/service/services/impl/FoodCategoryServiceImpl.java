@@ -43,4 +43,9 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
                 .map(fc -> this.modelMapper.map(fc, FoodCategoryServiceModel.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteCategory(String categoryId) {
+        this.foodCategoryRepository.delete(this.foodCategoryRepository.findById(categoryId).get());
+    }
 }

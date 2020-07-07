@@ -11,4 +11,6 @@ public interface FoodCategoryService {
     FoodCategoryServiceModel getById(String id);
 
     List<FoodCategoryServiceModel> getAll();
+
+    void deleteCategory(String categoryId);
 }

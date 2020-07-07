@@ -6,7 +6,7 @@
 >
 <th:block th:include="~{_shared/head}"/>
 <body>
-<script src="/js/users.js"></script>
+<script src="/js/admin-tool.js"></script>
 <th:block th:include="~{_shared/header}"/>
 <main class="mb-5">
     <div class="container">
@@ -61,8 +61,21 @@
                 </section>
             </div>
             <div id="tags" class="container tab-pane fade"><br>
-                <h3>Menu 2</h3>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                <h1 class="mt-5 mb-5 text-center">Tags</h1>
+                <section class="container w-50 mt-5">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th class="col-md">Tags</th>
+                                <th class="col-md"></th>
+                                <th class="col-md"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="tags-container"></tbody>
+                        </table>
+                    </div>
+                </section>
             </div>
         </div>
     </div>

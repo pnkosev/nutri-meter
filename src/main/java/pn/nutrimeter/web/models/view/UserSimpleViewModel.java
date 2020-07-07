@@ -11,7 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class UserSimpleViewModel {
 
-    private String Id;
+    private String id;
 
     private String username;
 
