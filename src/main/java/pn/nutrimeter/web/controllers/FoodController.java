@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,7 +33,8 @@ public class FoodController extends BaseController {
     public static final String FOOD_ADD_URL = "/add";
     public static final String FOOD_ADD_VIEW = "food/food-add";
     public static final String FOOD_CATEGORY_ADD_URL = "/category/add";
-    public static final String FOOD_CATEGORY_ADD_VIEW = "food/food-category-add";
+    public static final String FOOD_CATEGORY_ADD_EDIT_VIEW = "food/food-category-add-edit";
+    public static final String FOOD_CATEGORY_EDIT_URL = "/categories/edit/{categoryId}";
     public static final String REDIRECT_URL = "/home";
     public static final String FOOD_TAG_ADD_URL = "/tag/add";
     public static final String FOOD_TAG_ADD_VIEW = "food/tag-add";
@@ -100,7 +102,9 @@ public class FoodController extends BaseController {
     @GetMapping(FOOD_CATEGORY_ADD_URL)
     @PageTitle("Add Category")
     public ModelAndView addCategory(FoodCategoryCreateBindingModel foodCategoryCreateBindingModel) {
-        return view(FOOD_CATEGORY_ADD_VIEW);
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("action", "Add");
+        return view(mav, FOOD_CATEGORY_ADD_EDIT_VIEW);
     }
 
     @PostMapping(FOOD_CATEGORY_ADD_URL)
@@ -109,10 +113,41 @@ public class FoodController extends BaseController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return view(FOOD_CATEGORY_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
+            return view(FOOD_CATEGORY_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.foodCategoryService.create(this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class));
+
+        return redirect(REDIRECT_URL);
+    }
+
+    @GetMapping(FOOD_CATEGORY_EDIT_URL)
+    @PageTitle("Edit Category")
+    public ModelAndView editCategory(
+            @PathVariable String categoryId,
+            FoodCategoryCreateBindingModel foodCategoryCreateBindingModel) {
+        FoodCategoryServiceModel foodCategoryServiceModel = this.foodCategoryService.getById(categoryId);
+        foodCategoryCreateBindingModel.setName(foodCategoryServiceModel.getName());
+        foodCategoryCreateBindingModel.setDescription(foodCategoryServiceModel.getDescription());
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("action", "Edit");
+        mav.addObject("categoryId", foodCategoryServiceModel.getId());
+        return view(mav, FOOD_CATEGORY_ADD_EDIT_VIEW);
+    }
+
+    @PostMapping(FOOD_CATEGORY_EDIT_URL)
+    public ModelAndView editCategoryPost(
+            @PathVariable String categoryId,
+            @Valid FoodCategoryCreateBindingModel foodCategoryCreateBindingModel,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return view(FOOD_CATEGORY_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        FoodCategoryServiceModel foodCategoryServiceModel = this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class);
+        foodCategoryServiceModel.setId(categoryId);
+        this.foodCategoryService.edit(foodCategoryServiceModel);
 
         return redirect(REDIRECT_URL);
     }

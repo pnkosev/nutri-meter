@@ -90,7 +90,7 @@ class FoodControllerTest extends MvcTestBase {
         this.mockMvc
                 .perform(get(BASE_URL + FoodController.FOOD_CATEGORY_ADD_URL))
                 .andExpect(status().isOk())
-                .andExpect(view().name(FoodController.FOOD_CATEGORY_ADD_VIEW));
+                .andExpect(view().name(FoodController.FOOD_CATEGORY_ADD_EDIT_VIEW));
     }
 
     @Test
@@ -117,7 +117,7 @@ class FoodControllerTest extends MvcTestBase {
         this.mockMvc
                 .perform(post(BASE_URL + FoodController.FOOD_CATEGORY_ADD_URL))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(view().name(FoodController.FOOD_CATEGORY_ADD_VIEW));
+                .andExpect(view().name(FoodController.FOOD_CATEGORY_ADD_EDIT_VIEW));
     }
 
     private FoodCategory getFoodCategory() { return new FoodCategory() {{ setName("NAME"); }}; }
