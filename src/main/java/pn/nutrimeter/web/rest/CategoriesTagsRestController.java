@@ -21,22 +21,22 @@ public class CategoriesTagsRestController {
         this.tagService = tagService;
     }
 
-    @GetMapping("/categories")
+    @GetMapping("/category/all")
     public List<FoodCategoryServiceModel> allCategories() {
         return foodCategoryService.getAll();
     }
 
-    @PostMapping("/categories/delete/{categoryId}")
+    @PostMapping("/category/delete/{categoryId}")
     public void deleteCategory(@PathVariable String categoryId) {
         this.foodCategoryService.deleteCategory(categoryId);
     }
 
-    @GetMapping("/tags")
+    @GetMapping("/tag/all")
     public List<TagServiceModel> allTags() {
         return tagService.getAll();
     }
 
-    @PostMapping("/tags/delete/{tagId}")
+    @PostMapping("/tag/delete/{tagId}")
     public void deleteTag(@PathVariable String tagId) {
         this.tagService.deleteTag(tagId);
     }

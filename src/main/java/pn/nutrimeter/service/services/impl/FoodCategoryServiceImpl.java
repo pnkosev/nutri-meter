@@ -46,12 +46,13 @@ public class FoodCategoryServiceImpl implements FoodCategoryService {
 
     @Override
     public void deleteCategory(String categoryId) {
-        this.foodCategoryRepository.delete(this.foodCategoryRepository.findById(categoryId).get());
+        FoodCategory foodCategory = this.foodCategoryRepository.findById(categoryId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_CATEGORY_ID));
+        this.foodCategoryRepository.delete(foodCategory);
     }
 
     @Override
     public void edit(FoodCategoryServiceModel foodCategoryServiceModel) {
-        FoodCategory foodCategory = this.foodCategoryRepository.findById(foodCategoryServiceModel.getId()).get();
+        FoodCategory foodCategory = this.foodCategoryRepository.findById(foodCategoryServiceModel.getId()).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_CATEGORY_ID));
         this.modelMapper.map(foodCategoryServiceModel, foodCategory);
         this.foodCategoryRepository.saveAndFlush(foodCategory);
     }

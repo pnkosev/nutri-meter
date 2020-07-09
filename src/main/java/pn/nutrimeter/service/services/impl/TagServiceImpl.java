@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.Tag;
 import pn.nutrimeter.data.repositories.TagRepository;
+import pn.nutrimeter.error.ErrorConstants;
+import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.models.TagServiceModel;
 import pn.nutrimeter.service.services.api.TagService;
 
@@ -38,7 +40,20 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public TagServiceModel getById(String tagId) {
+        Tag tag = this.tagRepository.findById(tagId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_TAG_ID));
+        return this.modelMapper.map(tag, TagServiceModel.class);
+    }
+
+    @Override
     public void deleteTag(String tagId) {
-        this.tagRepository.delete(this.tagRepository.findById(tagId).get());
+        this.tagRepository.delete(this.tagRepository.findById(tagId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_TAG_ID)));
+    }
+
+    @Override
+    public void edit(TagServiceModel tagServiceModel) {
+        Tag tag = this.tagRepository.findById(tagServiceModel.getId()).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_TAG_ID));
+        this.modelMapper.map(tagServiceModel, tag);
+        this.tagRepository.saveAndFlush(tag);
     }
 }

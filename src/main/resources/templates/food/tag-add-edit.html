@@ -8,7 +8,11 @@
 <th:block th:include="~{_shared/header}"/>
 <main class="mb-5">
     <div class="container w-50 mt-5">
-        <form class="mx-auto w-100" th:action="@{/food/tag/add}" th:method="post" th:object="${tagCreateBindingModel}">
+        <h1 class="mt-5 mb-5 text-center"><span th:text="${action}"></span> a tag</h1>
+        <form class="mx-auto w-100"
+              th:action="${action == 'Add'} ? '/food/tag/add' : '/food/tag/edit/' + ${tagId}"
+              th:method="post" th:object="${tagCreateBindingModel}"
+        >
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control"
@@ -30,7 +34,7 @@
                 <small class="error" th:if="${#fields.errors('description')}" th:errors="*{description}"></small>
             </div>
             <div class="button-holder d-flex justify-content-center mt-4">
-                <button class="btn btn-secondary text-white mb-3" type="submit">Add Tag</button>
+                <button class="btn btn-secondary text-white mb-3" type="submit"><span th:text="${action}"></span> Tag</button>
             </div>
         </form>
     </div>

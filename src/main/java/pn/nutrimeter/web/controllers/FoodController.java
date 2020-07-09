@@ -34,10 +34,11 @@ public class FoodController extends BaseController {
     public static final String FOOD_ADD_VIEW = "food/food-add";
     public static final String FOOD_CATEGORY_ADD_URL = "/category/add";
     public static final String FOOD_CATEGORY_ADD_EDIT_VIEW = "food/food-category-add-edit";
-    public static final String FOOD_CATEGORY_EDIT_URL = "/categories/edit/{categoryId}";
+    public static final String FOOD_CATEGORY_EDIT_URL = "/category/edit/{categoryId}";
     public static final String REDIRECT_URL = "/home";
     public static final String FOOD_TAG_ADD_URL = "/tag/add";
-    public static final String FOOD_TAG_ADD_VIEW = "food/tag-add";
+    public static final String FOOD_TAG_EDIT_URL = "/tag/edit/{tagId}";
+    public static final String FOOD_TAG_ADD_EDIT_VIEW = "food/tag-add-edit";
 
     private final FoodService foodService;
 
@@ -132,6 +133,7 @@ public class FoodController extends BaseController {
         ModelAndView mav = new ModelAndView();
         mav.addObject("action", "Edit");
         mav.addObject("categoryId", foodCategoryServiceModel.getId());
+
         return view(mav, FOOD_CATEGORY_ADD_EDIT_VIEW);
     }
 
@@ -155,7 +157,9 @@ public class FoodController extends BaseController {
     @GetMapping(FOOD_TAG_ADD_URL)
     @PageTitle("Add Tag")
     public ModelAndView addTag(TagCreateBindingModel tagCreateBindingModel) {
-        return view(FOOD_TAG_ADD_VIEW);
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("action", "Add");
+        return view(mav, FOOD_TAG_ADD_EDIT_VIEW);
     }
 
     @PostMapping(FOOD_TAG_ADD_URL)
@@ -164,10 +168,42 @@ public class FoodController extends BaseController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return view(FOOD_TAG_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
+            return view(FOOD_TAG_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.tagService.create(this.modelMapper.map(tagCreateBindingModel, TagServiceModel.class));
+
+        return redirect(REDIRECT_URL);
+    }
+
+    @GetMapping(FOOD_TAG_EDIT_URL)
+    @PageTitle("Edit Tag")
+    public ModelAndView editTag(
+            @PathVariable String tagId,
+            TagCreateBindingModel tagCreateBindingModel) {
+        TagServiceModel tagServiceModel = this.tagService.getById(tagId);
+        tagCreateBindingModel.setName(tagServiceModel.getName());
+        tagCreateBindingModel.setDescription(tagServiceModel.getDescription());
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("action", "Edit");
+        mav.addObject("tagId", tagServiceModel.getId());
+
+        return view(mav, FOOD_TAG_ADD_EDIT_VIEW);
+    }
+
+    @PostMapping(FOOD_TAG_EDIT_URL)
+    public ModelAndView editTagPost(
+            @PathVariable String tagId,
+            @Valid TagCreateBindingModel tagCreateBindingModel,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return view(FOOD_TAG_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        TagServiceModel tagServiceModel = this.modelMapper.map(tagCreateBindingModel, TagServiceModel.class);
+        tagServiceModel.setId(tagId);
+        this.tagService.edit(tagServiceModel);
 
         return redirect(REDIRECT_URL);
     }

@@ -23,7 +23,7 @@ public class UserRestController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/user/all")
     public List<UserSimpleViewModel> allUsers() {
         return this.userService
                 .getAllUsers()
@@ -32,12 +32,12 @@ public class UserRestController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/users/promote/{userId}")
+    @PostMapping("/user/promote/{userId}")
     public void promoteUser(@PathVariable String userId) {
         this.userService.promoteUser(userId);
     }
 
-    @PostMapping("/users/demote/{userId}")
+    @PostMapping("/user/demote/{userId}")
     public void demoteUser(@PathVariable String userId) {
         this.userService.demoteUser(userId);
     }

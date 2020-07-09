@@ -1,7 +1,7 @@
 const URLs = {
-    users: "/api/users",
-    categories: '/api/categories',
-    tags: '/api/tags',
+    users: "/api/user/all",
+    categories: '/api/category/all',
+    tags: '/api/tag/all',
 };
 
 const createUserRow = (u, i) => {
@@ -14,7 +14,7 @@ const createUserRow = (u, i) => {
     const isAdmin = role === "Admin";
 
     const form =
-        `<form action="/api/users/${isAdmin ? 'demote' : 'promote'}/${u.id}" method="post">
+        `<form action="/api/user/${isAdmin ? 'demote' : 'promote'}/${u.id}" method="post">
             <button class="btn ${u.authorities.length !== 1 ? 'btn-warning' : 'btn-success'}">${isAdmin ? "Demote" : "Promote"}</button>
         </form>`;
 
@@ -28,6 +28,7 @@ const createUserRow = (u, i) => {
 };
 
 const createCategoryTagRow = (x, subRoute) => {
+    subRoute = getSingularFromPlural(subRoute);
     const editBtn = `<a href='/food/${subRoute}/edit/${x.id}' type="button" class="btn btn-info">edit</a>`;
 
     const deleteForm =
@@ -55,6 +56,31 @@ const mote = e => {
     return false;
 };
 
+const remove = e => {
+    e.preventDefault();
+
+    if (confirm(e.target.getAttribute('data-confirm'))) {
+        const URL = e.target.getAttribute('action');
+
+        fetch(URL, {method: 'post'})
+            .then(() => {
+                document.querySelector('a.active').click();
+            });
+    }
+
+    return false;
+};
+
+const getSingularFromPlural = str => {
+    if (str.endsWith('ies')) {
+        str = str.substr(0, str.length - 3) + 'y';
+    } else {
+        str = str.substr(0, str.length - 1);
+    }
+
+    return str;
+};
+
 const fillUsersContainer = () => {
     fetch(URLs.users)
         .then(res => res.json())
@@ -70,21 +96,6 @@ const fillUsersContainer = () => {
             const forms = document.querySelectorAll('#all-users form');
             forms.forEach(f => f.addEventListener('submit', mote));
         });
-};
-
-const remove = e => {
-    e.preventDefault();
-
-    if (confirm(e.target.getAttribute('data-confirm'))) {
-        const URL = e.target.getAttribute('action');
-
-        fetch(URL, {method: 'post'})
-            .then(() => {
-                document.querySelector('a.active').click();
-            });
-    }
-
-    return false;
 };
 
 const fillCategoriesTagsContainer = (url, containerName) => {

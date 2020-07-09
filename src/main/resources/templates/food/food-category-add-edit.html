@@ -9,7 +9,10 @@
 <main class="mb-5">
     <div class="container w-50 mt-5">
         <h1 class="mt-5 mb-5 text-center"><span th:text="${action}"></span> a food category</h1>
-        <form class="mx-auto w-100" th:action="${action == 'Add'} ? '/food/category/add' : '/food/categories/edit/' + ${categoryId}" th:method="post" th:object="${foodCategoryCreateBindingModel}">
+        <form class="mx-auto w-100"
+              th:action="${action == 'Add'} ? '/food/category/add' : '/food/category/edit/' + ${categoryId}"
+              th:method="post" th:object="${foodCategoryCreateBindingModel}"
+        >
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control"

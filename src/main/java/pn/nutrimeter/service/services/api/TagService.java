@@ -11,5 +11,9 @@ public interface TagService {
 
     List<TagServiceModel> getAll();
 
+    TagServiceModel getById(String tagId);
+
     void deleteTag(String tagId);
+
+    void edit(TagServiceModel tagServiceModel);
 }
