@@ -118,6 +118,18 @@ const fillCategoriesTagsContainer = (url, containerName) => {
 window.onload = () => {
     fillUsersContainer();
 
+    const tabs = document.querySelectorAll('.nav-tabs a');
+    tabs.forEach(t => t.addEventListener('click', () => {
+        tabs.forEach(c => c.classList.remove('active'));
+        t.classList.add('active');
+    }));
+
+    // SAME AS THE ABOVE
+    // $('.nav-tabs a').click(function (e) {
+    //     // No e.preventDefault() here  // <<<<<< THIS IS BY DEFAULT FROM $
+    //     $(this).tab('show');
+    // });
+
     const links = [...document.getElementsByTagName('a')];
     links.forEach(l => {
         if (l.href.endsWith('categories')) {
