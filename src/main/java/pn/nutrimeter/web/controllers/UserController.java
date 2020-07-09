@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import pn.nutrimeter.annotation.PageTitle;
 import pn.nutrimeter.error.UserAlreadyExistsException;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/user")
 public class UserController extends BaseController {
 
     public static final String USER_REGISTER_URL = "/register";
