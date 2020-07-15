@@ -40,6 +40,7 @@ public class FoodController extends BaseController {
     public static final String FOOD_TAG_ADD_EDIT_VIEW = "food/tag-add-edit";
     public static final String REDIRECT_HOME_URL = "/home";
     public static final String REDIRECT_FOOD_CATEGORY_URL = "/user/admin-tool#categories";
+    public static final String REDIRECT_TAG_URL = "/user/admin-tool#tags";
 
     private final FoodService foodService;
 
@@ -174,7 +175,7 @@ public class FoodController extends BaseController {
 
         this.tagService.create(this.modelMapper.map(tagCreateBindingModel, TagServiceModel.class));
 
-        return redirect(REDIRECT_HOME_URL);
+        return redirect(REDIRECT_TAG_URL);
     }
 
     @GetMapping(FOOD_TAG_EDIT_URL)
@@ -206,6 +207,6 @@ public class FoodController extends BaseController {
         tagServiceModel.setId(tagId);
         this.tagService.edit(tagServiceModel);
 
-        return redirect(REDIRECT_HOME_URL);
+        return redirect(REDIRECT_TAG_URL);
     }
 }
