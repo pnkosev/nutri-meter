@@ -115,13 +115,20 @@ const fillCategoriesTagsContainer = (url, containerName) => {
         });
 };
 
-window.onload = () => {
-    fillUsersContainer();
-
-    const tabs = document.querySelectorAll('.nav-tabs a');
-    tabs.forEach(t => t.addEventListener('click', () => {
-        tabs.forEach(c => c.classList.remove('active'));
+const tabSwitchConfig = () => {
+    const tabLinks = document.querySelectorAll('.nav-tabs a');
+    const tabs = document.querySelectorAll('.container .tab-pane');
+    tabLinks.forEach(t => t.addEventListener('click', () => {
+        tabLinks.forEach(c => c.classList.remove('active'));
         t.classList.add('active');
+        const href = t.getAttribute('href').substr(1);
+        tabs.forEach(y => {
+            if (y.getAttribute('id') === href) {
+                y.classList.add('active', 'show');
+            } else {
+                y.classList.remove('active', 'show');
+            }
+        });
     }));
 
     // SAME AS THE ABOVE
@@ -129,6 +136,11 @@ window.onload = () => {
     //     // No e.preventDefault() here  // <<<<<< THIS IS BY DEFAULT FROM $
     //     $(this).tab('show');
     // });
+};
+
+window.onload = () => {
+    fillUsersContainer();
+    tabSwitchConfig();
 
     const links = [...document.getElementsByTagName('a')];
     links.forEach(l => {
