@@ -35,10 +35,11 @@ public class FoodController extends BaseController {
     public static final String FOOD_CATEGORY_ADD_URL = "/category/add";
     public static final String FOOD_CATEGORY_ADD_EDIT_VIEW = "food/food-category-add-edit";
     public static final String FOOD_CATEGORY_EDIT_URL = "/category/edit/{categoryId}";
-    public static final String REDIRECT_URL = "/home";
     public static final String FOOD_TAG_ADD_URL = "/tag/add";
     public static final String FOOD_TAG_EDIT_URL = "/tag/edit/{tagId}";
     public static final String FOOD_TAG_ADD_EDIT_VIEW = "food/tag-add-edit";
+    public static final String REDIRECT_HOME_URL = "/home";
+    public static final String REDIRECT_FOOD_CATEGORY_URL = "/user/admin-tool#categories";
 
     private final FoodService foodService;
 
@@ -97,7 +98,7 @@ public class FoodController extends BaseController {
             return view(mav, FOOD_ADD_VIEW, e.getHttpStatus());
         }
 
-        return redirect(REDIRECT_URL);
+        return redirect(REDIRECT_HOME_URL);
     }
 
     @GetMapping(FOOD_CATEGORY_ADD_URL)
@@ -119,7 +120,7 @@ public class FoodController extends BaseController {
 
         this.foodCategoryService.create(this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class));
 
-        return redirect(REDIRECT_URL);
+        return redirect(REDIRECT_FOOD_CATEGORY_URL);
     }
 
     @GetMapping(FOOD_CATEGORY_EDIT_URL)
@@ -151,7 +152,7 @@ public class FoodController extends BaseController {
         foodCategoryServiceModel.setId(categoryId);
         this.foodCategoryService.edit(foodCategoryServiceModel);
 
-        return redirect(REDIRECT_URL);
+        return redirect(REDIRECT_FOOD_CATEGORY_URL);
     }
 
     @GetMapping(FOOD_TAG_ADD_URL)
@@ -173,7 +174,7 @@ public class FoodController extends BaseController {
 
         this.tagService.create(this.modelMapper.map(tagCreateBindingModel, TagServiceModel.class));
 
-        return redirect(REDIRECT_URL);
+        return redirect(REDIRECT_HOME_URL);
     }
 
     @GetMapping(FOOD_TAG_EDIT_URL)
@@ -205,6 +206,6 @@ public class FoodController extends BaseController {
         tagServiceModel.setId(tagId);
         this.tagService.edit(tagServiceModel);
 
-        return redirect(REDIRECT_URL);
+        return redirect(REDIRECT_HOME_URL);
     }
 }

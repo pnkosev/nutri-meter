@@ -115,9 +115,7 @@ const fillCategoriesTagsContainer = (url, containerName) => {
         });
 };
 
-const tabSwitchConfig = () => {
-    const tabLinks = document.querySelectorAll('.nav-tabs a');
-    const tabs = document.querySelectorAll('.container .tab-pane');
+const tabSwitchConfig = (tabLinks, tabs) => {
     tabLinks.forEach(t => t.addEventListener('click', () => {
         tabLinks.forEach(c => c.classList.remove('active'));
         t.classList.add('active');
@@ -125,32 +123,67 @@ const tabSwitchConfig = () => {
         tabs.forEach(y => {
             if (y.getAttribute('id') === href) {
                 y.classList.add('active', 'show');
+                switch (href) {
+                    case 'all-users':
+                        return fillUsersContainer();
+                    case 'categories':
+                        return fillCategoriesTagsContainer(URLs.categories, 'categories');
+                    case 'tags':
+                        return fillCategoriesTagsContainer(URLs.tags, 'tags');
+                }
             } else {
                 y.classList.remove('active', 'show');
             }
         });
     }));
 
-    // SAME AS THE ABOVE
+    // SAME AS THE ABOVE EXCEPT FOR THE CONTAINER FILLING
     // $('.nav-tabs a').click(function (e) {
     //     // No e.preventDefault() here  // <<<<<< THIS IS BY DEFAULT FROM $
     //     $(this).tab('show');
     // });
 };
 
-window.onload = () => {
-    fillUsersContainer();
-    tabSwitchConfig();
+const refreshSetup = (tabLinks, tabs) => {
+    const currentURL = window.location.href;
+    const index = currentURL.indexOf('#');
+    const currentTab = currentURL.substr(index + 1);
+    const allUsers = 'all-users';
+    const categories = 'categories';
+    const tags = 'tags';
 
-    const links = [...document.getElementsByTagName('a')];
-    links.forEach(l => {
-        if (l.href.endsWith('categories')) {
-            l.addEventListener('click', () => fillCategoriesTagsContainer(URLs.categories, 'categories'));
-        }
-
-        if (l.href.endsWith('tags')) {
-            l.addEventListener('click', () => fillCategoriesTagsContainer(URLs.tags, 'tags'));
+    tabLinks.forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('href').endsWith(currentTab)) {
+            l.classList.add('active');
         }
     });
+
+    tabs.forEach(c => c.classList.remove('active', 'show'));
+
+    switch (currentTab) {
+        case allUsers: {
+            let div = document.getElementById(allUsers);
+            div.classList.add('active', 'show');
+            return fillUsersContainer();
+        }
+        case categories: {
+            let div = document.getElementById(categories);
+            div.classList.add('active', 'show');
+            return fillCategoriesTagsContainer(URLs.categories, categories);
+        }
+        case tags: {
+            let div = document.getElementById(tags);
+            div.classList.add('active', 'show');
+            return fillCategoriesTagsContainer(URLs.tags, tags);
+        }
+    }
+};
+
+window.onload = () => {
+    const tabLinks = document.querySelectorAll('.nav-tabs a');
+    const tabs = document.querySelectorAll('.container .tab-pane');
+    refreshSetup(tabLinks, tabs);
+    tabSwitchConfig(tabLinks, tabs);
 };
 

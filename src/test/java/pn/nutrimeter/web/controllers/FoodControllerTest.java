@@ -66,7 +66,7 @@ class FoodControllerTest extends MvcTestBase {
                         .param("totalLipids", "5")
                         .param("foodCategories", this.getFoodCategoryString()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(FoodController.REDIRECT_URL));
+                .andExpect(redirectedUrl(FoodController.REDIRECT_HOME_URL));
     }
 
     @Test
@@ -108,7 +108,7 @@ class FoodControllerTest extends MvcTestBase {
                 .perform(post(BASE_URL + FoodController.FOOD_CATEGORY_ADD_URL)
                         .param("name", "name"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(FoodController.REDIRECT_URL));
+                .andExpect(redirectedUrl(FoodController.REDIRECT_HOME_URL));
     }
 
     @Test

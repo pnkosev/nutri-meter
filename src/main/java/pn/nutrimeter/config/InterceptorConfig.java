@@ -21,7 +21,9 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(faviconInterceptor);
+        registry
+                .addInterceptor(faviconInterceptor)
+                .addPathPatterns("/application/**"); // It was getting called for each and every js and css files... So by adding my application url prefix in addPathPatterns, it gets called only once.
         registry.addInterceptor(pageTitleInterceptor);
     }
 }
