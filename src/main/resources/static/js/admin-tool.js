@@ -181,6 +181,8 @@ const refreshSetup = (tabLinks, tabs) => {
 };
 
 window.onload = () => {
+    const adminToolLink = document.querySelector('#navbarNav [href$="#all-users"]');
+    adminToolLink.addEventListener('click', () => window.location.reload());
     const tabLinks = document.querySelectorAll('.nav-tabs a');
     const tabs = document.querySelectorAll('.container .tab-pane');
     refreshSetup(tabLinks, tabs);
