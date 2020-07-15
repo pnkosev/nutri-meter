@@ -62,6 +62,7 @@ public class FoodController extends BaseController {
     public ModelAndView addFood(FoodCreateBindingModel foodCreateBindingModel) {
         ModelAndView mav = new ModelAndView();
         mav.addObject("foodCategories", this.foodCategoryService.getAll());
+        mav.addObject("tags", this.tagService.getAll());
         return view(mav, FOOD_ADD_VIEW);
     }
 
@@ -73,6 +74,7 @@ public class FoodController extends BaseController {
         if (bindingResult.hasErrors()) {
             ModelAndView mav = new ModelAndView();
             mav.addObject("foodCategories", this.foodCategoryService.getAll());
+            mav.addObject("tags", this.tagService.getAll());
             return view(mav, FOOD_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
@@ -90,11 +92,24 @@ public class FoodController extends BaseController {
                 })
                 .collect(Collectors.toList()));
 
+        List<String> tags = foodCreateBindingModel.getTags();
+
+        foodServiceModel.setTags(
+                tags
+                .stream()
+                .map(id -> {
+                    TagServiceModel tagServiceModel = new TagServiceModel();
+                    tagServiceModel.setId(id);
+                    return tagServiceModel;
+                })
+                .collect(Collectors.toList()));
+
         try {
             this.foodService.create(foodServiceModel);
         } catch (FoodAddFailureException | IdNotFoundException e) {
             ModelAndView mav = new ModelAndView();
             mav.addObject("foodCategories", this.foodCategoryService.getAll());
+            mav.addObject("tags", this.tagService.getAll());
             mav.addObject("msg", e.getMessage());
             return view(mav, FOOD_ADD_VIEW, e.getHttpStatus());
         }

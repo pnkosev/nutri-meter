@@ -128,4 +128,6 @@ public class FoodCreateBindingModel {
 
     @Size(min = 1, message = "You must choose at least 1 category!")
     private List<String> foodCategories;
+
+    private List<String> tags;
 }

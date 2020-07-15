@@ -40,6 +40,12 @@
                 </select>
                 <small class="error" th:if="${#fields.errors('foodCategories')}" th:errors="*{foodCategories}"></small>
             </div>
+            <div class="form-group">
+                <th:block th:each="tag, stat : ${tags}">
+                    <input type="checkbox" th:field="*{tags}" th:id="tag + ${stat.index}" name="tag" th:value="${tag.id}"/>
+                    <label th:for="tag + ${stat.index}" th:text="${tag.name}"></label>
+                </th:block>
+            </div>
             <th:block sec:authorize="hasAuthority('ROLE_ADMIN')">
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="isCustom" th:field="*{isCustom}">
