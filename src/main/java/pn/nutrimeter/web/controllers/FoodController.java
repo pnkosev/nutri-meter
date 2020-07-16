@@ -18,6 +18,7 @@ import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.models.TagServiceModel;
 import pn.nutrimeter.service.services.api.FoodCategoryService;
 import pn.nutrimeter.service.services.api.FoodService;
+import pn.nutrimeter.service.services.api.MeasureService;
 import pn.nutrimeter.service.services.api.TagService;
 import pn.nutrimeter.web.models.binding.FoodCategoryCreateBindingModel;
 import pn.nutrimeter.web.models.binding.FoodCreateBindingModel;
@@ -49,12 +50,15 @@ public class FoodController extends BaseController {
 
     private final TagService tagService;
 
+    private final MeasureService measureService;
+
     private final ModelMapper modelMapper;
 
-    public FoodController(FoodService foodService, FoodCategoryService foodCategoryService, TagService tagService, ModelMapper modelMapper) {
+    public FoodController(FoodService foodService, FoodCategoryService foodCategoryService, TagService tagService, MeasureService measureService, ModelMapper modelMapper) {
         this.foodService = foodService;
         this.foodCategoryService = foodCategoryService;
         this.tagService = tagService;
+        this.measureService = measureService;
         this.modelMapper = modelMapper;
     }
 
@@ -76,6 +80,7 @@ public class FoodController extends BaseController {
             ModelAndView mav = new ModelAndView();
             mav.addObject("foodCategories", this.foodCategoryService.getAll());
             mav.addObject("tags", this.tagService.getAll());
+            mav.addObject("measures", this.measureService.getAllFromList(foodCreateBindingModel.getMeasures()));
             return view(mav, FOOD_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
