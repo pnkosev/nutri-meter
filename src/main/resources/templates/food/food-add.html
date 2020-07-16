@@ -4,12 +4,13 @@
         xmlns:th="http://www.thymeleaf.org"
 >
 <th:block th:include="~{_shared/head}"/>
+<script src="/js/measures.js"></script>
 <body>
 <th:block th:include="~{_shared/header}"/>
 <main class="mb-5">
     <div class="container w-50 mt-5">
         <h1 class="mt-5 mb-5 text-center">Add a food</h1>
-        <form class="mx-auto w-100" th:action="@{/food/add}" th:method="post" th:object="${foodCreateBindingModel}">
+        <form class="mx-auto w-100" id="food-add-form" th:action="@{/food/add}" th:method="post" th:object="${foodCreateBindingModel}">
             <div th:if="${msg}" class="text-center">
                 <small class="error" th:text="${msg}"></small>
             </div>
@@ -52,6 +53,24 @@
                     <label class="form-check-label" for="isCustom">is Custom?</label>
                 </div>
             </th:block>
+            <div class="form-group">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th class="col-sd-1">#</th>
+                            <th class="col-sd-5">Measure</th>
+                            <th class="col-sd-5">Grams</th>
+                            <th class="col-sd-1"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="measures-container"></tbody>
+                    </table>
+                </div>
+                <div class="text-right">
+                    <button type="button" class="btn-success" id="measure-add-btn">+</button>
+                </div>
+            </div>
             <div class="row">
                 <div class="table-responsive col-md-6">
                     <table class="table table-striped carbohydrates">
@@ -586,6 +605,32 @@
                 <button class="btn btn-secondary text-white mb-3" type="submit">Add Food</button>
             </div>
         </form>
+    </div>
+    <div id="my-modal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content w-50">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add measure</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="measure-add-form" th:action="@{/api/measure/add}" th:method="post">
+                    <div class="form-group">
+                        <label for="measure">Measure name</label>
+                        <input type="text" class="form-control" id="measure" placeholder="Measure">
+                    </div>
+                    <div class="form-group">
+                        <label for="grams">Grams</label>
+                        <input type="number" class="form-control" id="grams" placeholder="Grams">
+                    </div>
+                    <div class="button-holder d-flex justify-content-center mt-4">
+                        <button class="btn btn-secondary text-white mb-3" type="submit">Add Measure</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </main>
 <th:block th:include="~{_shared/footer}"/>

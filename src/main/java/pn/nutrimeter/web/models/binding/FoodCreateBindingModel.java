@@ -130,4 +130,6 @@ public class FoodCreateBindingModel {
     private List<String> foodCategories;
 
     private List<String> tags;
+
+    private List<String> measures;
 }

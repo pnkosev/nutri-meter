@@ -123,5 +123,7 @@ public class FoodServiceModel {
 
     private List<TagServiceModel> tags;
 
+    private List<MeasureServiceModel> measures;
+
     private UserServiceModel user;
 }

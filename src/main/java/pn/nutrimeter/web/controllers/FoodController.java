@@ -14,6 +14,7 @@ import pn.nutrimeter.error.FoodAddFailureException;
 import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.models.FoodCategoryServiceModel;
 import pn.nutrimeter.service.models.FoodServiceModel;
+import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.models.TagServiceModel;
 import pn.nutrimeter.service.services.api.FoodCategoryService;
 import pn.nutrimeter.service.services.api.FoodService;
@@ -103,6 +104,18 @@ public class FoodController extends BaseController {
                     return tagServiceModel;
                 })
                 .collect(Collectors.toList()));
+
+        List<String> measures = foodCreateBindingModel.getMeasures();
+
+        foodServiceModel.setMeasures(
+                measures
+                        .stream()
+                        .map(id -> {
+                            MeasureServiceModel measureServiceModel = new MeasureServiceModel();
+                            measureServiceModel.setId(id);
+                            return measureServiceModel;
+                        })
+                        .collect(Collectors.toList()));
 
         try {
             this.foodService.create(foodServiceModel);

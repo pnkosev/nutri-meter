@@ -4,9 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.Food;
+import pn.nutrimeter.data.models.Measure;
 import pn.nutrimeter.data.models.User;
-import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
+import pn.nutrimeter.data.repositories.MeasureRepository;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.ErrorConstants;
 import pn.nutrimeter.error.FoodAddFailureException;
@@ -14,9 +15,9 @@ import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.facades.AuthenticationFacade;
 import pn.nutrimeter.service.models.FoodServiceModel;
 import pn.nutrimeter.service.services.api.FoodService;
-import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.service.services.validation.FoodValidationService;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class FoodServiceImpl implements FoodService {
 
     private final FoodRepository foodRepository;
 
-    private final FoodCategoryRepository foodCategoryRepository;
+    private final MeasureRepository measureRepository;
 
     private final UserRepository userRepository;
 
@@ -36,16 +37,15 @@ public class FoodServiceImpl implements FoodService {
     private final ModelMapper modelMapper;
 
     public FoodServiceImpl(UserRepository userRepository,
-                           AuthenticationFacade authenticationFacade,
+                           MeasureRepository measureRepository, AuthenticationFacade authenticationFacade,
                            FoodValidationService foodValidationService,
                            FoodRepository foodRepository,
-                           FoodCategoryRepository foodCategoryRepository,
                            ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.measureRepository = measureRepository;
         this.authenticationFacade = authenticationFacade;
         this.foodValidationService = foodValidationService;
         this.foodRepository = foodRepository;
-        this.foodCategoryRepository = foodCategoryRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -62,13 +62,22 @@ public class FoodServiceImpl implements FoodService {
         foodServiceModel.setKcalPerHundredGrams(this.getTotalKcal(foodServiceModel));
 
         Food food = this.modelMapper.map(foodServiceModel, Food.class);
+        // THIS IS DONE AUTOMATICALLY BY THE MAPPER
+//        food.setFoodCategories(foodServiceModel.getFoodCategories()
+//                .stream()
+//                .map(category -> this.foodCategoryRepository
+//                        .findById(category.getId())
+//                        .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_CATEGORY_ID)))
+//                .collect(Collectors.toList()));
 
-        food.setFoodCategories(foodServiceModel.getFoodCategories()
-                .stream()
-                .map(category -> this.foodCategoryRepository
-                        .findById(category.getId())
-                        .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_CATEGORY_ID)))
-                .collect(Collectors.toList()));
+        List<Measure> defaultMeasures = Arrays.asList(
+                this.measureRepository.findByName("g"), this.measureRepository.findByName("oz"));
+
+        if (food.getMeasures() == null) {
+            food.setMeasures(defaultMeasures);
+        } else {
+            food.getMeasures().addAll(defaultMeasures);
+        }
 
         if (food.isCustom()) {
             User user = this.getUser();

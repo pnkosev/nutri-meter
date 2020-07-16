@@ -14,6 +14,7 @@ import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.models.FoodCategory;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
+import pn.nutrimeter.data.repositories.MeasureRepository;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.FoodAddFailureException;
 import pn.nutrimeter.error.IdNotFoundException;
@@ -39,7 +40,7 @@ class FoodServiceTest {
     FoodRepository foodRepository;
 
     @Autowired
-    FoodCategoryRepository foodCategoryRepository;
+    MeasureRepository measureRepository;
 
     @Autowired
     AuthenticationFacade authenticationFacade;
@@ -60,8 +61,8 @@ class FoodServiceTest {
     @BeforeEach
     void setUp() {
         this.modelMapper = new ModelMapper();
-        this.foodService = new FoodServiceImpl(userRepository, this.authenticationFacade, this.foodValidationService, this.foodRepository, this.foodCategoryRepository, this.modelMapper);
-        this.addFoodCategory();
+        this.foodService = new FoodServiceImpl(userRepository, this.measureRepository, this.authenticationFacade, this.foodValidationService, this.foodRepository, this.modelMapper);
+//        this.addFoodCategory();
     }
 
     @Test
@@ -174,18 +175,18 @@ class FoodServiceTest {
         foodServiceModel.setTotalProteins(1d);
         foodServiceModel.setTotalCarbohydrates(1d);
         foodServiceModel.setTotalLipids(1d);
-        FoodCategoryServiceModel categoryServiceModel = this.modelMapper.map(this.foodCategoryRepository.findAll().get(0), FoodCategoryServiceModel.class);
-        List<FoodCategoryServiceModel> categories = new ArrayList<>();
-        categories.add(categoryServiceModel);
-        foodServiceModel.setFoodCategories(categories);
+//        FoodCategoryServiceModel categoryServiceModel = this.modelMapper.map(this.foodCategoryRepository.findAll().get(0), FoodCategoryServiceModel.class);
+//        List<FoodCategoryServiceModel> categories = new ArrayList<>();
+//        categories.add(categoryServiceModel);
+//        foodServiceModel.setFoodCategories(categories);
 
         return foodServiceModel;
     }
 
-    private void addFoodCategory() {
-        FoodCategory category = new FoodCategory();
-        category.setName("Fruits");
-        category.setDescription("yummy");
-        this.foodCategoryRepository.saveAndFlush(category);
-    }
+//    private void addFoodCategory() {
+//        FoodCategory category = new FoodCategory();
+//        category.setName("Fruits");
+//        category.setDescription("yummy");
+//        this.foodCategoryRepository.saveAndFlush(category);
+//    }
 }
