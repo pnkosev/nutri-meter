@@ -1,5 +1,6 @@
 const URLs = {
-    addMeasure: '/api/measure/add'
+    addMeasure: '/api/measure/add',
+    deleteMeasure: '/api/measure/delete'
 };
 
 let row = 0;
@@ -18,8 +19,19 @@ const addHiddenInput = id => {
 };
 
 const deleteMeasure = (e) => {
+    const id = e.target.parentElement.parentElement.children[4]?.children[0].value;
+    if (id) {
+        fetch(URLs.deleteMeasure, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id})
+        })
+            .then();
+    }
     e.target.parentNode.parentElement.remove();
-    row--;
+    // row--;
 };
 
 const handleMeasureForm = () => {
@@ -105,4 +117,5 @@ window.onload = () => {
     setUpModal();
     handleMeasureForm();
     handleFoodForm();
+    [...document.getElementsByClassName('measure-delete-btn')].forEach(e => e.addEventListener('click', deleteMeasure));
 };

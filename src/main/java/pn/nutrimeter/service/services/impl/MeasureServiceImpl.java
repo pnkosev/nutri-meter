@@ -40,4 +40,10 @@ public class MeasureServiceImpl implements MeasureService {
                 .map(m -> this.modelMapper.map(m, MeasureServiceModel.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void delete(String id) {
+        Measure measure = this.measureRepository.findById(id).get();
+        this.measureRepository.delete(measure);
+    }
 }

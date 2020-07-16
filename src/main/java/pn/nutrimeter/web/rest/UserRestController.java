@@ -33,9 +33,7 @@ public class UserRestController {
     }
 
     @PostMapping("/user/promote/{userId}")
-    public void promoteUser(@PathVariable String userId) {
-        this.userService.promoteUser(userId);
-    }
+    public void promoteUser(@PathVariable String userId) { this.userService.promoteUser(userId); }
 
     @PostMapping("/user/demote/{userId}")
     public void demoteUser(@PathVariable String userId) {

@@ -10,4 +10,6 @@ public interface MeasureService {
     MeasureServiceModel create(MeasureServiceModel model);
 
     List<MeasureServiceModel> getAllFromList(List<String> measureList);
+
+    void delete(String id);
 }
