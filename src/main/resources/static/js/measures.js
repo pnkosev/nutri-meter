@@ -19,6 +19,7 @@ const addHiddenInput = id => {
 
 const deleteMeasure = (e) => {
     e.target.parentNode.parentElement.remove();
+    row--;
 };
 
 const handleMeasureForm = () => {

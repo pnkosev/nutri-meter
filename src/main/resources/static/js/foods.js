@@ -13,17 +13,20 @@ const createRow = (f, i) => {
     }
 };
 
+const createOption = (v) => {
+    return `<option value="${v.id}">${v.name}${v.name === 'g' ? '' : ` - ${v.equivalentInGrams} g`}</option>`;
+};
+
 const addFood = e => {
     e.preventDefault();
     const URL = e.target.getAttribute('action');
-
-    const inputs = e.target.querySelectorAll('input');
 
     const url = window.location.href.split("/");
     const date = url[url.length - 1];
 
     const json = {
-        quantity: inputs[0].value,
+        quantity: document.getElementById('quantity').value,
+        measure: document.getElementById('measure').value,
         date: date,
     };
 
@@ -101,10 +104,16 @@ const displayBlock = (e) => {
                         <span class="fa fa-star favorite-check"></span>
                     </div>
                     <form id="food-add-form" action=/api/food/${food.id} method="post">
-                        <input type="number" name="quantity" placeholder="Amount"/>
+                        <label for="quantity">Amount</label>
+                        <input type="number" name="quantity" id="quantity" placeholder="Amount"/>
+                        <select id="measure"></select>
                         <button class="btn btn-info">Add</button>
                     </form>    
                 </div>`;
+
+            food.measures.forEach(m => {
+                document.getElementById('measure').innerHTML += createOption(m);
+            });
 
             const favoriteCheck = document.querySelector('.favorite-check');
             const isFavorite = food.favorite;

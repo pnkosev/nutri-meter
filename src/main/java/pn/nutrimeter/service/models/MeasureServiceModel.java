@@ -16,6 +16,4 @@ public class MeasureServiceModel {
     private String name;
 
     private Double equivalentInGrams;
-
-    private List<FoodServiceModel> foods;
 }

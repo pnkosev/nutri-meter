@@ -13,5 +13,7 @@ public class DailyFoodBindingModel implements Serializable {
 
     private String quantity;
 
+    private String measure;
+
     private String date;
 }
