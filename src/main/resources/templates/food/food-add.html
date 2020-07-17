@@ -58,11 +58,11 @@
                     <table class="table table-striped">
                         <thead class="thead-dark">
                         <tr>
-                            <th class="col-sd-1">#</th>
-                            <th class="col-sd-5">Measure</th>
-                            <th class="col-sd-4">Grams</th>
-                            <th class="col-sd-1"></th>
-                            <th class="col-sd-1"></th>
+                            <th class="col-xs-1">#</th>
+                            <th class="col-xs-5">Measure</th>
+                            <th class="col-xs-4">Grams</th>
+                            <th class="col-xs-1"></th>
+                            <th class="col-xs-1 hidden"></th>
                         </tr>
                         </thead>
                         <tbody id="measures-container"></tbody>
@@ -72,8 +72,8 @@
                                     <td th:text="${stat.index + 1}"></td>
                                     <td th:text="${measure.name}">${measure.name}</td>
                                     <td th:text="${measure.equivalentInGrams}">${measure.equivalentInGrams}</td>
-                                    <td><button type="button" class="measure-delete-btn btn-danger">X</button></td>
-                                    <td><input type="hidden" th:field="*{measures}" th:value="${measure.id}"></td>
+                                    <td class="text-right"><button type="button" class="measure-delete-btn btn-danger">X</button></td>
+                                    <td class="hidden"><input type="hidden" th:field="*{measures}" th:value="${measure.id}"></td>
                                 </tr>
                             </th:block>
                         </th:block>

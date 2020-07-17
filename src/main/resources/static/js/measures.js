@@ -10,12 +10,12 @@ const createRow = (m) => {
         `<td>${++row}</td>
          <td>${m.name}</td>
          <td>${m.equivalentInGrams}</td>
-         <td><button type="button" class="measure-delete-btn btn-danger">X</button></td>`;
+         <td class="text-right"><button type="button" class="measure-delete-btn btn-danger">X</button></td>`;
     return `<tr>${columns}</tr>`;
 };
 
 const addHiddenInput = id => {
-    return `<td><input type="hidden" name="measures" value="${id}"></td>`;
+    return `<td class="hidden"><input type="hidden" name="measures" value="${id}"></td>`;
 };
 
 const deleteMeasure = (e) => {
