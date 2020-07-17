@@ -28,6 +28,11 @@ public class MeasureServiceImpl implements MeasureService {
     }
 
     @Override
+    public MeasureServiceModel getById(String id) {
+        return this.modelMapper.map(this.measureRepository.findById(id).get(), MeasureServiceModel.class);
+    }
+
+    @Override
     public MeasureServiceModel create(MeasureServiceModel model) {
         Measure measure = this.measureRepository.saveAndFlush(this.modelMapper.map(model, Measure.class));
         return this.modelMapper.map(measure, MeasureServiceModel.class);

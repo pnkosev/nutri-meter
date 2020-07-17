@@ -6,5 +6,5 @@ import pn.nutrimeter.service.models.FoodServiceModel;
 import java.sql.Timestamp;
 
 public interface DailyStoryFoodFactory {
-    DailyStoryFoodServiceModel create(FoodServiceModel food, double gramsConsumedInPercentage, Timestamp timeOfDay);
+    DailyStoryFoodServiceModel create(FoodServiceModel food, String measure, Double quantity, double gramsConsumedInPercentage, Timestamp timeOfDay);
 }

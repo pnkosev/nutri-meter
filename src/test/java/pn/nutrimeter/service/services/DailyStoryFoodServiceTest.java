@@ -13,6 +13,7 @@ import pn.nutrimeter.data.repositories.DailyStoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
 import pn.nutrimeter.error.DailyStoryNotFoundException;
 import pn.nutrimeter.error.IdNotFoundException;
+import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.services.api.DailyStoryFoodService;
 
 import java.time.LocalDate;
@@ -25,6 +26,8 @@ class DailyStoryFoodServiceTest extends TestBase {
 
     private static final String ID = "id";
     private static final double QUANTITY = 100.0;
+    private static final String MEASURE = "g";
+    private static final Double EQUIVALENT_IN_GRAMS = 75.0;
 
     @MockBean
     DailyStoryFoodRepository dailyStoryFoodRepository;
@@ -47,7 +50,7 @@ class DailyStoryFoodServiceTest extends TestBase {
         when(this.dailyStoryRepository.findByDateAndUserId(date, ID)).thenReturn(Optional.of(dailyStory));
         when(this.foodRepository.findById(ID)).thenReturn(Optional.of(food));
 
-        this.dailyStoryFoodService.create(QUANTITY, date, ID, ID);
+        this.dailyStoryFoodService.create(MEASURE, EQUIVALENT_IN_GRAMS, QUANTITY, date, ID, ID);
 
         ArgumentCaptor<DailyStoryFood> dsf = ArgumentCaptor.forClass(DailyStoryFood.class);
         verify(this.dailyStoryFoodRepository).save(dsf.capture());
@@ -58,18 +61,18 @@ class DailyStoryFoodServiceTest extends TestBase {
 
     @Test
     public void create_withInvalidDate_shouldThrow() {
-        assertThrows(DailyStoryNotFoundException.class, () -> this.dailyStoryFoodService.create(QUANTITY, null, ID, ID));
+        assertThrows(DailyStoryNotFoundException.class, () -> this.dailyStoryFoodService.create(MEASURE, EQUIVALENT_IN_GRAMS, QUANTITY, null, ID, ID));
     }
 
     @Test
     public void create_withInvalidUserId_shouldThrow() {
-        assertThrows(DailyStoryNotFoundException.class, () -> this.dailyStoryFoodService.create(QUANTITY, LocalDate.now(), ID, ID));
+        assertThrows(DailyStoryNotFoundException.class, () -> this.dailyStoryFoodService.create(MEASURE, EQUIVALENT_IN_GRAMS, QUANTITY, LocalDate.now(), ID, ID));
     }
 
     @Test
     public void create_withInvalidFoodId_shouldThrow() {
         LocalDate date = LocalDate.now();
         when(this.dailyStoryRepository.findByDateAndUserId(date, ID)).thenReturn(Optional.of(mock(DailyStory.class)));
-        assertThrows(IdNotFoundException.class, () -> this.dailyStoryFoodService.create(QUANTITY, date, ID, ID));
+        assertThrows(IdNotFoundException.class, () -> this.dailyStoryFoodService.create(MEASURE, EQUIVALENT_IN_GRAMS, QUANTITY, date, ID, ID));
     }
 }

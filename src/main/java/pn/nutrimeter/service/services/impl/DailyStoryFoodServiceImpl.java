@@ -10,6 +10,7 @@ import pn.nutrimeter.data.repositories.FoodRepository;
 import pn.nutrimeter.error.DailyStoryNotFoundException;
 import pn.nutrimeter.error.ErrorConstants;
 import pn.nutrimeter.error.IdNotFoundException;
+import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.services.api.DailyStoryFoodService;
 
 import java.time.LocalDate;
@@ -30,14 +31,16 @@ public class DailyStoryFoodServiceImpl implements DailyStoryFoodService {
     }
 
     @Override
-    public void create(double quantity, LocalDate date, String foodId, String userId) {
+    public void create(String measure, Double equivalentInGrams, double quantity, LocalDate date, String foodId, String userId) {
 
         DailyStoryFood dailyStoryFood = new DailyStoryFood();
 
         DailyStory dailyStory = this.dailyStoryRepository.findByDateAndUserId(date, userId).orElseThrow(() -> new DailyStoryNotFoundException(ErrorConstants.DAILY_STORY_NOT_FOUND));
         Food food = this.foodRepository.findById(foodId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
 
-        dailyStoryFood.setGramsConsumed(quantity);
+        dailyStoryFood.setMeasure(measure);
+        dailyStoryFood.setQuantity(quantity);
+        dailyStoryFood.setGramsConsumed(equivalentInGrams * quantity);
         dailyStoryFood.setFood(food);
         dailyStoryFood.setDailyStory(dailyStory);
 

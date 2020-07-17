@@ -4,5 +4,5 @@ import java.time.LocalDate;
 
 public interface DailyStoryFoodService {
 
-    void create(double quantity, LocalDate date, String foodId, String userId);
+    void create(String measure, Double equivalentInGrams, double quantity, LocalDate date, String foodId, String userId);
 }

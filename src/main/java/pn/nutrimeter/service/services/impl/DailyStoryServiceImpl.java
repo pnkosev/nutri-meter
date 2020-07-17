@@ -79,10 +79,12 @@ public class DailyStoryServiceImpl implements DailyStoryService {
                 : dailyStory.getDailyStoryFoodAssociation()
                 .stream()
                 .map(association -> {
+                    String measure = association.getMeasure();
+                    Double quantity = association.getQuantity();
                     double percentage = association.getGramsConsumed() / 100;
                     Food food = association.getFood();
                     FoodServiceModel foodServiceModel = this.modelMapper.map(food, FoodServiceModel.class);
-                    return dailyStoryFoodFactory.create(foodServiceModel, percentage, association.getTimeOfDay());
+                    return dailyStoryFoodFactory.create(foodServiceModel, measure, quantity, percentage, association.getTimeOfDay());
                 })
                 .collect(Collectors.toList());
     }

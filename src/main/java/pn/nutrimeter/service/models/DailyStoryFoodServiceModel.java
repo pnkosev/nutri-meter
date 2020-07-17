@@ -15,6 +15,10 @@ public class DailyStoryFoodServiceModel {
 
     private String name;
 
+    private String measure;
+
+    private Double quantity;
+
     private Double gramsConsumed;
 
     private Double kcal;

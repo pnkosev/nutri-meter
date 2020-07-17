@@ -22,6 +22,12 @@ public class DailyStoryFood extends BaseEntity {
     @Column(name = "time_of_day")
     private Timestamp timeOfDay;
 
+    @Column(name = "measure")
+    private String measure;
+
+    @Column(name = "quantity")
+    private Double quantity;
+
     @Column(name = "grams_consumed")
     private Double gramsConsumed;
 

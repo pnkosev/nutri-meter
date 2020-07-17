@@ -2,9 +2,11 @@ package pn.nutrimeter.web.rest;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
+import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
 import pn.nutrimeter.service.services.api.DailyStoryFoodService;
 import pn.nutrimeter.service.services.api.FoodService;
+import pn.nutrimeter.service.services.api.MeasureService;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.web.models.binding.DailyFoodBindingModel;
 import pn.nutrimeter.web.models.view.FoodDetailedViewModel;
@@ -25,13 +27,16 @@ public class FoodRestController {
 
     private final UserService userService;
 
+    private final MeasureService measureService;
+
     private final DailyStoryFoodService dailyStoryFoodService;
 
     private final ModelMapper modelMapper;
 
-    public FoodRestController(FoodService foodService, UserService userService, DailyStoryFoodService dailyStoryFoodService, ModelMapper modelMapper) {
+    public FoodRestController(FoodService foodService, UserService userService, MeasureService measureService, DailyStoryFoodService dailyStoryFoodService, ModelMapper modelMapper) {
         this.foodService = foodService;
         this.userService = userService;
+        this.measureService = measureService;
         this.dailyStoryFoodService = dailyStoryFoodService;
         this.modelMapper = modelMapper;
     }
@@ -85,9 +90,10 @@ public class FoodRestController {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(model.getDate(), formatter);
+        MeasureServiceModel measure = this.measureService.getById(model.getMeasure());
         double quantity = Double.parseDouble(model.getQuantity());
         UserServiceModel userModel = this.userService.getUserByUsername(principal.getName());
 
-        this.dailyStoryFoodService.create(quantity, date, foodId, userModel.getId());
+        this.dailyStoryFoodService.create(measure.getName(), measure.getEquivalentInGrams(), quantity, date, foodId, userModel.getId());
     }
 }

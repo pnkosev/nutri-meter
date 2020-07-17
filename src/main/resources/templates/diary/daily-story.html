@@ -53,7 +53,7 @@
                     <ul>
                         <li th:class="consumed-food-item" th:each="food : ${dailyStory.getDailyStoryFoodAssociation()}">
                             <i class="fas fa-apple-alt"></i>
-                            [[${food.name}]] - [[${food.gramsConsumed}]]
+                            [[${food.name}]] - <span th:text="${#numbers.formatDecimal(food.quantity, 1, 0)}"></span> [[${food.measure}]]
                         </li>
                     </ul>
                 </th:block>

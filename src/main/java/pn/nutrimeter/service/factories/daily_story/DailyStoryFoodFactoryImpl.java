@@ -10,11 +10,13 @@ import java.sql.Timestamp;
 @Factory
 public class DailyStoryFoodFactoryImpl implements DailyStoryFoodFactory {
     @Override
-    public DailyStoryFoodServiceModel create(FoodServiceModel food, double gramsConsumedInPercentage, Timestamp timeOfDay) {
+    public DailyStoryFoodServiceModel create(FoodServiceModel food, String measure, Double quantity, double gramsConsumedInPercentage, Timestamp timeOfDay) {
         DailyStoryFoodServiceModel dailyStoryFoodServiceModel = new DailyStoryFoodServiceModel();
 
         dailyStoryFoodServiceModel.setTimeOfDay(timeOfDay);
         dailyStoryFoodServiceModel.setName(food.getName());
+        dailyStoryFoodServiceModel.setMeasure(measure);
+        dailyStoryFoodServiceModel.setQuantity(quantity);
         dailyStoryFoodServiceModel.setGramsConsumed(gramsConsumedInPercentage * 100);
         dailyStoryFoodServiceModel.setKcal((food.getKcalPerHundredGrams() * gramsConsumedInPercentage));
         dailyStoryFoodServiceModel.setTotalProteins(this.calcAmount(food.getTotalProteins(), gramsConsumedInPercentage));
