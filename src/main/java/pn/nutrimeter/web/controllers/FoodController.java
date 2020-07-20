@@ -80,7 +80,9 @@ public class FoodController extends BaseController {
             ModelAndView mav = new ModelAndView();
             mav.addObject("foodCategories", this.foodCategoryService.getAll());
             mav.addObject("tags", this.tagService.getAll());
-            mav.addObject("measures", this.measureService.getAllFromList(foodCreateBindingModel.getMeasures()));
+            if (foodCreateBindingModel.getMeasures() != null) {
+                mav.addObject("measures", this.measureService.getAllFromList(foodCreateBindingModel.getMeasures()));
+            }
             return view(mav, FOOD_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 

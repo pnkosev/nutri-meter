@@ -5,6 +5,14 @@ const URLs = {
 
 let row = 0;
 
+const getInitialRowCount = () => {
+    const numberOfRows = document.getElementById('measures-container').children.length;
+
+    if (numberOfRows > 0) {
+        row = numberOfRows;
+    }
+};
+
 const createRow = (m) => {
     const columns =
         `<td>${++row}</td>
@@ -31,7 +39,7 @@ const deleteMeasure = (e) => {
             .then();
     }
     e.target.parentNode.parentElement.remove();
-    // row--;
+    row--;
 };
 
 const handleMeasureForm = () => {
@@ -55,36 +63,57 @@ const handleMeasureForm = () => {
     });
 };
 
+
+const handleHiddenInputs = () => {
+    [...document.getElementById('measures-container').children]
+        .forEach((r, i) => {
+            const cols = r.children;
+            if (cols.length === 5) {
+                const input = cols[4].children[0];
+                if (input.getAttribute('name') !== 'measures'){
+                    input.setAttribute('name', 'measures');
+                }
+            }
+        });
+};
+
+
 const handleFoodForm = () => {
     const foodForm = document.getElementById('food-add-form');
-    foodForm.addEventListener('submit', e => {
-        e.preventDefault();
+    const measureRows = [...document.getElementById('measures-container').children];
+    let jsonArray = [];
+    measureRows.forEach(mr => {
+        const columns = mr.children;
 
-        const measureRows = document.getElementById('measures-container').children;
-        [...measureRows].forEach(mr => {
-            const columns = mr.children;
-            const json = {
-                name: columns[1].innerHTML,
-                equivalentInGrams: columns[2].innerHTML
-            };
+        if (columns.length > 4) {
+            return;
+        }
 
-            fetch(URLs.addMeasure, {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(json)
-            })
-                .then(res => res.json())
-                .then(m => {
-                    const measuresContainer = document.getElementById('measures-container');
-                    let index = columns[0].innerHTML;
-                    const row = measuresContainer.children[--index];
-                    row.innerHTML += addHiddenInput(m.id);
-                    $(foodForm).submit();
-                });
-        });
+        const json = {
+            name: columns[1].innerHTML,
+            equivalentInGrams: columns[2].innerHTML
+        };
+
+        jsonArray.push(json);
     });
+
+    fetch(URLs.addMeasure, {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonArray)
+    })
+        .then(res => res.json())
+        .then(arr => {
+            let index = 0;
+            measureRows.forEach(r => {
+                r.innerHTML += addHiddenInput(arr[index++].id);
+            });
+        })
+        .finally(() => {
+            foodForm.submit();
+        });
 };
 
 const setUpModal = () => {
@@ -114,8 +143,11 @@ const setUpModal = () => {
 };
 
 window.onload = () => {
+    getInitialRowCount();
     setUpModal();
     handleMeasureForm();
-    handleFoodForm();
+    const btn = document.querySelector('#food-add-form > div.button-holder > button');
+    btn.addEventListener('click', handleFoodForm);
     [...document.getElementsByClassName('measure-delete-btn')].forEach(e => e.addEventListener('click', deleteMeasure));
+    handleHiddenInputs();
 };

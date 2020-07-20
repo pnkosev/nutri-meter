@@ -9,7 +9,7 @@ public interface MeasureService {
 
     MeasureServiceModel getById(String id);
 
-    MeasureServiceModel create(MeasureServiceModel model);
+    List<MeasureServiceModel> createAll(List<MeasureServiceModel> model);
 
     List<MeasureServiceModel> getAllFromList(List<String> measureList);
 

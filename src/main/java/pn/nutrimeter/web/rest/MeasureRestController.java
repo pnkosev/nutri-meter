@@ -7,6 +7,8 @@ import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.services.api.MeasureService;
 import pn.nutrimeter.web.models.binding.MeasureCreateBindingModel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,8 +25,13 @@ public class MeasureRestController {
     }
 
     @PostMapping("/measure/add")
-    public MeasureServiceModel addMeasure(@RequestBody MeasureCreateBindingModel bindingModel) {
-        return this.measureService.create(this.modelMapper.map(bindingModel, MeasureServiceModel.class));
+    public List<MeasureServiceModel> addMeasures(@RequestBody List<MeasureCreateBindingModel> bindingModelList) {
+        ArrayList<MeasureServiceModel> measureServiceModels = new ArrayList<>();
+        bindingModelList.forEach(m -> {
+            MeasureServiceModel measureServiceModel = this.modelMapper.map(m, MeasureServiceModel.class);
+            measureServiceModels.add(measureServiceModel);
+        });
+        return this.measureService.createAll(measureServiceModels);
     }
 
     @PostMapping("/measure/delete")

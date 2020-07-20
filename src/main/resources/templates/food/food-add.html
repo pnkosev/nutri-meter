@@ -65,18 +65,19 @@
                             <th class="col-xs-1 hidden"></th>
                         </tr>
                         </thead>
-                        <tbody id="measures-container"></tbody>
-                        <th:block th:if="${measures != null}">
-                            <th:block th:each="measure, stat : ${measures}">
-                                <tr>
-                                    <td th:text="${stat.index + 1}"></td>
-                                    <td th:text="${measure.name}">${measure.name}</td>
-                                    <td th:text="${measure.equivalentInGrams}">${measure.equivalentInGrams}</td>
-                                    <td class="text-right"><button type="button" class="measure-delete-btn btn-danger">X</button></td>
-                                    <td class="hidden"><input type="hidden" th:field="*{measures}" th:value="${measure.id}"></td>
-                                </tr>
+                        <tbody id="measures-container">
+                            <th:block th:if="${measures != null}">
+                                <th:block th:each="measure, stat : ${measures}">
+                                    <tr>
+                                        <td th:text="${stat.index + 1}"></td>
+                                        <td th:text="${measure.name}"></td>
+                                        <td th:text="${#numbers.formatDecimal(measure.equivalentInGrams, 1, 0)}"></td>
+                                        <td class="text-right"><button type="button" class="measure-delete-btn btn-danger">X</button></td>
+                                        <td class="hidden"><input type="hidden" th:value="${measure.id}"></td>
+                                    </tr>
+                                </th:block>
                             </th:block>
-                        </th:block>
+                        </tbody>
                     </table>
                 </div>
                 <div class="text-right">
@@ -614,7 +615,7 @@
                 </div>
             </div>
             <div class="button-holder d-flex justify-content-center mt-4">
-                <button class="btn btn-secondary text-white mb-3" type="submit">Add Food</button>
+                <button class="btn btn-secondary text-white mb-3" type="button">Add Food</button>
             </div>
         </form>
     </div>

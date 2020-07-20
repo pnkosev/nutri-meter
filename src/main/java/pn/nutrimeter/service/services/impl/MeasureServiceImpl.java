@@ -7,7 +7,11 @@ import pn.nutrimeter.data.repositories.MeasureRepository;
 import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.services.api.MeasureService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,9 +37,14 @@ public class MeasureServiceImpl implements MeasureService {
     }
 
     @Override
-    public MeasureServiceModel create(MeasureServiceModel model) {
-        Measure measure = this.measureRepository.saveAndFlush(this.modelMapper.map(model, Measure.class));
-        return this.modelMapper.map(measure, MeasureServiceModel.class);
+    public List<MeasureServiceModel> createAll(List<MeasureServiceModel> modelList) {
+        ArrayList<MeasureServiceModel> list = new ArrayList<>();
+        modelList.forEach(m -> {
+            Measure measure = this.measureRepository.saveAndFlush(this.modelMapper.map(m, Measure.class));
+            MeasureServiceModel measureServiceModel = this.modelMapper.map(measure, MeasureServiceModel.class);
+            list.add(measureServiceModel);
+        });
+        return list;
     }
 
     @Override
