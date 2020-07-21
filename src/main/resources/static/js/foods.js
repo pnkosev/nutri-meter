@@ -159,7 +159,7 @@ const setUpModal = () => {
     const btn = document.getElementById('add-food-btn');
 
     // Get the <span> element that closes the foods
-    const closeBtn = document.getElementsByClassName('close')[0];
+    const closeBtn = document.getElementsByClassName('close-modal')[0];
 
     // When the user clicks the button, open the foods
     btn.onclick = function () {

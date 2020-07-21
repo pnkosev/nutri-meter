@@ -13,11 +13,11 @@ const getInitialRowCount = () => {
     }
 };
 
-const createRow = (m) => {
+const createRow = ({name, equivalentInGrams}) => {
     const columns =
         `<td>${++row}</td>
-         <td>${m.name}</td>
-         <td>${m.equivalentInGrams}</td>
+         <td>${name}</td>
+         <td>${equivalentInGrams}</td>
          <td class="text-right"><button type="button" class="measure-delete-btn btn-danger">X</button></td>`;
     return `<tr>${columns}</tr>`;
 };
@@ -42,21 +42,29 @@ const deleteMeasure = (e) => {
     row--;
 };
 
+const addOptionToSelect = ({name, equivalentInGrams}) => {
+    const select = document.getElementById('measures');
+    const option = document.createElement('option');
+    option.value = `${name} - ${equivalentInGrams}`;
+    option.innerHTML = `${name} - ${equivalentInGrams}g`;
+    select.append(option);
+};
+
 const handleMeasureForm = () => {
     const form = document.getElementById('measure-add-form');
     form.addEventListener('submit', e => {
         e.preventDefault();
 
-        const name = document.getElementById('measure').value;
-        const equivalentInGrams = document.getElementById('grams').value;
-
-        const json = {
-            name,
-            equivalentInGrams
+        const measure = {
+            name: document.getElementById('measure').value,
+            equivalentInGrams: document.getElementById('grams').value,
         };
 
         const measuresContainer = document.getElementById('measures-container');
-        measuresContainer.innerHTML += createRow(json);
+        measuresContainer.innerHTML += createRow(measure);
+
+        addOptionToSelect(measure);
+
         form.reset();
         document.getElementById('my-modal').style.display = "none";
         [...document.getElementsByClassName('measure-delete-btn')].forEach(e => e.addEventListener('click', deleteMeasure));
@@ -116,6 +124,68 @@ const handleFoodForm = () => {
         });
 };
 
+const setUpSelect = () => {
+    const select = document.getElementById('measures');
+    select.setAttribute('prev', select.value);
+    select.onchange = e => {
+        const quantity = document.getElementById('nutrients-in');
+        const nextValue = e.target.value;
+        recalculateNutrients(quantity.value, select.getAttribute('prev'), nextValue);
+        select.setAttribute('prev', nextValue);
+        quantity.value = 1;
+    };
+};
+
+const setUpNutrientInput = () => {
+    const nutrientInput = document.getElementById('nutrients-in');
+
+    nutrientInput.onkeydown = e => {
+        let previousValue = e.target.value;
+
+        const indexOfFirstNonDigit = previousValue.match('[^\\d]+')?.index;
+        if (indexOfFirstNonDigit) {
+            previousValue = previousValue.substring(0, index);
+        }
+
+        nutrientInput.setAttribute('previous', previousValue);
+    };
+
+    nutrientInput.onkeyup = e => {
+        const previousValue = nutrientInput.getAttribute('previous');
+        if (previousValue) {
+            let currentValue = e.target.value;
+            if (currentValue === '0' || currentValue === '') {
+                currentValue = 1;
+                nutrientInput.value = 1;
+            }
+
+            // DOES NOT WORK IF TYPING TOO FAST
+            // if (isNaN(currentValue.substring(currentValue.length - 1))) {
+            //     currentValue = currentValue.substring(0, currentValue.length - 1);
+            //     nutrientInput.value = currentValue;
+            // }
+
+            const indexOfFirstNonDigit = currentValue.match('[^\\d]+')?.index;
+            if (indexOfFirstNonDigit) {
+                currentValue = currentValue.substring(0, index);
+                nutrientInput.value = currentValue;
+            }
+
+            const ratio = previousValue / +currentValue;
+
+            const inputList = [...document.querySelectorAll('.all-nutrients input')];
+
+            inputList.forEach(i => {
+                if (i.value) {
+                    const res = i.getAttribute('wholeVal') ? i.getAttribute('wholeVal') / ratio : i.value / ratio;
+                    i.setAttribute('wholeVal', res);
+                    i.value = Math.round((res + Number.EPSILON) * 100) / 100;
+                }
+            });
+        }
+    };
+};
+
 const setUpModal = () => {
     const modal = document.getElementById('my-modal');
 
@@ -142,9 +212,40 @@ const setUpModal = () => {
     }
 };
 
+const recalculateNutrients = (quantity, previousMeasure, currentMeasure) => {
+    let previousMeasureEquivalentInGrams = 1;
+    if (previousMeasure.includes(' - ')) {
+        const previousMeasureData = previousMeasure.split(' - ');
+        previousMeasureEquivalentInGrams = previousMeasureData[1];
+    }
+    const previousAmount = +quantity * +previousMeasureEquivalentInGrams;
+
+    let currentMeasureEquivalentInGrams = 1;
+    if (currentMeasure.includes(' - ')) {
+        const currentMeasureData = currentMeasure.split(' - ');
+        currentMeasureEquivalentInGrams = currentMeasureData[1];
+    }
+
+    const currentAmount = +currentMeasureEquivalentInGrams;
+
+    const ratio = currentAmount / previousAmount;
+
+    const inputList = [...document.querySelectorAll('.all-nutrients input')];
+
+    inputList.forEach(i => {
+        if (i.value) {
+            const res = i.getAttribute('wholeVal') ? i.getAttribute('wholeVal') * ratio : i.value * ratio;
+            i.setAttribute('wholeVal', res);
+            i.value = Math.round((res + Number.EPSILON) * 100) / 100;
+        }
+    });
+};
+
 window.onload = () => {
     getInitialRowCount();
     setUpModal();
+    setUpSelect();
+    setUpNutrientInput();
     handleMeasureForm();
     const btn = document.querySelector('#food-add-form > div.button-holder > button');
     btn.addEventListener('click', handleFoodForm);

@@ -84,7 +84,15 @@
                     <button type="button" class="btn-success" id="measure-add-btn">+</button>
                 </div>
             </div>
-            <div class="row">
+            <div class="text-center">
+                <label for="nutrients-in">Nutrients in:</label>
+                <input type="text" maxlength="6" id="nutrients-in" value="100" size="5">
+                <select id="measures">
+                    <option value="g">g</option>
+                    <option value="oz - 28">oz - 28g</option>
+                </select>
+            </div>
+            <div class="row all-nutrients">
                 <div class="table-responsive col-md-6">
                     <table class="table table-striped carbohydrates">
                         <thead class="thead-dark">
@@ -101,7 +109,10 @@
                                 </label>
                             </td>
                             <td>
-                                <input type="number" id="carbs" th:field="*{totalCarbohydrates}">
+                                <input type="number" id="carbs"
+                                    th:classappend="${#fields.hasErrors('totalCarbohydrates')} ? 'is-invalid'"
+                                    th:field="*{totalCarbohydrates}">
+                                <small class="error" th:if="${#fields.errors('totalCarbohydrates')}" th:errors="*{totalCarbohydrates}"></small>
                             </td>
                         </tr>
                         <tr>
@@ -152,7 +163,10 @@
                                 </label>
                             </td>
                             <td>
-                                <input type="number" id="proteins" th:field="*{totalProteins}">
+                                <input type="number" id="proteins"
+                                    th:classappend="${#fields.hasErrors('totalProteins')} ? 'is-invalid'"
+                                    th:field="*{totalProteins}">
+                                <small class="error" th:if="${#fields.errors('totalProteins')}" th:errors="*{totalProteins}"></small>
                             </td>
                         </tr>
                         <tr>
@@ -282,7 +296,10 @@
                                 </label>
                             </td>
                             <td>
-                                <input type="number" id="lipids" th:field="*{totalLipids}">
+                                <input type="number" id="lipids"
+                                    th:classappend="${#fields.hasErrors('totalLipids')} ? 'is-invalid'"
+                                    th:field="*{totalLipids}">
+                                <small class="error" th:if="${#fields.errors('totalLipids')}" th:errors="*{totalLipids}"></small>
                             </td>
                         </tr>
                         <tr>
