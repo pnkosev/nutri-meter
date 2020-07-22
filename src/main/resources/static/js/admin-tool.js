@@ -1,7 +1,8 @@
 const URLs = {
-    users: "/api/user/all",
+    users: '/api/user/all',
     categories: '/api/category/all',
     tags: '/api/tag/all',
+    search: '/api/users',
 };
 
 const createUserRow = (u, i) => {
@@ -81,35 +82,52 @@ const getSingularFromPlural = str => {
     return str;
 };
 
-const fillUsersContainer = () => {
+const getUserList = data => {
+    let list = '';
+    data.forEach((u, i) => {
+        list += createUserRow(u, i);
+    });
+    return list;
+};
+
+const getCategoryTagList = (data, subRoute) => {
+    let list = '';
+    data.forEach(x => {
+        list += createCategoryTagRow(x, subRoute);
+    });
+    return list;
+};
+
+const fillContainer = (list, containerName) => {
+    const container = document.getElementById(containerName);
+    container.innerHTML = list !== '' ? `${list}` : `<tr><td>Empty</td><td></td><td></td></tr>`;
+};
+
+const fillUserContainer = (data, containerName) => {
+    fillContainer(getUserList(data), containerName);
+};
+
+const fillCategoryTagContainer = (data, containerName) => {
+    fillContainer(getCategoryTagList(data, containerName), containerName);
+};
+
+const fetchUsers = () => {
     fetch(URLs.users)
         .then(res => res.json())
         .then(data => {
-            let list = '';
-            data.forEach((u, i) => {
-                list += createUserRow(u, i);
-            });
 
-            const container = document.getElementById("users-container");
-            container.innerHTML = `${list}`;
-
-            const forms = document.querySelectorAll('#all-users form');
+            fillUserContainer(data, 'users-container');
+            const forms = document.querySelectorAll('#users-container form');
             forms.forEach(f => f.addEventListener('submit', mote));
         });
 };
 
-const fillCategoriesTagsContainer = (url, containerName) => {
+const fetchCategoriesTags = (url, containerName) => {
     fetch(url)
         .then(res => res.json())
         .then(data => {
-            let list = '';
-            data.forEach(x => {
-                list += createCategoryTagRow(x, containerName);
-            });
 
-            const container = document.querySelector(`#${containerName}-container`);
-            container.innerHTML = list !== '' ? `${list}` : `<tr><td>Empty</td><td></td><td></td></tr>`;
-
+            fillCategoryTagContainer(data, `${containerName}-container`);
             const deleteForms = document.querySelectorAll(`#${containerName} form.delete`);
             deleteForms.forEach(f => f.addEventListener('submit', remove));
         });
@@ -125,11 +143,11 @@ const tabSwitchConfig = (tabLinks, tabs) => {
                 y.classList.add('active', 'show');
                 switch (href) {
                     case 'all-users':
-                        return fillUsersContainer();
+                        return fetchUsers();
                     case 'categories':
-                        return fillCategoriesTagsContainer(URLs.categories, 'categories');
+                        return fetchCategoriesTags(URLs.categories, 'categories');
                     case 'tags':
-                        return fillCategoriesTagsContainer(URLs.tags, 'tags');
+                        return fetchCategoriesTags(URLs.tags, 'tags');
                 }
             } else {
                 y.classList.remove('active', 'show');
@@ -165,19 +183,40 @@ const refreshSetup = (tabLinks, tabs) => {
         case allUsers: {
             let div = document.getElementById(allUsers);
             div.classList.add('active', 'show');
-            return fillUsersContainer();
+            return fetchUsers();
         }
         case categories: {
             let div = document.getElementById(categories);
             div.classList.add('active', 'show');
-            return fillCategoriesTagsContainer(URLs.categories, categories);
+            return fetchCategoriesTags(URLs.categories, categories);
         }
         case tags: {
             let div = document.getElementById(tags);
             div.classList.add('active', 'show');
-            return fillCategoriesTagsContainer(URLs.tags, tags);
+            return fetchCategoriesTags(URLs.tags, tags);
         }
     }
+};
+
+const searchSetUp = () => {
+    const searchBtn = document.getElementById('search-users');
+
+    searchBtn.onclick = () => {
+        const searchInput = document.getElementById('search-input');
+        const searchValue = searchInput.value;
+
+        if (searchValue) {
+            fetch(URLs.search + `?username=${searchValue}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    fillUserContainer(data,"users-container" );
+                    searchInput.value = '';
+                    const forms = document.querySelectorAll('#users-container form');
+                    forms.forEach(f => f.addEventListener('submit', mote));
+                });
+        }
+    };
 };
 
 window.onload = () => {
@@ -187,5 +226,6 @@ window.onload = () => {
     const tabs = document.querySelectorAll('.container .tab-pane');
     refreshSetup(tabLinks, tabs);
     tabSwitchConfig(tabLinks, tabs);
+    searchSetUp();
 };
 

@@ -46,4 +46,10 @@ public class DailyStoryFoodServiceImpl implements DailyStoryFoodService {
 
         this.dailyStoryFoodRepository.save(dailyStoryFood);
     }
+
+    @Override
+    public void delete(String dailyStoryFoodId) {
+        DailyStoryFood dailyStoryFood = this.dailyStoryFoodRepository.findById(dailyStoryFoodId).get();
+        this.dailyStoryFoodRepository.delete(dailyStoryFood);
+    }
 }

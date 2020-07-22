@@ -112,3 +112,25 @@ table.custom-table td{
     display:none;
     visibility:hidden;
 }
+
+/*.search-area {*/
+/*    padding: 1rem 1rem;*/
+/*    margin: auto;*/
+/*}*/
+
+/*.search-area > form {*/
+/*    position: relative;*/
+/*}*/
+
+/*.fa-search {*/
+/*    position: absolute;*/
+/*    left: 0.55rem;*/
+/*    top: 0.75rem;*/
+/*}*/
+
+/*.search-area > form input {*/
+/*    padding-left: 2rem;*/
+/*    width: 80% !important;*/
+/*    min-width: 7rem;*/
+/*    margin-right: 1rem;*/
+/*}*/

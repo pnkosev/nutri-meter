@@ -96,4 +96,9 @@ public class FoodRestController {
 
         this.dailyStoryFoodService.create(measure.getName(), measure.getEquivalentInGrams(), quantity, date, foodId, userModel.getId());
     }
+
+    @DeleteMapping("/food/{dailyStoryFoodId}")
+    public void deleteFood(@PathVariable String dailyStoryFoodId) {
+        this.dailyStoryFoodService.delete(dailyStoryFoodId);
+    }
 }

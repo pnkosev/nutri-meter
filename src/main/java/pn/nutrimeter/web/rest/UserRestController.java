@@ -3,6 +3,8 @@ package pn.nutrimeter.web.rest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pn.nutrimeter.data.models.specifications.SearchCriteria;
+import pn.nutrimeter.data.models.specifications.UserSpecification;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.web.models.view.UserSimpleViewModel;
 
@@ -21,6 +23,15 @@ public class UserRestController {
     public UserRestController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
         this.modelMapper = modelMapper;
+    }
+
+    @GetMapping("/users")
+    public List<UserSimpleViewModel> searchedUsers(@RequestParam(value = "username") String username) {
+        UserSpecification specification = new UserSpecification(new SearchCriteria("username", ":", username));
+        return this.userService.getAllUsers(specification)
+                .stream()
+                .map(u -> this.modelMapper.map(u, UserSimpleViewModel.class))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/user/all")

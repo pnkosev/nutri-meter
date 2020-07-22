@@ -54,7 +54,7 @@
                         <li th:class="consumed-food-item" th:each="food : ${dailyStory.getDailyStoryFoodAssociation()}">
                             <i class="fas fa-apple-alt"></i>
                             [[${food.name}]] - [[${#numbers.formatDecimal(food.quantity, 1, 0)}]] [[${food.measure}]][[${food.quantity > 1 ? 's' : ''}]]
-                            <span class="close delete-food" style="font-size:24px">X</span>
+                            <span class="close delete-food" th:association-id="${food.id}" style="font-size:24px">X</span>
                         </li>
                     </ul>
                 </th:block>

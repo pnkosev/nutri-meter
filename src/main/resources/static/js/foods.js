@@ -151,6 +151,23 @@ const getFoods = (URL, table) => {
         });
 };
 
+const setUpFoodRemoval = () => {
+    [...document.getElementsByClassName('delete-food')]
+        .forEach(f => {
+            f.onclick = () => {
+                const associationId = f.getAttribute('association-id');
+
+                fetch(URLs.food + `/${associationId}`, {
+                    method: 'delete',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(() => window.location.reload());
+            };
+        });
+};
+
 const setUpModal = () => {
     // Get the foods
     const modal = document.getElementById('my-modal');
@@ -191,4 +208,5 @@ const setUpModal = () => {
 
 window.onload = () => {
     setUpModal();
+    setUpFoodRemoval();
 };

@@ -1,6 +1,7 @@
 package pn.nutrimeter.service.services.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -114,6 +115,24 @@ public class UserServiceImpl implements UserService {
         return this.userRepository
                 .findAllByAuthoritiesNotContaining(roleRoot)
                 .stream()
+                .map(u -> this.modelMapper.map(u, UserServiceModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserServiceModel> getAllUsers(Specification<User> specification) {
+        return this.userRepository.findAll(specification)
+                .stream()
+//                .filter(u -> {
+//                    boolean isRoot = false;
+//                    for (Role authority : u.getAuthorities()) {
+//                        if (authority.getAuthority().equals(ROLE_ROOT)) {
+//                            isRoot = true;
+//                            break;
+//                        }
+//                    }
+//                    return !isRoot;
+//                })
                 .map(u -> this.modelMapper.map(u, UserServiceModel.class))
                 .collect(Collectors.toList());
     }

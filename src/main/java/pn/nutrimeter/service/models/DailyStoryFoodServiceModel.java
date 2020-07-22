@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class DailyStoryFoodServiceModel {
 
+    private String id;
+
     private Timestamp timeOfDay;
 
     private String name;
