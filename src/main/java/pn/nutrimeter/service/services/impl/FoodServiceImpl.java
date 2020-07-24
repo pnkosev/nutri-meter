@@ -1,6 +1,7 @@
 package pn.nutrimeter.service.services.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.Food;
@@ -92,6 +93,15 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public List<FoodServiceModel> getAll() {
         return this.foodRepository.findAll()
+                .stream()
+                .map(f -> this.modelMapper.map(f, FoodServiceModel.class))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<FoodServiceModel> getAll(Specification<Food> specification) {
+        return this.foodRepository.findAll(specification)
                 .stream()
                 .map(f -> this.modelMapper.map(f, FoodServiceModel.class))
                 .collect(Collectors.toList());

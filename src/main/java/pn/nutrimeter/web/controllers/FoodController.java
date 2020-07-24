@@ -114,15 +114,17 @@ public class FoodController extends BaseController {
 
         List<String> measures = foodCreateBindingModel.getMeasures();
 
-        foodServiceModel.setMeasures(
-                measures
-                        .stream()
-                        .map(id -> {
-                            MeasureServiceModel measureServiceModel = new MeasureServiceModel();
-                            measureServiceModel.setId(id);
-                            return measureServiceModel;
-                        })
-                        .collect(Collectors.toList()));
+        if (measures != null) {
+            foodServiceModel.setMeasures(
+                    measures
+                            .stream()
+                            .map(id -> {
+                                MeasureServiceModel measureServiceModel = new MeasureServiceModel();
+                                measureServiceModel.setId(id);
+                                return measureServiceModel;
+                            })
+                            .collect(Collectors.toList()));
+        }
 
         try {
             this.foodService.create(foodServiceModel);

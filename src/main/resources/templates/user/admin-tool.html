@@ -27,10 +27,22 @@
             <div id="all-users" class="container tab-pane active"><br>
                 <h1 class="mt-5 mb-5 text-center">All users</h1>
                 <div class="search-area w-50 text-center">
-                    <form class="form-inline md-form mr-auto text-center">
+                    <form
+                            class="form-inline md-form mr-auto text-center"
+                            id="user-search-form">
                         <i class="fas fa-search"></i>
-                        <input class="form-control" type="text" placeholder="Search" aria-label="Search" id="search-input">
-                        <button class="btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light" id="search-users" type="button">Search</button>
+                        <input
+                                class="form-control"
+                                type="text"
+                                placeholder="Search"
+                                aria-label="Search"
+                                id="user-search-input">
+                        <button
+                                class="btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light"
+                                id="user-search-btn"
+                                type="button">
+                            Search
+                        </button>
                     </form>
                 </div>
                 <section class="container w-50 mt-5">

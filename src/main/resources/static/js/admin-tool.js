@@ -198,24 +198,32 @@ const refreshSetup = (tabLinks, tabs) => {
     }
 };
 
+const search = () => {
+    const searchInput = document.getElementById('user-search-input');
+    const searchValue = searchInput.value;
+
+    if (searchValue) {
+        fetch(URLs.search + `?username=${searchValue}`)
+            .then(res => res.json())
+            .then(data => {
+
+                fillUserContainer(data,"users-container" );
+                searchInput.value = '';
+                const forms = document.querySelectorAll('#users-container form');
+                forms.forEach(f => f.addEventListener('submit', mote));
+            });
+    }
+};
+
 const searchSetUp = () => {
-    const searchBtn = document.getElementById('search-users');
+    const searchBtn = document.getElementById('user-search-btn');
+    const searchForm = document.getElementById('user-search-form');
 
-    searchBtn.onclick = () => {
-        const searchInput = document.getElementById('search-input');
-        const searchValue = searchInput.value;
+    searchBtn.onclick = () => search();
 
-        if (searchValue) {
-            fetch(URLs.search + `?username=${searchValue}`)
-                .then(res => res.json())
-                .then(data => {
-
-                    fillUserContainer(data,"users-container" );
-                    searchInput.value = '';
-                    const forms = document.querySelectorAll('#users-container form');
-                    forms.forEach(f => f.addEventListener('submit', mote));
-                });
-        }
+    searchForm.onsubmit = e => {
+        e.preventDefault();
+        search();
     };
 };
 
