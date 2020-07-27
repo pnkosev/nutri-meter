@@ -27,7 +27,7 @@ public class UserRestController {
 
     @GetMapping("/users")
     public List<UserSimpleViewModel> searchedUsers(@RequestParam(value = "username") String username) {
-        UserSpecification specification = new UserSpecification(new SearchCriteria("username", ":", username));
+        UserSpecification specification = new UserSpecification(new SearchCriteria("username", "~", username));
         return this.userService.getAllUsers(specification)
                 .stream()
                 .map(u -> this.modelMapper.map(u, UserSimpleViewModel.class))

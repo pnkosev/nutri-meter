@@ -3,8 +3,11 @@ package pn.nutrimeter.web.rest;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
+import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.models.specifications.FoodSpecification;
 import pn.nutrimeter.data.models.specifications.SearchCriteria;
+import pn.nutrimeter.data.models.specifications.builder.SpecificationBuilderImpl;
+import pn.nutrimeter.data.models.specifications.builder.SpecificationBuilder;
 import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
 import pn.nutrimeter.service.services.api.DailyStoryFoodService;
@@ -82,9 +85,13 @@ public class FoodRestController {
 
     @GetMapping("/foods")
     public List<FoodSimpleViewModel> searchedFoods(@RequestParam(value = "name") String name) {
-        FoodSpecification foodSpec1 = new FoodSpecification(new SearchCriteria("name", ":", name));
-        FoodSpecification foodSpec2 = new FoodSpecification(new SearchCriteria("isCustom", ":", false));
-        return this.foodService.getAll(Specification.where(foodSpec1).and(foodSpec2))
+        SpecificationBuilder<Food> fsb = new SpecificationBuilderImpl<>();
+        Specification<Food> spec = fsb
+                .with(new SearchCriteria("name", "~", name))
+                .with(new SearchCriteria("isCustom", ":", false))
+                .build(FoodSpecification::new);
+
+        return this.foodService.getAll(spec)
                 .stream()
                 .map(f -> this.modelMapper.map(f, FoodSimpleViewModel.class))
                 .collect(Collectors.toList());
