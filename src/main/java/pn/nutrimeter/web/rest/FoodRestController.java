@@ -8,6 +8,7 @@ import pn.nutrimeter.data.models.specifications.FoodSpecification;
 import pn.nutrimeter.data.models.specifications.SearchCriteria;
 import pn.nutrimeter.data.models.specifications.builder.SpecificationBuilderImpl;
 import pn.nutrimeter.data.models.specifications.builder.SpecificationBuilder;
+import pn.nutrimeter.service.facades.AuthenticationFacade;
 import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
 import pn.nutrimeter.service.services.api.DailyStoryFoodService;
@@ -37,13 +38,16 @@ public class FoodRestController {
 
     private final DailyStoryFoodService dailyStoryFoodService;
 
+    private final AuthenticationFacade authenticationFacade;
+
     private final ModelMapper modelMapper;
 
-    public FoodRestController(FoodService foodService, UserService userService, MeasureService measureService, DailyStoryFoodService dailyStoryFoodService, ModelMapper modelMapper) {
+    public FoodRestController(FoodService foodService, UserService userService, MeasureService measureService, DailyStoryFoodService dailyStoryFoodService, AuthenticationFacade authenticationFacade, ModelMapper modelMapper) {
         this.foodService = foodService;
         this.userService = userService;
         this.measureService = measureService;
         this.dailyStoryFoodService = dailyStoryFoodService;
+        this.authenticationFacade = authenticationFacade;
         this.modelMapper = modelMapper;
     }
 
@@ -84,14 +88,14 @@ public class FoodRestController {
     }
 
     @GetMapping("/foods")
-    public List<FoodSimpleViewModel> searchedFoods(@RequestParam(value = "name") String name) {
-        SpecificationBuilder<Food> fsb = new SpecificationBuilderImpl<>();
-        Specification<Food> spec = fsb
-                .with(new SearchCriteria("name", "~", name))
-                .with(new SearchCriteria("isCustom", ":", false))
-                .build(FoodSpecification::new);
+    public List<FoodSimpleViewModel> searchedFoods(
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "type") String type,
+            @RequestParam(value = "category") String category
+    ) {
+        Specification<Food> specification = getFoodSpecification(name, type, category);
 
-        return this.foodService.getAll(spec)
+        return this.foodService.getAll(specification)
                 .stream()
                 .map(f -> this.modelMapper.map(f, FoodSimpleViewModel.class))
                 .collect(Collectors.toList());
@@ -120,5 +124,30 @@ public class FoodRestController {
     @DeleteMapping("/food/{dailyStoryFoodId}")
     public void deleteFood(@PathVariable String dailyStoryFoodId) {
         this.dailyStoryFoodService.delete(dailyStoryFoodId);
+    }
+
+    private Specification<Food> getFoodSpecification(String name, String type, String category) {
+        SpecificationBuilder<Food> fsb = new SpecificationBuilderImpl<>();
+        Specification<Food> foodSpecification = fsb
+                .with(new SearchCriteria("name", "~", name))
+                .with(new SearchCriteria("isCustom", ":", type.contains("custom")))
+                .build(FoodSpecification::new);
+
+        Specification<Food> spec = foodSpecification;
+
+        if (type.contains("custom")) {
+            Specification<Food> customFoodsSpecification = FoodSpecification.joinCustomFoods(this.authenticationFacade.getUsername());
+            spec = Specification.where(foodSpecification).and(customFoodsSpecification);
+        } else if (type.contains("favorite")) {
+            Specification<Food> favoriteFoodsSpecification = FoodSpecification.joinFavoriteFoods(this.authenticationFacade.getUsername());
+            spec = Specification.where(foodSpecification).and(favoriteFoodsSpecification);
+        }
+
+        if (!category.equalsIgnoreCase("all")) {
+            Specification<Food> foodFromCategory = FoodSpecification.joinCategories(category);
+            spec = spec.and(foodFromCategory);
+        }
+
+        return spec;
     }
 }

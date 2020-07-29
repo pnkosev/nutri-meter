@@ -187,12 +187,19 @@ button > i.fa-sticky-note {
 
 .search-area > form {
     position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .fa-search {
     position: absolute;
     left: 0.75rem;
     top: 0.85rem;
+}
+
+.fa-cog:hover {
+    cursor: pointer;
 }
 
 .search-area > form > input {
@@ -235,6 +242,11 @@ li.selected {
 
 #food-add-form > input {
     max-width: 100px;
+}
+
+#food-categories-block {
+    margin-top: 1rem;
+    display: none;
 }
 
 @media only screen and (max-width: 500px) {

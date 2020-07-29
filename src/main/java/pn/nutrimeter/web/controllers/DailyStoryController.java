@@ -6,17 +6,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 import pn.nutrimeter.annotation.PageTitle;
 import pn.nutrimeter.error.DateParseFailureException;
-import pn.nutrimeter.service.models.DailyStoryServiceModel;
-import pn.nutrimeter.service.models.MacroTargetServiceModel;
-import pn.nutrimeter.service.models.MicroTargetServiceModel;
-import pn.nutrimeter.service.models.UserServiceModel;
+import pn.nutrimeter.service.models.*;
 import pn.nutrimeter.service.services.api.DailyStoryService;
+import pn.nutrimeter.service.services.api.FoodCategoryService;
 import pn.nutrimeter.service.services.api.UserService;
 
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 @Controller
 public class DailyStoryController extends BaseController {
@@ -25,9 +24,12 @@ public class DailyStoryController extends BaseController {
 
     private final DailyStoryService dailyStoryService;
 
-    public DailyStoryController(UserService userService, DailyStoryService dailyStoryService) {
+    private final FoodCategoryService foodCategoryService;
+
+    public DailyStoryController(UserService userService, DailyStoryService dailyStoryService, FoodCategoryService foodCategoryService) {
         this.userService = userService;
         this.dailyStoryService = dailyStoryService;
+        this.foodCategoryService = foodCategoryService;
     }
 
     @GetMapping("/diary/{date}")
@@ -53,9 +55,11 @@ public class DailyStoryController extends BaseController {
 
         MacroTargetServiceModel macroTargetServiceModel = this.userService.getMacroTargetByUserId(userId, dailyStory.getDailyWeight());
         MicroTargetServiceModel microTargetServiceModel = this.userService.getMicroTargetByUserId(userId);
+        List<FoodCategoryServiceModel> foodCategoryServiceModels = this.foodCategoryService.getAll();
 
         mav.addObject("macroTarget", macroTargetServiceModel);
         mav.addObject("microTarget", microTargetServiceModel);
+        mav.addObject("categories", foodCategoryServiceModels);
 
         return view(mav, "diary/daily-story");
     }

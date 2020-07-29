@@ -48,7 +48,7 @@ const addFood = e => {
 const getCurrentTab = () => {
     const currentURL = window.location.href;
     const index = currentURL.indexOf('#');
-    return currentURL.substr(index);
+    return currentURL.substr(index + 1);
 };
 
 const toggleAsFavorite = (e, foodId) => {
@@ -78,8 +78,8 @@ const toggleAsFavorite = (e, foodId) => {
     })
         .then(() => {
             const currentTab = getCurrentTab();
-            if (currentTab === '#foods-favorite') {
-                document.querySelector(`a[href$="${currentTab}"]`).click()
+            if (currentTab === 'foods-favorite') {
+                document.querySelector(`a[href$="#${currentTab}"]`).click()
             }
         });
 
@@ -200,7 +200,9 @@ const setUpModal = () => {
     // When the user clicks the button, open all foods
     btn.onclick = function () {
         modal.style.display = 'block';
-        window.location.href += '#foods-all';
+        if (!window.location.href.includes('#foods-all')) {
+            window.location.href += '#foods-all';
+        }
         getFoods(URLs.allFoods, 'table-foods-all');
     };
 
@@ -217,18 +219,40 @@ const setUpModal = () => {
             removeHref();
         }
     }
+}
+
+const getCategoryQuery = () => {
+    const foodCategoriesBlock = document.getElementById('food-categories-block');
+    let category;
+
+    if (foodCategoriesBlock.style.display === 'block') {
+        category = document.getElementById('food-categories').value;
+    } else {
+        category = 'all';
+    }
+
+    return `&category=${category}`;
 };
 
 const search = () => {
     const searchInput = document.getElementById('food-search-input');
     const searchValue = searchInput.value;
+    const currentTab = getCurrentTab();
 
-    fetch(URLs.searchedFoods + `?name=${searchValue}`)
+    let query = `?name=${searchValue}&type=${currentTab}`;
+    const categoryQuery = getCategoryQuery();
+    if (categoryQuery) {
+        query += `${categoryQuery.toLowerCase()}`;
+    } else {
+
+    }
+
+    fetch(URLs.searchedFoods + query)
         .then(res => res.json())
         .then(data => {
 
             searchInput.value = '';
-            fillContainer(data, 'table-foods-all');
+            fillContainer(data, `table-${currentTab}`);
             const foods = document.querySelectorAll('.food-line');
             foods.forEach(f => f.addEventListener('click', displayBlock));
         });
@@ -267,6 +291,23 @@ const tabSwitchConfig = (tabLinks, tabs) => {
     }));
 };
 
+const toggleDisplay = (el) => {
+    if (el.style.display === 'block') {
+        el.style.display = 'none';
+    } else {
+        el.style.display = 'block';
+    }
+};
+
+const setUpCategorySettings = () => {
+    const categorySettingsIcon = document.getElementById('category-settings');
+
+    categorySettingsIcon.onclick = () => {
+        const foodCategoriesBlock = document.getElementById('food-categories-block');
+        toggleDisplay(foodCategoriesBlock);
+    };
+};
+
 window.onload = () => {
     setUpModal();
     const tabLinks = document.querySelectorAll('.nav-tabs a');
@@ -274,4 +315,5 @@ window.onload = () => {
     tabSwitchConfig(tabLinks, tabs);
     setUpFoodRemoval();
     setUpSearch();
+    setUpCategorySettings();
 };

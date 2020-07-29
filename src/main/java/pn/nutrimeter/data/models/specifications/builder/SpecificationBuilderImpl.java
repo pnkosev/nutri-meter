@@ -2,7 +2,6 @@ package pn.nutrimeter.data.models.specifications.builder;
 
 import org.springframework.data.jpa.domain.Specification;
 import pn.nutrimeter.data.models.specifications.SearchCriteria;
-import pn.nutrimeter.data.models.specifications.builder.SpecificationBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
