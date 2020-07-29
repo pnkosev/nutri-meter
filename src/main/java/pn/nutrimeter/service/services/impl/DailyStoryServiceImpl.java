@@ -113,6 +113,7 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         dailyStoryServiceModel.setOmega3(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getOmega3).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setOmega6(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getOmega6).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setSaturated(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getSaturated).reduce(0.0, Double::sum));
+        dailyStoryServiceModel.setTransFats(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getTransFats).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setCholesterol(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getCholesterol).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setVitaminA(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminA).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setVitaminB1(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminB1).reduce(0.0, Double::sum));
