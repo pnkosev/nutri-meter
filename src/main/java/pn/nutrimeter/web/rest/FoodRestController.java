@@ -4,8 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import pn.nutrimeter.data.models.Food;
-import pn.nutrimeter.data.models.specifications.FoodSpecification;
-import pn.nutrimeter.data.models.specifications.SearchCriteria;
+import pn.nutrimeter.data.models.FoodCategory;
+import pn.nutrimeter.data.models.User;
+import pn.nutrimeter.data.models.specifications.*;
 import pn.nutrimeter.data.models.specifications.builder.SpecificationBuilderImpl;
 import pn.nutrimeter.data.models.specifications.builder.SpecificationBuilder;
 import pn.nutrimeter.service.facades.AuthenticationFacade;
@@ -37,6 +38,7 @@ public class FoodRestController {
     private final MeasureService measureService;
 
     private final DailyStoryFoodService dailyStoryFoodService;
+
 
     private final AuthenticationFacade authenticationFacade;
 
@@ -127,27 +129,26 @@ public class FoodRestController {
     }
 
     private Specification<Food> getFoodSpecification(String name, String type, String category) {
-        SpecificationBuilder<Food> fsb = new SpecificationBuilderImpl<>();
-        Specification<Food> foodSpecification = fsb
-                .with(new SearchCriteria("name", "~", name))
-                .with(new SearchCriteria("isCustom", ":", type.contains("custom")))
-                .build(FoodSpecification::new);
+        SpecificationBuilder<Food> specBuilder = new SpecificationBuilderImpl<>();
 
-        Specification<Food> spec = foodSpecification;
+        specBuilder = specBuilder
+                .with(new SearchCriteria("name", "~", name))
+                .with(new SearchCriteria("isCustom", ":", type.contains("custom")));
 
         if (type.contains("custom")) {
-            Specification<Food> customFoodsSpecification = FoodSpecification.joinCustomFoods(this.authenticationFacade.getUsername());
-            spec = Specification.where(foodSpecification).and(customFoodsSpecification);
+            specBuilder = specBuilder
+                    .<User>join(new JoinCriteria("user", "username", this.authenticationFacade.getUsername()));
         } else if (type.contains("favorite")) {
-            Specification<Food> favoriteFoodsSpecification = FoodSpecification.joinFavoriteFoods(this.authenticationFacade.getUsername());
-            spec = Specification.where(foodSpecification).and(favoriteFoodsSpecification);
+            specBuilder = specBuilder
+                    .<User>join(new JoinCriteria("users", "username", this.authenticationFacade.getUsername()));
         }
 
         if (!category.equalsIgnoreCase("all")) {
-            Specification<Food> foodFromCategory = FoodSpecification.joinCategories(category);
-            spec = spec.and(foodFromCategory);
+            specBuilder = specBuilder
+                    .<FoodCategory>join(new JoinCriteria("foodCategories", "name", category));
         }
 
-        return spec;
+        return specBuilder
+                .build(FoodSpecification::new);
     }
 }
