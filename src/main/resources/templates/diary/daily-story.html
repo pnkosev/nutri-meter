@@ -332,11 +332,11 @@
             </section>
         </section>
     </section>
-    <div id="my-modal" class="modal">
+    <div id="food-modal" class="modal">
         <!-- Modal content -->
         <div class="modal-content w-50">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add food to diary</h5>
+                <h5 class="modal-title">Add food to diary</h5>
                 <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -356,7 +356,7 @@
                             type="button">
                         Search
                     </button>
-                    <i class="fa fa-cog" id="category-settings"></i>
+                    <i class="fa fa-cog" id="food-category-settings"></i>
                 </form>
                 <div id="food-categories-block">
                     <label for="food-categories">Food Category</label>
@@ -388,6 +388,60 @@
                     </div>
                 </div>
                 <div id="food-add-block" style="display: none">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="exercise-modal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content w-50">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add exercise to diary</h5>
+                <button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="search-area">
+                <form
+                        class="form-inline md-form mr-auto"
+                        id="exercise-search-form">
+                    <i class="fas fa-search"></i>
+                    <input class="form-control mr-sm-2"
+                           type="text"
+                           id="exercise-search-input"
+                           placeholder="Search"
+                           aria-label="Search">
+                    <button class="btn btn-outline-success btn-rounded btn-sm my-0 waves-effect waves-light"
+                            id="exercise-search-btn"
+                            type="button">
+                        Search
+                    </button>
+                    <i class="fa fa-cog" id="exercise-category-settings"></i>
+                </form>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content">
+                    <div>
+                        <h6>Name</h6>
+                        <ul id="table-exercises-all"></ul>
+                    </div>
+                    <div class="text-center" id="exercise-add-block" style="display: block">
+                        <form action="/api/exercise/add" method="post">
+                            <input type="text" id="exercise-name" placeholder="Exercise name">
+                            <div id="exercise-info" style="display: none"></div>
+                            <div>
+                                <span>
+                                    for
+                                    <input type="number" id="exercise-duration" placeholder="60">
+                                    minutes burns
+                                    <input type="number" id="exercise-kcal-burned" placeholder="300">
+                                    <div id="exercise-kcal" style="display: none"></div>
+                                    kcal
+                                </span>
+                            </div>
+                            <button class="btn btn-info">Add</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

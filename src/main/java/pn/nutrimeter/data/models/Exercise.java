@@ -27,6 +27,10 @@ public class Exercise extends BaseEntity {
     @Column(name = "kcal_burned_per_min")
     private Double kcalBurnedPerMin;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
     @OneToMany(mappedBy = "exercise")
     private List<DailyStoryExercise> dailyStoryExerciseAssociation;
 }

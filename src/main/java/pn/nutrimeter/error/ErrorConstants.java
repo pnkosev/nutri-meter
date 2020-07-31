@@ -11,6 +11,8 @@ public class ErrorConstants {
     public static final String INVALID_FOOD_ID = "No such food id!";
     public static final String INVALID_FOOD_MODEL = "Please fill all mandatory fields!";
 
+    public static final String INVALID_EXERCISE_ID = "No such food id!";
+
     public static final String INVALID_CATEGORY_ID = "No such category id!";
 
     public static final String INVALID_TAG_ID = "No such tag id!";

@@ -39,7 +39,6 @@ public class FoodRestController {
 
     private final DailyStoryFoodService dailyStoryFoodService;
 
-
     private final AuthenticationFacade authenticationFacade;
 
     private final ModelMapper modelMapper;
