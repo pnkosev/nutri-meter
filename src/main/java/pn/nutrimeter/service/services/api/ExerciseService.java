@@ -10,7 +10,7 @@ public interface ExerciseService {
 
     ExerciseServiceModel getById(String exerciseId);
 
-    ExerciseServiceModel getByNameAndKcalBurnedPerMin(String name, Double kcal);
+    ExerciseServiceModel getByNameAndKcalBurnedPerHour(String name, Double kcalBurnedPerHour);
 
     ExerciseServiceModel create(ExerciseServiceModel model, String username);
 }

@@ -55,17 +55,30 @@ public class ExerciseRestController {
             @RequestBody DailyExerciseBindingModel model,
             Principal principal) {
 
-        ExerciseServiceModel esm = this.exerciseService.getByNameAndKcalBurnedPerMin(model.getName(), model.getKcalBurnedPerMin());
+        Double kcalBurnedPerHour = this.getKcalBurnedPerHour(model.getDuration(), model.getKcalBurned());
+
+        ExerciseServiceModel esm = this.exerciseService.getByNameAndKcalBurnedPerHour(model.getName(), kcalBurnedPerHour);
         UserServiceModel userModel = this.userService.getUserByUsername(principal.getName());
 
         if (esm == null) {
             // TODO VALIDATION BEFORE CREATION
-            esm = this.exerciseService.create(this.modelMapper.map(model, ExerciseServiceModel.class), userModel.getUsername());
+            ExerciseServiceModel exerciseServiceModel = this.modelMapper.map(model, ExerciseServiceModel.class);
+            exerciseServiceModel.setKcalBurnedPerHour(kcalBurnedPerHour);
+            esm = this.exerciseService.create(exerciseServiceModel, userModel.getUsername());
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(model.getDate(), formatter);
 
         this.dailyStoryExerciseService.create(date, userModel.getId(), esm.getId(), model.getDuration());
+    }
+
+    @DeleteMapping("/exercise/{dailyStoryExerciseId}")
+    public void deleteExercise(@PathVariable String dailyStoryExerciseId) {
+        this.dailyStoryExerciseService.delete(dailyStoryExerciseId);
+    }
+
+    private Double getKcalBurnedPerHour(Double duration, Double kcalBurned) {
+        return kcalBurned / (duration / 60);
     }
 }

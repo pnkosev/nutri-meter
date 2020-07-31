@@ -24,8 +24,8 @@ public class Exercise extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ExerciseCategory category;
 
-    @Column(name = "kcal_burned_per_min")
-    private Double kcalBurnedPerMin;
+    @Column(name = "kcal_burned_per_hour")
+    private Double kcalBurnedPerHour;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

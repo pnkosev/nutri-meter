@@ -12,5 +12,5 @@ public interface ExerciseRepository extends JpaRepository<Exercise, String> {
 
     List<Exercise> findAllByUserIsNull();
 
-    Optional<Exercise> findByNameAndKcalBurnedPerMin(String name, Double kcalBurnedPerMin);
+    Optional<Exercise> findByNameAndKcalBurnedPerHourAndUserIdNull(String name, Double kcalBurnedPerHour);
 }

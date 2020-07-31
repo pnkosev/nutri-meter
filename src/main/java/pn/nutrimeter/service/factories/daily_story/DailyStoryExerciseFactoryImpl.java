@@ -14,7 +14,7 @@ public class DailyStoryExerciseFactoryImpl implements DailyStoryExerciseFactory 
 
         dailyStoryExerciseServiceModel.setId(association.getId());
         dailyStoryExerciseServiceModel.setName(model.getName());
-        dailyStoryExerciseServiceModel.setKcalBurnedPerMin(model.getKcalBurnedPerMin());
+        dailyStoryExerciseServiceModel.setKcalBurnedPerHour(model.getKcalBurnedPerHour());
         dailyStoryExerciseServiceModel.setDuration(association.getDuration());
 
         return dailyStoryExerciseServiceModel;

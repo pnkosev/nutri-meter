@@ -107,8 +107,10 @@ public class DailyStoryServiceImpl implements DailyStoryService {
 
     private void reduceNutrientsFromListOfFoods(DailyStoryServiceModel dailyStoryServiceModel) {
         List<DailyStoryFoodServiceModel> dailyStoryFoodAssociation = dailyStoryServiceModel.getDailyStoryFoodAssociation();
+        List<DailyStoryExerciseServiceModel> dailyStoryExerciseAssociation = dailyStoryServiceModel.getDailyStoryExerciseAssociation();
 
-        dailyStoryServiceModel.setKcal(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getKcal).reduce(0.0, Double::sum));
+        dailyStoryServiceModel.setKcalConsumed(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getKcal).reduce(0.0, Double::sum));
+        dailyStoryServiceModel.setKcalBurned(dailyStoryExerciseAssociation.stream().map(e -> e.getKcalBurnedPerHour() * (e.getDuration() / 60)).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setTotalProteins(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getTotalProteins).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setCysteine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getCysteine).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setHistidine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getHistidine).reduce(0.0, Double::sum));

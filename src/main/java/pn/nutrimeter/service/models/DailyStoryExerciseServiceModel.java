@@ -13,7 +13,7 @@ public class DailyStoryExerciseServiceModel {
 
     private String name;
 
-    private Double kcalBurnedPerMin;
+    private Double kcalBurnedPerHour;
 
     private Double duration;
 }

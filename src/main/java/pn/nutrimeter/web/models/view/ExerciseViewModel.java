@@ -13,5 +13,5 @@ public class ExerciseViewModel {
 
     private String name;
 
-    private Double kcalBurnedPerMin;
+    private Double kcalBurnedPerHour;
 }

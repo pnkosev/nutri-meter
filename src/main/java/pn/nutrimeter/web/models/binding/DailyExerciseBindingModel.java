@@ -13,7 +13,7 @@ public class DailyExerciseBindingModel {
 
     private Double duration;
 
-    private Double kcalBurnedPerMin;
+    private Double kcalBurned;
 
     private String date;
 }

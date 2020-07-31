@@ -47,8 +47,8 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public ExerciseServiceModel getByNameAndKcalBurnedPerMin(String name, Double kcal) {
-        Optional<Exercise> optionalExercise = this.exerciseRepository.findByNameAndKcalBurnedPerMin(name, kcal);
+    public ExerciseServiceModel getByNameAndKcalBurnedPerHour(String name, Double kcalBurnedPerHour) {
+        Optional<Exercise> optionalExercise = this.exerciseRepository.findByNameAndKcalBurnedPerHourAndUserIdNull(name, kcalBurnedPerHour);
 
         ExerciseServiceModel exerciseServiceModel = null;
 

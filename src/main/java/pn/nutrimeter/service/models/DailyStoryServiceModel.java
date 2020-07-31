@@ -23,7 +23,9 @@ public class DailyStoryServiceModel {
 
     private List<DailyStoryExerciseServiceModel> dailyStoryExerciseAssociation;
 
-    private Double kcal;
+    private Double kcalConsumed;
+
+    private Double kcalBurned;
 
     private Double totalProteins;
 

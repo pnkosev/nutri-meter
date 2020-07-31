@@ -62,7 +62,7 @@ const addExercise = e => {
     const json = {
         name: nameInput.style.display === 'none' ? exerciseInfo.innerText : nameInput.value,
         duration: document.getElementById('exercise-duration').value,
-        kcalBurnedPerMin: kcalBurnedInput.style.display === 'none' ? kcalBurnedInfo.innerText : kcalBurnedInput.value,
+        kcalBurned: kcalBurnedInput.style.display === 'none' ? kcalBurnedInfo.innerText : kcalBurnedInput.value,
         date: date,
     };
 
@@ -254,7 +254,7 @@ const displayExerciseBlock = (e) => {
             .then(res => res.json())
             .then(data => {
                 elementsAsJson.exerciseInfo.innerHTML = data.name;
-                elementsAsJson.kcalBurnedInfo.innerHTML = `${data.kcalBurnedPerMin}`;
+                elementsAsJson.kcalBurnedInfo.innerHTML = `${data.kcalBurnedPerHour}`;
                 elementsAsJson.duration.value = 60;
             });
     } else {
@@ -309,13 +309,13 @@ const getExercises = (URL, table) => {
         });
 };
 
-const setUpFoodRemoval = () => {
-    [...document.getElementsByClassName('delete-food')]
+const removeElement = (URL, className) => {
+    [...document.getElementsByClassName(className)]
         .forEach(f => {
             f.onclick = () => {
                 const associationId = f.getAttribute('association-id');
 
-                fetch(URLs.food + `/${associationId}`, {
+                fetch(URL + `/${associationId}`, {
                     method: 'delete',
                     headers: {
                         'Content-Type': 'application/json'
@@ -324,6 +324,11 @@ const setUpFoodRemoval = () => {
                     .then(() => window.location.reload());
             };
         });
+};
+
+const setUpElementRemoval = () => {
+    removeElement(URLs.food, 'delete-food');
+    removeElement(URLs.exercise, 'delete-exercise');
 };
 
 const removeHref = () => {
@@ -501,7 +506,7 @@ const setUpCategorySettings = () => {
 window.onload = () => {
     setUpModals();
     tabSwitchConfig();
-    setUpFoodRemoval();
+    setUpElementRemoval();
     setUpSearch();
     setUpCategorySettings();
 };

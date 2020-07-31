@@ -15,5 +15,5 @@ public class ExerciseServiceModel {
 
     private String category;
 
-    private Double kcalBurnedPerMin;
+    private Double kcalBurnedPerHour;
 }
