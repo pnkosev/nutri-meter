@@ -5,6 +5,7 @@ main {
 }
 
 #consumed-foods,
+#exercises-done,
 #kcal-summary,
 .day-picker,
 .macro-nutrients,
@@ -22,9 +23,6 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-}
-
-#consumed-foods-body > ul > li {
 }
 
 .consumed-food-item {
@@ -97,24 +95,19 @@ button > i.fa-sticky-note {
     justify-content: space-around;
 }
 
+.section-block {
+    margin-top: 0.5rem;
+    min-height: 20vh;
+    padding: 0;
+    border: 1px solid #aaaaaa;
+    border-radius: 0.25em;
+}
+
 .section-title {
     background-color: rgba(184, 255, 0, 0.21);
     margin: 0;
     padding: 0.2em;
     border-bottom: 1px solid #aaaaaa;
-}
-
-#consumed-foods {
-    height: 20vh;
-    border: 1px solid #aaaaaa;
-    border-radius: 0.25em;
-}
-
-#kcal-summary {
-    margin-top: 0.5rem;
-    height: 10vh;
-    border: 1px solid #aaaaaa;
-    border-radius: 0.25em;
 }
 
 #nutrients-container {
@@ -124,22 +117,6 @@ button > i.fa-sticky-note {
 
 .nutrients {
     flex: 1 0 auto;
-}
-
-.macro-nutrients {
-    margin-right: 0.25em;
-}
-
-.micro-nutrients {
-    margin-left: 0.25em;
-}
-
-.macro-nutrients,
-.micro-nutrients {
-    margin-top: 0.5rem;
-    padding: 0;
-    border: 1px solid #aaaaaa;
-    border-radius: 0.25em;
 }
 
 .nutrient-body {

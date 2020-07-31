@@ -46,15 +46,14 @@
                 Add note
             </button>
         </div>
-        <section id="consumed-foods">
+        <section id="consumed-foods" class="section-block">
             <h5 class="section-title text-center">Foods consumed throughout the day:</h5>
             <div id="consumed-foods-body">
                 <th:block th:if="${dailyStory != null}">
                     <ul>
                         <li th:class="consumed-food-item" th:each="food : ${dailyStory.getDailyStoryFoodAssociation()}">
                             <i class="fas fa-apple-alt"></i>
-                            [[${food.name}]] - [[${#numbers.formatDecimal(food.quantity, 1, 0)}]]
-                            [[${food.measure}]][[${food.quantity > 1 ? 's' : ''}]]
+                            [[${food.name}]] - [[${#numbers.formatDecimal(food.quantity, 1, 0)}]] [[${food.measure}]]
                             <span class="close delete-food" th:association-id="${food.id}"
                                   style="font-size:24px">X</span>
                         </li>
@@ -62,12 +61,27 @@
                 </th:block>
             </div>
         </section>
-        <section id="kcal-summary">
+        <section id="exercises-done" class="section-block">
+            <h5 class="section-title text-center">Exercises throughout the day:</h5>
+            <div id="exercises-done-body">
+                <th:block th:if="${dailyStory != null}">
+                    <ul>
+                        <li th:class="consumed-food-item" th:each="exercise : ${dailyStory.getDailyStoryExerciseAssociation()}">
+                            <i class="fas fa-dumbbell"></i>
+                            [[${exercise.name}]] - [[${#numbers.formatDecimal(exercise.duration, 1, 0)}]]mins [[${#numbers.formatDecimal(exercise.kcalBurnedPerMin, 1, 0)}]]kcal
+                            <span class="close delete-exercise" th:association-id="${exercise.id}"
+                                  style="font-size:24px">X</span>
+                        </li>
+                    </ul>
+                </th:block>
+            </div>
+        </section>
+        <section id="kcal-summary" class="section-block">
 
         </section>
         <section id="nutrients-container">
             <section id="macro" class="nutrients">
-                <section id="proteins" class="macro-nutrients">
+                <section id="proteins" class="macro-nutrients section-block">
                     <h5 class="text-center section-title">Proteins</h5>
                     <div id="proteins-body" class="nutrient-body">
                         <div class="nutrient-row">
@@ -132,7 +146,7 @@
                         </div>
                     </div>
                 </section>
-                <section id="carbs" class="macro-nutrients">
+                <section id="carbs" class="macro-nutrients section-block">
                     <h5 class="text-center section-title">Carbohydrates</h5>
                     <div id="carbs-body" class="nutrient-body">
                         <div class="nutrient-row">
@@ -162,7 +176,7 @@
                         </div>
                     </div>
                 </section>
-                <section id="lipids" class="macro-nutrients">
+                <section id="lipids" class="macro-nutrients section-block">
                     <h5 class="text-center section-title">Lipids</h5>
                     <div id="lipids-body" class="nutrient-body">
                         <div class="nutrient-row">
@@ -204,7 +218,7 @@
                 </section>
             </section>
             <section id="micro" class="nutrients">
-                <section id="vitamins" class="micro-nutrients">
+                <section id="vitamins" class="micro-nutrients section-block">
                     <h5 class="text-center section-title">Vitamins</h5>
                     <div id="vitamins-body" class="nutrient-body">
                         <div class="nutrient-row">
@@ -269,7 +283,7 @@
                         </div>
                     </div>
                 </section>
-                <section id="minerals" class="micro-nutrients">
+                <section id="minerals" class="micro-nutrients section-block">
                     <h5 class="text-center section-title">Minerals</h5>
                     <div id="minerals-body" class="nutrient-body">
                         <div class="nutrient-row">
