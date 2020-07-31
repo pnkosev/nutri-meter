@@ -422,7 +422,7 @@ const getCategoryQuery = () => {
     const foodCategoriesBlock = document.getElementById('food-categories-block');
     let category;
 
-    if (foodCategoriesBlock.style.display === 'block') {
+    if (foodCategoriesBlock.style.display === 'inline-block') {
         category = document.getElementById('food-categories').value;
     } else {
         category = 'all';

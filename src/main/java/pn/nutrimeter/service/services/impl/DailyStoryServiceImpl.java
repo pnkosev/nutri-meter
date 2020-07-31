@@ -3,16 +3,16 @@ package pn.nutrimeter.service.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.DailyStory;
+import pn.nutrimeter.data.models.Exercise;
 import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.repositories.DailyStoryRepository;
 import pn.nutrimeter.data.repositories.UserRepository;
 import pn.nutrimeter.error.ErrorConstants;
 import pn.nutrimeter.error.UserNotFoundException;
+import pn.nutrimeter.service.factories.daily_story.DailyStoryExerciseFactory;
 import pn.nutrimeter.service.factories.daily_story.DailyStoryFoodFactory;
-import pn.nutrimeter.service.models.DailyStoryFoodServiceModel;
-import pn.nutrimeter.service.models.DailyStoryServiceModel;
-import pn.nutrimeter.service.models.FoodServiceModel;
+import pn.nutrimeter.service.models.*;
 import pn.nutrimeter.service.services.api.DailyStoryService;
 
 import java.time.LocalDate;
@@ -30,12 +30,15 @@ public class DailyStoryServiceImpl implements DailyStoryService {
 
     private final DailyStoryFoodFactory dailyStoryFoodFactory;
 
+    private final DailyStoryExerciseFactory dailyStoryExerciseFactory;
+
     private final ModelMapper modelMapper;
 
-    public DailyStoryServiceImpl(DailyStoryRepository dailyStoryRepository, UserRepository userRepository, DailyStoryFoodFactory dailyStoryFoodFactory, ModelMapper modelMapper) {
+    public DailyStoryServiceImpl(DailyStoryRepository dailyStoryRepository, UserRepository userRepository, DailyStoryFoodFactory dailyStoryFoodFactory, DailyStoryExerciseFactory dailyStoryExerciseFactory, ModelMapper modelMapper) {
         this.dailyStoryRepository = dailyStoryRepository;
         this.userRepository = userRepository;
         this.dailyStoryFoodFactory = dailyStoryFoodFactory;
+        this.dailyStoryExerciseFactory = dailyStoryExerciseFactory;
         this.modelMapper = modelMapper;
     }
 
@@ -63,16 +66,32 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         }
         this.dailyStoryRepository.saveAndFlush(dailyStory);
 
-        List<DailyStoryFoodServiceModel> dailyStoryFoodServiceModels = this.getModels(dailyStory);
+        List<DailyStoryFoodServiceModel> dailyStoryFoodServiceModels = this.getFoodModels(dailyStory);
+        List<DailyStoryExerciseServiceModel> dailyStoryExerciseServiceModels = this.getExerciseModels(dailyStory);
         DailyStoryServiceModel dailyStoryServiceModel = this.modelMapper.map(dailyStory, DailyStoryServiceModel.class);
         dailyStoryServiceModel.setDailyStoryFoodAssociation(dailyStoryFoodServiceModels);
+        dailyStoryServiceModel.setDailyStoryExerciseAssociation(dailyStoryExerciseServiceModels);
 
         this.reduceNutrientsFromListOfFoods(dailyStoryServiceModel);
 
         return dailyStoryServiceModel;
     }
 
-    private List<DailyStoryFoodServiceModel> getModels(DailyStory dailyStory) {
+    private List<DailyStoryExerciseServiceModel> getExerciseModels(DailyStory dailyStory) {
+        List<DailyStoryExerciseServiceModel> newList = new ArrayList<>();
+        return dailyStory.getDailyStoryFoodAssociation() == null
+                ? newList
+                : dailyStory.getDailyStoryExerciseAssociation()
+                .stream()
+                .map(association -> {
+                    Exercise exercise = association.getExercise();
+                    ExerciseServiceModel model = this.modelMapper.map(exercise, ExerciseServiceModel.class);
+                    return dailyStoryExerciseFactory.create(association, model);
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<DailyStoryFoodServiceModel> getFoodModels(DailyStory dailyStory) {
         List<DailyStoryFoodServiceModel> newList = new ArrayList<>();
         return dailyStory.getDailyStoryFoodAssociation() == null
                 ? newList

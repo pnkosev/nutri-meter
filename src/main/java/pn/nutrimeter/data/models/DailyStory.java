@@ -32,7 +32,7 @@ public class DailyStory extends BaseEntity {
     @OneToMany(mappedBy = "dailyStory", cascade = CascadeType.ALL)
     private List<DailyStoryFood> dailyStoryFoodAssociation;
 
-    @OneToMany(mappedBy = "exercise")
+    @OneToMany(mappedBy = "dailyStory")
     private List<DailyStoryExercise> dailyStoryExerciseAssociation;
 
     @OneToMany(mappedBy = "dailyStory")

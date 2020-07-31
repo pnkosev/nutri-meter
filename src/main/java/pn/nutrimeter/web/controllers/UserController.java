@@ -65,7 +65,7 @@ public class UserController extends BaseController {
             return view(USER_REGISTER_VIEW, e.getHttpStatus());
         }
 
-        return redirect(USER_LOGIN_URL);
+        return redirect("/user" + USER_LOGIN_URL);
     }
 
 

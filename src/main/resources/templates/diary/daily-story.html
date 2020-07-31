@@ -358,7 +358,7 @@
                     </button>
                     <i class="fa fa-cog" id="food-category-settings"></i>
                 </form>
-                <div id="food-categories-block">
+                <div id="food-categories-block" style="display: none">
                     <label for="food-categories">Food Category</label>
                     <select name="food-categories" id="food-categories">
                         <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>

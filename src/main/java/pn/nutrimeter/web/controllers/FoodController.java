@@ -153,7 +153,9 @@ public class FoodController extends BaseController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return view(FOOD_CATEGORY_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
+            ModelAndView mav = new ModelAndView();
+            mav.addObject("action", "Add");
+            return view(mav, FOOD_CATEGORY_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.foodCategoryService.create(this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class));
@@ -183,7 +185,11 @@ public class FoodController extends BaseController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return view(FOOD_CATEGORY_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
+            FoodCategoryServiceModel foodCategoryServiceModel = this.foodCategoryService.getById(categoryId);
+            ModelAndView mav = new ModelAndView();
+            mav.addObject("action", "Edit");
+            mav.addObject("categoryId", foodCategoryServiceModel.getId());
+            return view(mav, FOOD_CATEGORY_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         FoodCategoryServiceModel foodCategoryServiceModel = this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class);
@@ -207,7 +213,9 @@ public class FoodController extends BaseController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return view(FOOD_TAG_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
+            ModelAndView mav = new ModelAndView();
+            mav.addObject("action", "Add");
+            return view(mav, FOOD_TAG_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.tagService.create(this.modelMapper.map(tagCreateBindingModel, TagServiceModel.class));
@@ -237,7 +245,11 @@ public class FoodController extends BaseController {
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return view(FOOD_TAG_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
+            TagServiceModel tagServiceModel = this.tagService.getById(tagId);
+            ModelAndView mav = new ModelAndView();
+            mav.addObject("action", "Edit");
+            mav.addObject("tagId", tagServiceModel.getId());
+            return view(mav, FOOD_TAG_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         TagServiceModel tagServiceModel = this.modelMapper.map(tagCreateBindingModel, TagServiceModel.class);

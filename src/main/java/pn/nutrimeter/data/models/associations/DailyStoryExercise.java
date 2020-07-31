@@ -1,5 +1,6 @@
 package pn.nutrimeter.data.models.associations;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,9 +13,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "daily_stories_exercises")
-@IdClass(DailyStoryExerciseId.class)
+//@IdClass(DailyStoryExerciseId.class)
 public class DailyStoryExercise extends BaseEntity {
 
     @Column(name = "duration")

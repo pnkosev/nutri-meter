@@ -73,6 +73,11 @@ const remove = e => {
 };
 
 const getSingularFromPlural = str => {
+    const indexOfDash = str.indexOf('-');
+    if (indexOfDash) {
+        str = str.substring(0, indexOfDash);
+    }
+
     if (str.endsWith('ies')) {
         str = str.substr(0, str.length - 3) + 'y';
     } else {
