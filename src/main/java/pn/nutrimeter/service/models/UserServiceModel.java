@@ -17,5 +17,11 @@ public class UserServiceModel {
 
     private String email;
 
+    private Double totalKcalTarget;
+
+    private Double kcalFromActivityLevel;
+
+    private Double bmr;
+
     private Set<RoleServiceModel> authorities;
 }

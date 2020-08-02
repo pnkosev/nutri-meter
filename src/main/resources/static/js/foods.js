@@ -503,10 +503,211 @@ const setUpCategorySettings = () => {
     };
 };
 
+const progressArc = (canvas, span, p) => {
+    const can = document.getElementById(canvas);
+    const ctx = can.getContext('2d');
+    const spanPercent = document.getElementById(span);
+
+    const posX = can.width / 2;
+    const posY = can.height / 2;
+    const fps = 1000 / 200;
+    let percent = 0;
+    const onePercent = 360 / 100;
+    const result = onePercent * p;
+    can.lineCap = 'round';
+
+    arcMove();
+
+    function arcMove() {
+
+        let degrees = 0;
+        const acrInterval = setInterval(function () {
+            degrees += 1;
+            ctx.clearRect(0, 0, can.width, can.height);
+            percent = degrees / onePercent;
+
+            spanPercent.innerHTML = percent.toFixed();
+
+            ctx.beginPath();
+            ctx.arc(posX, posY, 80, (Math.PI / 180) * 270, (Math.PI / 180) * (270 + 360));
+            ctx.strokeStyle = '#b1b1b1';
+            ctx.lineWidth = 20;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.strokeStyle = '#3949AB';
+            ctx.lineWidth = 20;
+            ctx.arc(posX, posY, 80, (Math.PI / 180) * 270, (Math.PI / 180) * (270 + degrees));
+            ctx.stroke();
+            if (degrees >= result) {
+                clearInterval(acrInterval);
+            }
+        }, fps);
+    }
+};
+
+const progressBar = (canvas) => {
+    return {
+        ctx: document.getElementById(canvas).getContext('2d'),
+        display: function (p, color, text) {
+            this.ctx.fillStyle = '#444444';
+            this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            this.ctx.fillStyle = color;
+            this.ctx.fillRect(0, 0, p * this.ctx.canvas.width / 100, this.ctx.canvas.height);
+            this.ctx.font = "2.5rem Verdana";
+            this.ctx.fillStyle = 'white';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(text, this.ctx.canvas.width / 2, this.ctx.canvas.height / 1.75);
+        },
+    };
+};
+
+const distributedProgressBar = (canvas) => {
+    return {
+        ctx: document.getElementById(canvas).getContext('2d'),
+        display: function ({p1, p2, p3}, {c1, c2, c3}) {
+            const rects = [
+                {x: 0, y: 0, w: p1 * this.ctx.canvas.width / 100, h: this.ctx.canvas.height},
+                {x: p1 * this.ctx.canvas.width / 100, y: 0, w: p2 * this.ctx.canvas.width / 100, h: this.ctx.canvas.height},
+                {x: p1 * this.ctx.canvas.width / 100 + p2 * this.ctx.canvas.width / 100, y: 0, w: p3 * this.ctx.canvas.width / 100, h: this.ctx.canvas.height},
+            ];
+            let i = 0;
+
+            const colors = [c1, c2, c3];
+
+            while (i < rects.length) {
+                let r = rects[i];
+                this.ctx.fillStyle = colors[i++];
+                this.ctx.fillRect(r.x, r.y, r.w, r.h);
+            }
+
+            const can = document.getElementById(canvas);
+            const c = can.getContext('2d');
+
+            const spans = [...document.getElementsByClassName('absolute-block')];
+
+            can.onmousemove = function(e) {
+                // important: correct mouse position:
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                let i = 0;
+
+                while(i < rects.length) {
+                    // add a single rect to path:
+                    let r = rects[i++];
+                    c.beginPath();
+                    c.rect(r.x, r.y, r.w, r.h);
+
+                    // check if we hover it, display element, if not hide it
+                    if (c.isPointInPath(x, y)) {
+                        displayElement(spans[i - 1]);
+                    } else {
+                        hideElement(spans[i - 1]);
+                    }
+                }
+            };
+
+            can.onmouseleave = function (e) {
+                i = 0;
+                while(i < rects.length) {
+                    hideElement(spans[i++]);
+                }
+            }
+        },
+    };
+};
+
+const getKcalFromElement = el => {
+    let innerText = el.innerText;
+    let index = innerText.indexOf(' / ');
+    if (index > -1) {
+        innerText = innerText.substring(0, index);
+    } else {
+        index = innerText.indexOf(' kcal');
+        if (index > -1) {
+            innerText = innerText.substring(0, index);
+        }
+    }
+    return innerText;
+};
+
+const setKcalConsumedProgressBar = () => {
+    const kcalConsumed = document.getElementById('kcal-consumed').innerText;
+    const kcalBudget = document.getElementById('kcal-burned').innerText;
+    const percentage = kcalConsumed / kcalBudget * 100;
+    const text = `${kcalConsumed} / ${kcalBudget}`;
+    progressBar('kcal-consumed-progress-bar').display(percentage, '#30acf0', text);
+    progressArc('kcal-consumed-progress-arc', 'percent', percentage);
+};
+
+const getDecimalPart = num => {
+    return num % 1;
+};
+
+const increaseBiggestNum = nums => {
+    let n = 0;
+    let temp = 0;
+    let res;
+    for (let key in nums) {
+        temp = getDecimalPart(nums[key]);
+        if (n < temp) {
+            n = temp;
+            res = key;
+        }
+    }
+    nums[res] += 1;
+};
+
+const setKcalBurnedProgressBar = () => {
+    const kcalConsumed = document.getElementById('kcal-burned').innerText;
+    const kcalFromActivityLevel = getKcalFromElement(document.getElementById('kcal-activity-level'));
+    const kcalFromBmr = getKcalFromElement(document.getElementById('kcal-bmr'));
+    const kcalFromExercise = getKcalFromElement(document.getElementById('kcal-exercise'));
+    const p1 = kcalFromBmr / kcalConsumed * 100;
+    const p2 = kcalFromActivityLevel / kcalConsumed * 100;
+    const p3 = kcalFromExercise / kcalConsumed * 100;
+
+    let yo = {
+        p1,
+        p2,
+        p3
+    };
+    if (parseFloat(p1.toFixed()) + parseFloat(p2.toFixed()) + parseFloat(p3.toFixed()) < 100) {
+       increaseBiggestNum(yo);
+    }
+    document.getElementById('kcal-bmr-percents').innerText = `${yo.p1.toFixed()}%`;
+    document.getElementById('kcal-activity-percents').innerText = `${yo.p2.toFixed()}%`;
+    document.getElementById('kcal-exercise-percents').innerText = `${yo.p3.toFixed()}%`;
+    const colorJson = {
+        c1: '#f0a24d',
+        c2: '#38c791',
+        c3: '#f36381',
+    };
+    const kcalJson = {
+        p1,
+        p2,
+        p3
+    };
+    distributedProgressBar('kcal-burned-progress-bar').display(kcalJson, colorJson);
+};
+
+const setKcalBudgetProgressBar = () => {
+    const kcalBudget = document.getElementById('kcal-budget').innerText;
+    progressBar('kcal-budget-progress-bar').display(kcalBudget, '#c54ef0', kcalBudget);
+};
+
+const setCanvas = () => {
+    setKcalConsumedProgressBar();
+    setKcalBurnedProgressBar();
+    setKcalBudgetProgressBar();
+};
+
 window.onload = () => {
     setUpModals();
     tabSwitchConfig();
     setUpElementRemoval();
     setUpSearch();
     setUpCategorySettings();
+    setCanvas();
 };

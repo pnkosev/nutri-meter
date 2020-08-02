@@ -66,10 +66,12 @@
             <div id="exercises-done-body">
                 <th:block th:if="${dailyStory != null}">
                     <ul>
-                        <li th:class="consumed-food-item" th:each="exercise : ${dailyStory.getDailyStoryExerciseAssociation()}">
+                        <li th:class="consumed-food-item"
+                            th:each="exercise : ${dailyStory.getDailyStoryExerciseAssociation()}">
                             <i class="fas fa-dumbbell"></i>
                             [[${exercise.name}]] - [[${#numbers.formatDecimal(exercise.duration, 1, 0)}]]mins
-                            [[${#numbers.formatDecimal(exercise.kcalBurnedPerHour * (exercise.duration / 60), 1, 0)}]]kcal
+                            [[${#numbers.formatDecimal(exercise.kcalBurnedPerHour * (exercise.duration / 60), 1,
+                            0)}]]kcal
                             <span class="close delete-exercise" th:association-id="${exercise.id}"
                                   style="font-size:24px">X</span>
                         </li>
@@ -78,8 +80,87 @@
             </div>
         </section>
         <section id="kcal-summary" class="section-block">
-            [[${#numbers.formatDecimal(dailyStory.kcalConsumed, 1, 0)}]]
-            [[${#numbers.formatDecimal(dailyStory.kcalBurned, 1, 0)}]]
+            <h5 class="section-title text-center">Calories summary:</h5>
+            <div class="canvas-container">
+                <div class="canvas-sub-container">
+                    <h6 class="sub-title text-center">CONSUMED</h6>
+                    <div id="canvas-kcal-consumed">
+                        <canvas id="kcal-consumed-progress-bar"></canvas>
+                        <div class="canvas-wrap">
+                            <canvas id="kcal-consumed-progress-arc" width="180" height="180"></canvas>
+                            <span id="kcal-consumed" class="hidden"
+                                  th:text="${#numbers.formatDecimal(dailyStory.kcalConsumed, 1, 0)}"
+                            >
+                        </span>
+                            <span id="percent"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="canvas-sub-container">
+                    <h6 class="sub-title text-center">BURNED</h6>
+                    <div class="canvas-kcal-burned">
+                        <canvas id="kcal-burned-progress-bar"></canvas>
+                        <span
+                                id="kcal-burned"
+                                style="display: none"
+                                th:text="${#numbers.formatDecimal(dailyStory.kcalBurned + kcalFromActivityLevel + kcalFromBMR, 1, 0)}"
+                        >
+                        </span>
+                        <div class="absolute-block" style="display: none">
+                            <div class="info-container">
+                                <div class="info-nums">
+                                    <div class="info-title">BMR</div>
+                                    <div
+                                            id="kcal-bmr"
+                                            th:text="${#numbers.formatDecimal(kcalFromBMR, 1, 0)} + ' / ' + ${#numbers.formatDecimal(dailyStory.kcalBurned + kcalFromActivityLevel + kcalFromBMR, 1, 0)}"
+                                    >
+                                    </div>
+                                </div>
+                                <div class="separator"></div>
+                                <div class="info-percents" id="kcal-bmr-percents"></div>
+                            </div>
+                        </div>
+                        <div class="absolute-block" style="display: none">
+                            <div class="info-container">
+                                <div class="info-nums">
+                                    <div class="info-title">Activity</div>
+                                    <div
+                                            id="kcal-activity-level"
+                                            th:text="${#numbers.formatDecimal(kcalFromActivityLevel, 1, 0)} + ' / ' + ${#numbers.formatDecimal(dailyStory.kcalBurned + kcalFromActivityLevel + kcalFromBMR, 1, 0)}"
+                                    >
+                                    </div>
+                                </div>
+                                <div class="separator"></div>
+                                <div class="info-percents" id="kcal-activity-percents"></div>
+                            </div>
+                        </div>
+                        <div class="absolute-block" style="display: none">
+                            <div class="info-container">
+                                <div class="info-nums">
+                                    <div class="info-title">Exercises</div>
+                                    <div
+                                            id="kcal-exercise"
+                                            th:text="${#numbers.formatDecimal(dailyStory.kcalBurned, 1, 0)} + ' / ' + ${#numbers.formatDecimal(dailyStory.kcalBurned + kcalFromActivityLevel + kcalFromBMR, 1, 0)}"
+                                    >
+                                    </div>
+                                </div>
+                                <div class="separator"></div>
+                                <div class="info-percents" id="kcal-exercise-percents"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="canvas-sub-container">
+                    <h6 class="sub-title text-center">BUDGET</h6>
+                    <canvas id="kcal-budget-progress-bar"></canvas>
+                    <span
+                            id="kcal-budget"
+                            class="hidden"
+                            th:text="${#numbers.formatDecimal(dailyStory.kcalBurned + kcalFromActivityLevel + kcalFromBMR, 1, 0)}"
+                    >
+                     </span>
+                </div>
+            </div>
         </section>
         <section id="nutrients-container">
             <section id="macro" class="nutrients">
@@ -377,7 +458,8 @@
                 <div id="food-categories-block" style="display: none">
                     <label for="food-categories">Food Category</label>
                     <select name="food-categories" id="food-categories">
-                        <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+                        <option th:each="category : ${categories}" th:value="${category.name}"
+                                th:text="${category.name}"></option>
                     </select>
                 </div>
             </div>

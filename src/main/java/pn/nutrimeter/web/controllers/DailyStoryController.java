@@ -60,6 +60,9 @@ public class DailyStoryController extends BaseController {
         mav.addObject("macroTarget", macroTargetServiceModel);
         mav.addObject("microTarget", microTargetServiceModel);
         mav.addObject("categories", foodCategoryServiceModels);
+        mav.addObject("totalKcalTarget", userServiceModel.getTotalKcalTarget());
+        mav.addObject("kcalFromActivityLevel", userServiceModel.getKcalFromActivityLevel());
+        mav.addObject("kcalFromBMR", userServiceModel.getBmr());
 
         return view(mav, "diary/daily-story");
     }
