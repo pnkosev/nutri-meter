@@ -353,6 +353,30 @@ span#percent::after {
     /*visibility: hidden;*/
 }
 
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 5rem;
+    text-align: center;
+    z-index: 2;
+}
+
+#loader .loader-text {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-image: url("/img/bean-eater-loader.gif");
+    background-repeat: no-repeat;
+    background-size: 100px;
+}
+
 @media only screen and (max-width: 500px) {
     div .modal-content {
         width: 80% !important;

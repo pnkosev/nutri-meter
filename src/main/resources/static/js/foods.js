@@ -282,6 +282,8 @@ const getFoods = (URL, table) => {
     const foodAddBlock = document.getElementById('food-add-block');
     foodAddBlock.style.display = 'none';
 
+    loader.show();
+
     fetch(URL)
         .then(res => res.json())
         .then(data => {
@@ -291,6 +293,7 @@ const getFoods = (URL, table) => {
             foods.forEach(f => f.addEventListener('click', (e) => {
                 toggleSelected(e, 'food-add-block');
                 displayFoodBlock(e);
+                loader.hide();
             }));
         });
 };
@@ -701,6 +704,16 @@ const setCanvas = () => {
     setKcalConsumedProgressBar();
     setKcalBurnedProgressBar();
     setKcalBudgetProgressBar();
+};
+
+const loader = {
+    loaderElement: document.getElementById('loader'),
+    show: function() {
+        displayElement(this.loaderElement);
+    },
+    hide: function() {
+        hideElement(this.loaderElement);
+    }
 };
 
 window.onload = () => {
