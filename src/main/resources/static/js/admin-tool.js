@@ -49,10 +49,15 @@ const mote = e => {
 
     const URL = e.target.getAttribute('action');
 
-    fetch(URL, {method: 'post'})
-        .then(() => {
-            window.location.reload();
-        });
+    loader.show();
+
+    setTimeout(() => {
+        fetch(URL, {method: 'post'})
+            .then(() => {
+                loader.hide();
+                window.location.reload();
+            });
+    }, 1000);
 
     return false;
 };
@@ -63,10 +68,15 @@ const remove = e => {
     if (confirm(e.target.getAttribute('data-confirm'))) {
         const URL = e.target.getAttribute('action');
 
-        fetch(URL, {method: 'post'})
-            .then(() => {
-                document.querySelector('a.active').click();
-            });
+        loader.show();
+
+        setTimeout(() => {
+            fetch(URL, {method: 'post'})
+                .then(() => {
+                    document.querySelector('a.active').click();
+                    loader.hide();
+                });
+        }, 1000);
     }
 
     return false;
@@ -117,25 +127,33 @@ const fillCategoryTagContainer = (data, containerName) => {
 };
 
 const fetchUsers = () => {
-    fetch(URLs.users)
-        .then(res => res.json())
-        .then(data => {
+    loader.show();
 
-            fillUserContainer(data, 'users-container');
-            const forms = document.querySelectorAll('#users-container form');
-            forms.forEach(f => f.addEventListener('submit', mote));
-        });
+    setTimeout(() => {
+        fetch(URLs.users)
+            .then(res => res.json())
+            .then(data => {
+                fillUserContainer(data, 'users-container');
+                const forms = document.querySelectorAll('#users-container form');
+                forms.forEach(f => f.addEventListener('submit', mote));
+                loader.hide();
+            });
+    }, 1000);
 };
 
 const fetchCategoriesTags = (url, containerName) => {
-    fetch(url)
-        .then(res => res.json())
-        .then(data => {
+    loader.show();
 
-            fillCategoryTagContainer(data, `${containerName}-container`);
-            const deleteForms = document.querySelectorAll(`#${containerName} form.delete`);
-            deleteForms.forEach(f => f.addEventListener('submit', remove));
-        });
+    setTimeout(() => {
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                fillCategoryTagContainer(data, `${containerName}-container`);
+                const deleteForms = document.querySelectorAll(`#${containerName} form.delete`);
+                deleteForms.forEach(f => f.addEventListener('submit', remove));
+                loader.hide();
+            });
+    }, 1000);
 };
 
 const tabSwitchConfig = (tabLinks, tabs) => {
@@ -208,15 +226,20 @@ const search = () => {
     const searchValue = searchInput.value;
 
     if (searchValue) {
-        fetch(URLs.search + `?username=${searchValue}`)
-            .then(res => res.json())
-            .then(data => {
+        loader.show();
 
-                fillUserContainer(data,"users-container" );
-                searchInput.value = '';
-                const forms = document.querySelectorAll('#users-container form');
-                forms.forEach(f => f.addEventListener('submit', mote));
-            });
+        setTimeout(() => {
+            fetch(URLs.search + `?username=${searchValue}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    fillUserContainer(data,"users-container" );
+                    searchInput.value = '';
+                    const forms = document.querySelectorAll('#users-container form');
+                    forms.forEach(f => f.addEventListener('submit', mote));
+                    loader.hide();
+                });
+        }, 1000);
     }
 };
 

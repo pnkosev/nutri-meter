@@ -33,16 +33,21 @@ const addFood = e => {
         date: date,
     };
 
-    fetch(actionURL, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(json)
-    })
-        .then(() => {
-            window.location = '/diary/' + date;
-        });
+    loader.show();
+
+    setTimeout(() => {
+        fetch(actionURL, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(json)
+        })
+            .then(() => {
+                loader.hide();
+                window.location = '/diary/' + date;
+            });
+    }, 1000);
 
     return false;
 };
@@ -66,16 +71,21 @@ const addExercise = e => {
         date: date,
     };
 
-    fetch(actionURL, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(json)
-    })
-        .then(() => {
-            window.location = '/diary/' + date;
-        });
+    loader.show();
+
+    setTimeout(() => {
+        fetch(actionURL, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(json)
+        })
+            .then(() => {
+                loader.hide();
+                window.location = '/diary/' + date;
+            });
+    }, 1000);
 };
 
 const getCurrentTab = () => {
@@ -102,19 +112,24 @@ const toggleAsFavorite = (e, foodId) => {
         isFavorite
     };
 
-    fetch(URLs.favoriteFoods, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(json)
-    })
-        .then(() => {
-            const currentTab = getCurrentTab();
-            if (currentTab === '#foods-favorite') {
-                document.querySelector(`a[href$="${currentTab}"]`).click();
-            }
-        });
+    loader.show();
+
+    setTimeout(() => {
+        fetch(URLs.favoriteFoods, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(json)
+        })
+            .then(() => {
+                const currentTab = getCurrentTab();
+                if (currentTab === '#foods-favorite') {
+                    document.querySelector(`a[href$="${currentTab}"]`).click();
+                }
+                loader.hide();
+            });
+    }, 1000);
 
     return false;
 };
@@ -160,11 +175,14 @@ const displayFoodBlock = (e) => {
 
     const foodId = li.children[0].value;
 
-    fetch(URLs.food + `/${foodId}`)
-        .then(res => res.json())
-        .then(food => {
-            foodAddBlock.innerHTML =
-                `<div class="text-center">
+    loader.show();
+
+    setTimeout(() => {
+        fetch(URLs.food + `/${foodId}`)
+            .then(res => res.json())
+            .then(food => {
+                foodAddBlock.innerHTML =
+                    `<div class="text-center">
                     <div>
                         <span>${food.name}</span>
                         <span class="fa fa-star favorite-check"></span>
@@ -177,20 +195,22 @@ const displayFoodBlock = (e) => {
                     </form>    
                 </div>`;
 
-            food.measures.forEach(m => {
-                document.getElementById('food-measure').innerHTML += createOption(m);
+                food.measures.forEach(m => {
+                    document.getElementById('food-measure').innerHTML += createOption(m);
+                });
+
+                const favoriteCheck = document.querySelector('.favorite-check');
+                const isFavorite = food.favorite;
+                if (isFavorite) {
+                    favoriteCheck.classList.add('checked');
+                }
+                favoriteCheck.addEventListener('click', (e) => toggleAsFavorite(e, foodId));
+
+                const form = document.getElementById('food-add-form');
+                form.addEventListener('submit', addFood);
+                loader.hide();
             });
-
-            const favoriteCheck = document.querySelector('.favorite-check');
-            const isFavorite = food.favorite;
-            if (isFavorite) {
-                favoriteCheck.classList.add('checked');
-            }
-            favoriteCheck.addEventListener('click', (e) => toggleAsFavorite(e, foodId));
-
-            const form = document.getElementById('food-add-form');
-            form.addEventListener('submit', addFood);
-        });
+    }, 1000);
 };
 
 const checkIfListItemIsSelected = list => {
@@ -250,13 +270,18 @@ const displayExerciseBlock = (e) => {
         const exerciseId = li.children[0].value;
         hideCustomExerciseBlock(elementsAsJson);
 
-        fetch(URLs.exercise + `/${exerciseId}`)
-            .then(res => res.json())
-            .then(data => {
-                elementsAsJson.exerciseInfo.innerHTML = data.name;
-                elementsAsJson.kcalBurnedInfo.innerHTML = `${data.kcalBurnedPerHour}`;
-                elementsAsJson.duration.value = 60;
-            });
+        loader.show();
+
+        setTimeout(() => {
+            fetch(URLs.exercise + `/${exerciseId}`)
+                .then(res => res.json())
+                .then(data => {
+                    elementsAsJson.exerciseInfo.innerHTML = data.name;
+                    elementsAsJson.kcalBurnedInfo.innerHTML = `${data.kcalBurnedPerHour}`;
+                    elementsAsJson.duration.value = 60;
+                    loader.hide();
+                });
+        }, 1000);
     } else {
         revealCustomExerciseBlock(elementsAsJson);
         elementsAsJson.duration.value = '';
@@ -284,32 +309,39 @@ const getFoods = (URL, table) => {
 
     loader.show();
 
-    fetch(URL)
-        .then(res => res.json())
-        .then(data => {
+    setTimeout(() => {
+        fetch(URL)
+            .then(res => res.json())
+            .then(data => {
 
-            fillContainer(data, table);
-            const foods = getTableLine();
-            foods.forEach(f => f.addEventListener('click', (e) => {
-                toggleSelected(e, 'food-add-block');
-                displayFoodBlock(e);
+                fillContainer(data, table);
+                const foods = getTableLine();
+                foods.forEach(f => f.addEventListener('click', (e) => {
+                    toggleSelected(e, 'food-add-block');
+                    displayFoodBlock(e);
+                }));
                 loader.hide();
-            }));
-        });
+            });
+    }, 1000);
 };
 
 const getExercises = (URL, table) => {
-    fetch(URL)
-        .then(res => res.json())
-        .then(data => {
+    loader.show();
 
-            fillContainer(data, table);
-            const exercises = getTableLine();
-            exercises.forEach(f => f.addEventListener('click', (e) => {
-                toggleSelected(e, null);
-                displayExerciseBlock(e);
-            }));
-        });
+    setTimeout(() => {
+        fetch(URL)
+            .then(res => res.json())
+            .then(data => {
+
+                fillContainer(data, table);
+                const exercises = getTableLine();
+                exercises.forEach(f => f.addEventListener('click', (e) => {
+                    toggleSelected(e, null);
+                    displayExerciseBlock(e);
+                }));
+                loader.hide();
+            });
+    }, 1000);
 };
 
 const removeElement = (URL, className) => {
@@ -318,13 +350,20 @@ const removeElement = (URL, className) => {
             f.onclick = () => {
                 const associationId = f.getAttribute('association-id');
 
-                fetch(URL + `/${associationId}`, {
-                    method: 'delete',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                    .then(() => window.location.reload());
+                loader.show();
+
+                setTimeout(() => {
+                    fetch(URL + `/${associationId}`, {
+                        method: 'delete',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(() => {
+                            loader.hide();
+                            window.location.reload();
+                        });
+                }, 1000);
             };
         });
 };
@@ -447,17 +486,22 @@ const search = () => {
     let query = `?name=${searchValue}&type=${currentTabWithoutHashTag}`;
     query += `${getCategoryQuery().toLowerCase()}`;
 
-    fetch(URLs.searchedFoods + query)
-        .then(res => res.json())
-        .then(data => {
-            searchInput.value = '';
-            fillContainer(data, `table-${currentTabWithoutHashTag}`);
-            const foods = getTableLine();
-            foods.forEach(f => f.addEventListener('click', (e) => {
-                toggleSelected(e, 'food-add-block');
-                displayFoodBlock(e);
-            }));
-        });
+    loader.show();
+
+    setTimeout(() => {
+        fetch(URLs.searchedFoods + query)
+            .then(res => res.json())
+            .then(data => {
+                searchInput.value = '';
+                fillContainer(data, `table-${currentTabWithoutHashTag}`);
+                const foods = getTableLine();
+                foods.forEach(f => f.addEventListener('click', (e) => {
+                    toggleSelected(e, 'food-add-block');
+                    displayFoodBlock(e);
+                }));
+                loader.hide();
+            });
+    }, 1000);
 };
 
 const setUpSearch = () => {
@@ -571,8 +615,18 @@ const distributedProgressBar = (canvas) => {
         display: function ({p1, p2, p3}, {c1, c2, c3}) {
             const rects = [
                 {x: 0, y: 0, w: p1 * this.ctx.canvas.width / 100, h: this.ctx.canvas.height},
-                {x: p1 * this.ctx.canvas.width / 100, y: 0, w: p2 * this.ctx.canvas.width / 100, h: this.ctx.canvas.height},
-                {x: p1 * this.ctx.canvas.width / 100 + p2 * this.ctx.canvas.width / 100, y: 0, w: p3 * this.ctx.canvas.width / 100, h: this.ctx.canvas.height},
+                {
+                    x: p1 * this.ctx.canvas.width / 100,
+                    y: 0,
+                    w: p2 * this.ctx.canvas.width / 100,
+                    h: this.ctx.canvas.height
+                },
+                {
+                    x: p1 * this.ctx.canvas.width / 100 + p2 * this.ctx.canvas.width / 100,
+                    y: 0,
+                    w: p3 * this.ctx.canvas.width / 100,
+                    h: this.ctx.canvas.height
+                },
             ];
             let i = 0;
 
@@ -589,14 +643,14 @@ const distributedProgressBar = (canvas) => {
 
             const spans = [...document.getElementsByClassName('absolute-block')];
 
-            can.onmousemove = function(e) {
+            can.onmousemove = function (e) {
                 // important: correct mouse position:
                 const rect = this.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
                 let i = 0;
 
-                while(i < rects.length) {
+                while (i < rects.length) {
                     // add a single rect to path:
                     let r = rects[i++];
                     c.beginPath();
@@ -613,7 +667,7 @@ const distributedProgressBar = (canvas) => {
 
             can.onmouseleave = function (e) {
                 i = 0;
-                while(i < rects.length) {
+                while (i < rects.length) {
                     hideElement(spans[i++]);
                 }
             }
@@ -677,7 +731,7 @@ const setKcalBurnedProgressBar = () => {
         p3
     };
     if (parseFloat(p1.toFixed()) + parseFloat(p2.toFixed()) + parseFloat(p3.toFixed()) < 100) {
-       increaseBiggestNum(yo);
+        increaseBiggestNum(yo);
     }
     document.getElementById('kcal-bmr-percents').innerText = `${yo.p1.toFixed()}%`;
     document.getElementById('kcal-activity-percents').innerText = `${yo.p2.toFixed()}%`;
@@ -704,16 +758,6 @@ const setCanvas = () => {
     setKcalConsumedProgressBar();
     setKcalBurnedProgressBar();
     setKcalBudgetProgressBar();
-};
-
-const loader = {
-    loaderElement: document.getElementById('loader'),
-    show: function() {
-        displayElement(this.loaderElement);
-    },
-    hide: function() {
-        hideElement(this.loaderElement);
-    }
 };
 
 window.onload = () => {

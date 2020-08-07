@@ -6,8 +6,8 @@
 >
 <th:block th:include="~{_shared/head}"/>
 <body>
-<script src="/js/admin-tool.js"></script>
 <th:block th:include="~{_shared/header}"/>
+<th:block th:include="~{_shared/loader}"/>
 <main class="mb-5">
     <div class="container">
         <h2 class="text-center mt-5 mb-5">Admin Tool</h2>
@@ -26,9 +26,9 @@
         <div class="tab-content">
             <div id="all-users" class="container tab-pane active"><br>
                 <h1 class="mt-5 mb-5 text-center">All users</h1>
-                <div class="search-area w-50 text-center">
+                <div class="container w-50 mt-5 search-area">
                     <form
-                            class="form-inline md-form mr-auto text-center"
+                            class="mx-auto w-100"
                             id="user-search-form">
                         <i class="fas fa-search"></i>
                         <input
@@ -106,5 +106,7 @@
     </div>
 </main>
 <th:block th:include="~{_shared/footer}"/>
+<script src="/js/admin-tool.js"></script>
+<script src="/js/loader.js"></script>
 </body>
 </html>
