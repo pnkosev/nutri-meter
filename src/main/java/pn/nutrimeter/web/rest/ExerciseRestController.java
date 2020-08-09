@@ -1,7 +1,12 @@
 package pn.nutrimeter.web.rest;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pn.nutrimeter.error.BaseRuntimeException;
+import pn.nutrimeter.error.IdNotFoundException;
+import pn.nutrimeter.error.InvalidInputException;
 import pn.nutrimeter.service.models.ExerciseServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
 import pn.nutrimeter.service.services.api.DailyStoryExerciseService;
@@ -17,8 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
-public class ExerciseRestController {
+public class ExerciseRestController extends BaseRestController {
 
     private final ExerciseService exerciseService;
 
@@ -28,7 +32,10 @@ public class ExerciseRestController {
 
     private final ModelMapper modelMapper;
 
-    public ExerciseRestController(ExerciseService exerciseService, UserService userService, DailyStoryExerciseService dailyStoryExerciseService, ModelMapper modelMapper) {
+    public ExerciseRestController(ExerciseService exerciseService,
+                                  UserService userService,
+                                  DailyStoryExerciseService dailyStoryExerciseService,
+                                  ModelMapper modelMapper) {
         this.exerciseService = exerciseService;
         this.userService = userService;
         this.dailyStoryExerciseService = dailyStoryExerciseService;
@@ -36,32 +43,38 @@ public class ExerciseRestController {
     }
 
     @GetMapping("/exercises")
-    public List<ExerciseViewModel> getExercises() {
-        return this.exerciseService
+    public ResponseEntity<List<ExerciseViewModel>> getExercises() {
+        List<ExerciseViewModel> exercises = this.exerciseService
                 .getAllNonCustom()
                 .stream()
                 .map(e -> this.modelMapper.map(e, ExerciseViewModel.class))
                 .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.OK).body(exercises);
     }
 
     @GetMapping("/exercise/{exerciseId}")
-    public ExerciseViewModel getExercise(@PathVariable String exerciseId) {
+    public ResponseEntity<ExerciseViewModel> getExercise(@PathVariable String exerciseId) {
         ExerciseServiceModel exerciseServiceModel = this.exerciseService.getById(exerciseId);
-        return this.modelMapper.map(exerciseServiceModel, ExerciseViewModel.class);
+        ExerciseViewModel viewModel = this.modelMapper.map(exerciseServiceModel, ExerciseViewModel.class);
+        return ResponseEntity.status(HttpStatus.OK).body(viewModel);
     }
 
     @PostMapping("/exercise/add")
-    public void addExercise(
+    public ResponseEntity addExercise(
             @RequestBody DailyExerciseBindingModel model,
             Principal principal) {
 
+        // TODO MODEL VALIDATION
+
         Double kcalBurnedPerHour = this.getKcalBurnedPerHour(model.getDuration(), model.getKcalBurned());
 
-        ExerciseServiceModel esm = this.exerciseService.getByNameAndKcalBurnedPerHour(model.getName(), kcalBurnedPerHour);
-        UserServiceModel userModel = this.userService.getUserByUsername(principal.getName());
+        ExerciseServiceModel esm = this.exerciseService
+                .getByNameAndKcalBurnedPerHour(model.getName(), kcalBurnedPerHour);
+        UserServiceModel userModel = this.userService
+                .getUserByUsername(principal.getName());
 
         if (esm == null) {
-            // TODO VALIDATION BEFORE CREATION
             ExerciseServiceModel exerciseServiceModel = this.modelMapper.map(model, ExerciseServiceModel.class);
             exerciseServiceModel.setKcalBurnedPerHour(kcalBurnedPerHour);
             esm = this.exerciseService.create(exerciseServiceModel, userModel.getUsername());
@@ -71,11 +84,14 @@ public class ExerciseRestController {
         LocalDate date = LocalDate.parse(model.getDate(), formatter);
 
         this.dailyStoryExerciseService.create(date, userModel.getId(), esm.getId(), model.getDuration());
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @DeleteMapping("/exercise/{dailyStoryExerciseId}")
-    public void deleteExercise(@PathVariable String dailyStoryExerciseId) {
+    public ResponseEntity deleteExercise(@PathVariable String dailyStoryExerciseId) {
         this.dailyStoryExerciseService.delete(dailyStoryExerciseId);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     private Double getKcalBurnedPerHour(Double duration, Double kcalBurned) {

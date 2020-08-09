@@ -3,6 +3,7 @@ package pn.nutrimeter.web.rest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.repositories.FoodRepository;
 import pn.nutrimeter.web.base.RestApiTestBase;
@@ -10,6 +11,7 @@ import pn.nutrimeter.web.models.view.FoodSimpleViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -39,9 +41,9 @@ class FoodRestControllerTest extends RestApiTestBase {
 //
 //        assertEquals(0, foods.length);
 
-        List<FoodSimpleViewModel> actual = this.foodRestController.allFoods();
+        ResponseEntity<List<FoodSimpleViewModel>> actual = this.foodRestController.allFoods();
 
-        assertEquals(0, foods.size());
+        assertEquals(this.foods.size(), Objects.requireNonNull(actual.getBody()).size());
     }
 
     @Test
@@ -52,8 +54,8 @@ class FoodRestControllerTest extends RestApiTestBase {
                 new Food() {{ setName("Pear"); }}
         ));
 
-        List<FoodSimpleViewModel> actual = this.foodRestController.allFoods();
+        ResponseEntity<List<FoodSimpleViewModel>> actual = this.foodRestController.allFoods();
 
-        assertEquals(3, actual.size());
+        assertEquals(this.foods.size(), Objects.requireNonNull(actual.getBody()).size());
     }
 }

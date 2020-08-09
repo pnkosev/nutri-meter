@@ -34,7 +34,13 @@ public class DailyStoryServiceImpl implements DailyStoryService {
 
     private final ModelMapper modelMapper;
 
-    public DailyStoryServiceImpl(DailyStoryRepository dailyStoryRepository, UserRepository userRepository, DailyStoryFoodFactory dailyStoryFoodFactory, DailyStoryExerciseFactory dailyStoryExerciseFactory, ModelMapper modelMapper) {
+    public DailyStoryServiceImpl(
+            DailyStoryRepository dailyStoryRepository,
+            UserRepository userRepository,
+            DailyStoryFoodFactory dailyStoryFoodFactory,
+            DailyStoryExerciseFactory dailyStoryExerciseFactory,
+            ModelMapper modelMapper
+    ) {
         this.dailyStoryRepository = dailyStoryRepository;
         this.userRepository = userRepository;
         this.dailyStoryFoodFactory = dailyStoryFoodFactory;
@@ -47,7 +53,8 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         Optional<DailyStory> dailyStoryOptional = this.dailyStoryRepository.findByDateAndUserId(date, id);
 
         DailyStory dailyStory;
-        User user = this.userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
+        User user = this.userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
 
         if (dailyStoryOptional.isEmpty()) {
             dailyStory = new DailyStory();

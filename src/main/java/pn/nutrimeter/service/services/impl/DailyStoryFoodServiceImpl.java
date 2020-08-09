@@ -49,7 +49,9 @@ public class DailyStoryFoodServiceImpl implements DailyStoryFoodService {
 
     @Override
     public void delete(String dailyStoryFoodId) {
-        DailyStoryFood dailyStoryFood = this.dailyStoryFoodRepository.findById(dailyStoryFoodId).get();
+        DailyStoryFood dailyStoryFood = this.dailyStoryFoodRepository
+                .findById(dailyStoryFoodId)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.DAILY_STORY_FOOD_NOT_FOUND));
         this.dailyStoryFoodRepository.delete(dailyStoryFood);
     }
 }

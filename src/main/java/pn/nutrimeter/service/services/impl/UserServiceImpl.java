@@ -90,13 +90,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel getUserByUsername(String username) {
-        User user = this.userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(ErrorConstants.USERNAME_NOT_FOUND));
+        User user = this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(ErrorConstants.USERNAME_NOT_FOUND));
         return this.modelMapper.map(user, UserServiceModel.class);
     }
 
     @Override
     public MacroTargetServiceModel getMacroTargetByUserId(String userId, double userWeight) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
         MacroTarget macroTarget = user.getMacroTarget();
 
         return this.macroTargetServiceModelFactory.create(macroTarget, userWeight);
@@ -104,7 +106,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public MicroTargetServiceModel getMicroTargetByUserId(String userId) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
         return this.modelMapper.map(user.getMicroTarget(), MicroTargetServiceModel.class);
     }
 
@@ -139,7 +142,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel promoteUser(String userId) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException("No such user found!"));
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException("No such user found!"));
 
         Set<Role> roles = user.getAuthorities();
 
@@ -156,7 +160,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserServiceModel demoteUser(String userId) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new IdNotFoundException("No such user found!"));
+        User user = this.userRepository.findById(userId)
+                .orElseThrow(() -> new IdNotFoundException("No such user found!"));
 
         Set<Role> roles = user.getAuthorities();
 

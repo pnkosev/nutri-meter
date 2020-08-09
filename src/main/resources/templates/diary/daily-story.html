@@ -5,6 +5,9 @@
 >
 <th:block th:include="~{_shared/head}"/>
 <link rel="stylesheet" href="/css/daily-story-css.css">
+<script src="/js/loader.js"></script>
+<script src="/js/error-handling.js"></script>
+<script src="/js/foods.js"></script>
 <body>
 <th:block th:include="~{_shared/header}"/>
 <th:block th:include="~{_shared/loader}"/>
@@ -60,6 +63,7 @@
                         </li>
                     </ul>
                 </th:block>
+                <small class="error" id="error-container-food"></small>
             </div>
         </section>
         <section id="exercises-done" class="section-block">
@@ -78,6 +82,7 @@
                         </li>
                     </ul>
                 </th:block>
+                <small class="error" id="error-container-exercise"></small>
             </div>
         </section>
         <section id="kcal-summary" class="section-block">
@@ -476,14 +481,17 @@
                     <div class="tab-pane fade show active" id="foods-all" role="tabpanel" aria-labelledby="foods-all">
                         <h6>Name</h6>
                         <ul id="table-foods-all"></ul>
+                        <small class="error" id="error-container-add-food-all"></small>
                     </div>
                     <div class="tab-pane fade" id="foods-custom" role="tabpanel" aria-labelledby="foods-custom">
                         <h6>Name</h6>
                         <ul id="table-foods-custom"></ul>
+                        <small class="error" id="error-container-add-food-custom"></small>
                     </div>
                     <div class="tab-pane fade" id="foods-favorite" role="tabpanel" aria-labelledby="foods-favorite">
                         <h6>Name</h6>
                         <ul id="table-foods-favorite"></ul>
+                        <small class="error" id="error-container-add-food-favorite"></small>
                     </div>
                 </div>
                 <div id="food-add-block" style="display: none">
@@ -540,6 +548,7 @@
                             </div>
                             <button class="btn btn-info">Add</button>
                         </form>
+                        <small class="error" id="error-container-add-exercise"></small>
                     </div>
                 </div>
             </div>
@@ -547,7 +556,5 @@
     </div>
 </main>
 <th:block th:include="~{_shared/footer}"/>
-<script src="/js/foods.js"></script>
-<script src="/js/loader.js"></script>
 </body>
 </html>

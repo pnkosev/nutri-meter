@@ -5,6 +5,9 @@
         xmlns:th="http://www.thymeleaf.org"
 >
 <th:block th:include="~{_shared/head}"/>
+<script src="/js/loader.js"></script>
+<script src="/js/error-handling.js"></script>
+<script src="/js/admin-tool.js"></script>
 <body>
 <th:block th:include="~{_shared/header}"/>
 <th:block th:include="~{_shared/loader}"/>
@@ -46,6 +49,7 @@
                     </form>
                 </div>
                 <section class="container w-50 mt-5">
+                    <small class="error" id="error-container"></small>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead class="thead-dark">
@@ -65,6 +69,7 @@
             <div id="categories" class="container tab-pane fade"><br>
                 <h1 class="mt-5 mb-5 text-center">Food Categories</h1>
                 <section class="container w-50 mt-5">
+                    <small class="error" id="error-container-categories"></small>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead class="thead-dark">
@@ -84,6 +89,7 @@
             </div>
             <div id="tags" class="container tab-pane fade"><br>
                 <h1 class="mt-5 mb-5 text-center">Tags</h1>
+                <small class="error" id="error-container-tags"></small>
                 <section class="container w-50 mt-5">
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -106,7 +112,5 @@
     </div>
 </main>
 <th:block th:include="~{_shared/footer}"/>
-<script src="/js/admin-tool.js"></script>
-<script src="/js/loader.js"></script>
 </body>
 </html>

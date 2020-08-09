@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.Measure;
 import pn.nutrimeter.data.repositories.MeasureRepository;
+import pn.nutrimeter.error.ErrorConstants;
+import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.services.api.MeasureService;
 
@@ -33,7 +35,9 @@ public class MeasureServiceImpl implements MeasureService {
 
     @Override
     public MeasureServiceModel getById(String id) {
-        return this.modelMapper.map(this.measureRepository.findById(id).get(), MeasureServiceModel.class);
+        Measure measure = this.measureRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_MEASURE_ID));
+        return this.modelMapper.map(measure, MeasureServiceModel.class);
     }
 
     @Override
@@ -57,7 +61,9 @@ public class MeasureServiceImpl implements MeasureService {
 
     @Override
     public void delete(String id) {
-        Measure measure = this.measureRepository.findById(id).get();
+        Measure measure = this.measureRepository
+                .findById(id)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_MEASURE_ID));
         this.measureRepository.delete(measure);
     }
 }

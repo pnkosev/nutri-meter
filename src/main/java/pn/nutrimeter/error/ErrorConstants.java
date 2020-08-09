@@ -11,7 +11,9 @@ public class ErrorConstants {
     public static final String INVALID_FOOD_ID = "No such food id!";
     public static final String INVALID_FOOD_MODEL = "Please fill all mandatory fields!";
 
-    public static final String INVALID_EXERCISE_ID = "No such food id!";
+    public static final String INVALID_MEASURE_ID = "No such measure id!";
+
+    public static final String INVALID_EXERCISE_ID = "No such exercise id!";
 
     public static final String INVALID_CATEGORY_ID = "No such category id!";
 
@@ -20,4 +22,8 @@ public class ErrorConstants {
     public static final String INVALID_LIFE_STAGE_GROUP_ID = "No such life stage group id!";
 
     public static final String DAILY_STORY_NOT_FOUND = "No such daily story found!";
+
+    public static final String DAILY_STORY_FOOD_NOT_FOUND = "No such association found!";
+
+    public static final String DAILY_STORY_EXERCISE_NOT_FOUND = "No such association found!";
 }

@@ -41,18 +41,26 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagServiceModel getById(String tagId) {
-        Tag tag = this.tagRepository.findById(tagId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_TAG_ID));
+        Tag tag = this.tagRepository
+                .findById(tagId)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_TAG_ID));
         return this.modelMapper.map(tag, TagServiceModel.class);
     }
 
     @Override
     public void deleteTag(String tagId) {
-        this.tagRepository.delete(this.tagRepository.findById(tagId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_TAG_ID)));
+        this.tagRepository.delete(
+                this.tagRepository
+                        .findById(tagId)
+                        .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_TAG_ID))
+        );
     }
 
     @Override
     public void edit(TagServiceModel tagServiceModel) {
-        Tag tag = this.tagRepository.findById(tagServiceModel.getId()).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_TAG_ID));
+        Tag tag = this.tagRepository
+                .findById(tagServiceModel.getId())
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_TAG_ID));
         this.modelMapper.map(tagServiceModel, tag);
         this.tagRepository.saveAndFlush(tag);
     }

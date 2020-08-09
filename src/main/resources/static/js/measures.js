@@ -28,15 +28,19 @@ const addHiddenInput = id => {
 
 const deleteMeasure = (e) => {
     const id = e.target.parentElement.parentElement.children[4]?.children[0].value;
+
     if (id) {
-        fetch(URLs.deleteMeasure, {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({id})
-        })
-            .then();
+        delayFetchBy1Sec(() => {
+            fetch(URLs.deleteMeasure, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id})
+            })
+                .then(checkFetchResponse)
+                .catch(handleError);
+        });
     }
     e.target.parentNode.parentElement.remove();
     row--;
@@ -105,23 +109,29 @@ const handleFoodForm = () => {
         jsonArray.push(json);
     });
 
-    fetch(URLs.addMeasure, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonArray)
-    })
-        .then(res => res.json())
-        .then(arr => {
-            let index = 0;
-            measureRows.forEach(r => {
-                r.innerHTML += addHiddenInput(arr[index++].id);
-            });
-        })
-        .finally(() => {
-            foodForm.submit();
+    if (jsonArray.length > 0) {
+        delayFetchBy1Sec(() => {
+            fetch(URLs.addMeasure, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonArray)
+            })
+                .then(checkFetchResponse)
+                .then(res => res.json())
+                .then(arr => {
+                    let index = 0;
+                    measureRows.forEach(r => {
+                        r.innerHTML += addHiddenInput(arr[index++].id);
+                    });
+                    foodForm.submit();
+                })
+                .catch(handleError);
         });
+    } else {
+        foodForm.submit();
+    }
 };
 
 const setUpSelect = () => {

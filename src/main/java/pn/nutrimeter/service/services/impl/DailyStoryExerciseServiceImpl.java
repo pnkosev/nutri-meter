@@ -49,8 +49,8 @@ public class DailyStoryExerciseServiceImpl implements DailyStoryExerciseService 
 
     @Override
     public void delete(String dailyStoryExerciseId) {
-        // TODO
-        DailyStoryExercise dailyStoryExercise = this.dailyStoryExerciseRepository.findById(dailyStoryExerciseId).get();
+        DailyStoryExercise dailyStoryExercise = this.dailyStoryExerciseRepository.findById(dailyStoryExerciseId)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.DAILY_STORY_EXERCISE_NOT_FOUND));
         this.dailyStoryExerciseRepository.delete(dailyStoryExercise);
     }
 }

@@ -26,7 +26,9 @@ public class DailyStoryController extends BaseController {
 
     private final FoodCategoryService foodCategoryService;
 
-    public DailyStoryController(UserService userService, DailyStoryService dailyStoryService, FoodCategoryService foodCategoryService) {
+    public DailyStoryController(UserService userService,
+                                DailyStoryService dailyStoryService,
+                                FoodCategoryService foodCategoryService) {
         this.userService = userService;
         this.dailyStoryService = dailyStoryService;
         this.foodCategoryService = foodCategoryService;
@@ -53,8 +55,10 @@ public class DailyStoryController extends BaseController {
         DailyStoryServiceModel dailyStory = this.dailyStoryService.getByDateAndUserId(today, userId);
         mav.addObject("dailyStory", dailyStory);
 
-        MacroTargetServiceModel macroTargetServiceModel = this.userService.getMacroTargetByUserId(userId, dailyStory.getDailyWeight());
-        MicroTargetServiceModel microTargetServiceModel = this.userService.getMicroTargetByUserId(userId);
+        MacroTargetServiceModel macroTargetServiceModel =
+                this.userService.getMacroTargetByUserId(userId, dailyStory.getDailyWeight());
+        MicroTargetServiceModel microTargetServiceModel =
+                this.userService.getMicroTargetByUserId(userId);
         List<FoodCategoryServiceModel> foodCategoryServiceModels = this.foodCategoryService.getAll();
 
         mav.addObject("macroTarget", macroTargetServiceModel);

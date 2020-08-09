@@ -137,7 +137,8 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public FoodServiceModel getById(String id) {
-        Food food = this.foodRepository.findById(id).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
+        Food food = this.foodRepository.findById(id)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
         FoodServiceModel foodServiceModel = this.modelMapper.map(food, FoodServiceModel.class);
 
         User user = this.getUser();
@@ -150,7 +151,8 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public FoodServiceModel addFoodAsFavorite(String foodId) {
-        Food food = this.foodRepository.findById(foodId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
+        Food food = this.foodRepository.findById(foodId)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
         User user = this.getUser();
         user.getFavoriteFoods().add(food);
         this.userRepository.saveAndFlush(user);
@@ -160,7 +162,8 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public FoodServiceModel removeFoodAsFavorite(String foodId) {
-        Food food = this.foodRepository.findById(foodId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
+        Food food = this.foodRepository.findById(foodId)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
         User user = this.getUser();
 
         if (user.getFavoriteFoods().contains(food)) {
@@ -177,7 +180,8 @@ public class FoodServiceImpl implements FoodService {
 
     private User getUser() {
         String username = this.getUsername();
-        return this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(ErrorConstants.USERNAME_NOT_FOUND));
+        return this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(ErrorConstants.USERNAME_NOT_FOUND));
     }
 
     private int getTotalKcal(FoodServiceModel food) {

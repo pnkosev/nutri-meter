@@ -49,17 +49,20 @@ const mote = e => {
 
     const URL = e.target.getAttribute('action');
 
-    loader.show();
-
-    setTimeout(() => {
+    delayFetchBy1Sec(() => {
         fetch(URL, {method: 'post'})
-            .then(() => {
-                loader.hide();
-                window.location.reload();
-            });
-    }, 1000);
+            .then(checkFetchResponse)
+            .then(() => window.location.reload())
+            .catch(handleError);
+    });
 
     return false;
+};
+
+const getCurrentTab = () => {
+    const currentURL = window.location.href;
+    const index = currentURL.indexOf('#');
+    return currentURL.substr(index + 1);
 };
 
 const remove = e => {
@@ -68,15 +71,17 @@ const remove = e => {
     if (confirm(e.target.getAttribute('data-confirm'))) {
         const URL = e.target.getAttribute('action');
 
-        loader.show();
-
-        setTimeout(() => {
+        delayFetchBy1Sec(() => {
             fetch(URL, {method: 'post'})
+                .then(checkFetchResponse)
                 .then(() => {
                     document.querySelector('a.active').click();
-                    loader.hide();
+                })
+                .catch(err => {
+                    // TO DO - SHOW ERROR
+                    handleError(err, `error-container-${getCurrentTab()}`);
                 });
-        }, 1000);
+        });
     }
 
     return false;
@@ -127,33 +132,34 @@ const fillCategoryTagContainer = (data, containerName) => {
 };
 
 const fetchUsers = () => {
-    loader.show();
 
-    setTimeout(() => {
+    delayFetchBy1Sec(() => {
         fetch(URLs.users)
-            .then(res => res.json())
-            .then(data => {
-                fillUserContainer(data, 'users-container');
-                const forms = document.querySelectorAll('#users-container form');
-                forms.forEach(f => f.addEventListener('submit', mote));
-                loader.hide();
-            });
-    }, 1000);
+        .then(checkFetchResponse)  // SAME AS 'res => checkFetchResponse(res)'
+        .then(res => res.json())
+        .then(data => {
+            fillUserContainer(data, 'users-container');
+            const forms = document.querySelectorAll('#users-container form');
+            forms.forEach(f => f.addEventListener('submit', mote));
+        })
+        .catch(handleError);
+    });
 };
 
 const fetchCategoriesTags = (url, containerName) => {
-    loader.show();
-
-    setTimeout(() => {
+    delayFetchBy1Sec(() => {
         fetch(url)
+            .then(checkFetchResponse)
             .then(res => res.json())
             .then(data => {
                 fillCategoryTagContainer(data, `${containerName}-container`);
                 const deleteForms = document.querySelectorAll(`#${containerName} form.delete`);
                 deleteForms.forEach(f => f.addEventListener('submit', remove));
-                loader.hide();
+            })
+            .catch(err => {
+                handleError(err, `error-container-${getCurrentTab()}`);
             });
-    }, 1000);
+    });
 };
 
 const tabSwitchConfig = (tabLinks, tabs) => {
@@ -186,9 +192,7 @@ const tabSwitchConfig = (tabLinks, tabs) => {
 };
 
 const refreshSetup = (tabLinks, tabs) => {
-    const currentURL = window.location.href;
-    const index = currentURL.indexOf('#');
-    const currentTab = currentURL.substr(index + 1);
+    const currentTab = getCurrentTab();
     const allUsers = 'all-users';
     const categories = 'categories';
     const tags = 'tags';
@@ -226,20 +230,18 @@ const search = () => {
     const searchValue = searchInput.value;
 
     if (searchValue) {
-        loader.show();
-
-        setTimeout(() => {
+        delayFetchBy1Sec(() => {
             fetch(URLs.search + `?username=${searchValue}`)
+                .then(checkFetchResponse)
                 .then(res => res.json())
                 .then(data => {
-
-                    fillUserContainer(data,"users-container" );
+                    fillUserContainer(data, "users-container");
                     searchInput.value = '';
                     const forms = document.querySelectorAll('#users-container form');
                     forms.forEach(f => f.addEventListener('submit', mote));
-                    loader.hide();
-                });
-        }, 1000);
+                })
+                .catch(handleError);
+        });
     }
 };
 

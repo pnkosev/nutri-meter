@@ -46,42 +46,4 @@ public class UserRegisterServiceModel {
     private Double totalKcalTarget;
 
     private Set<RoleServiceModel> authorities;
-
-//    private Double proteinTarget;
-//
-//    private Double cysteineRDA;
-//
-//    private Double histidineRDA;
-//
-//    private Double isoleucineRDA;
-//
-//    private Double leucineRDA;
-//
-//    private Double lysineRDA;
-//
-//    private Double methionineRDA;
-//
-//    private Double phenylalineRDA;
-//
-//    private Double threonineRDA;
-//
-//    private Double tryptophanRDA;
-//
-//    private Double tyrosineRDA;
-//
-//    private Double valineRDA;
-//
-//    private Double carbohydrateTarget;
-//
-//    private Double fiberRDA;
-//
-//    private Double lipidTarget;
-//
-//    private Double omega3RDA;
-//
-//    private Double omega6RDA;
-//
-//    private Double saturatedRDA;
-//
-//    private Double transFatsRDA;
 }

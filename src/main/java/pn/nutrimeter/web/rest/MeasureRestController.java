@@ -2,6 +2,8 @@ package pn.nutrimeter.web.rest;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.services.api.MeasureService;
@@ -12,8 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
-public class MeasureRestController {
+public class MeasureRestController extends BaseRestController {
 
     private final MeasureService measureService;
 
@@ -25,18 +26,22 @@ public class MeasureRestController {
     }
 
     @PostMapping("/measure/add")
-    public List<MeasureServiceModel> addMeasures(@RequestBody List<MeasureCreateBindingModel> bindingModelList) {
+    public ResponseEntity<List<MeasureServiceModel>> addMeasures(@RequestBody List<MeasureCreateBindingModel> bindingModelList) {
         ArrayList<MeasureServiceModel> measureServiceModels = new ArrayList<>();
+
         bindingModelList.forEach(m -> {
             MeasureServiceModel measureServiceModel = this.modelMapper.map(m, MeasureServiceModel.class);
             measureServiceModels.add(measureServiceModel);
         });
-        return this.measureService.createAll(measureServiceModels);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.measureService.createAll(measureServiceModels));
     }
 
     @PostMapping("/measure/delete")
-    public void deleteMeasure(@RequestBody Map<String, String> payload) {
+    public ResponseEntity deleteMeasure(@RequestBody Map<String, String> payload) {
         String id = payload.get("id");
         this.measureService.delete(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

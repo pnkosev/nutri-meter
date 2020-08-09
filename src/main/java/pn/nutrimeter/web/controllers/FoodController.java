@@ -54,7 +54,11 @@ public class FoodController extends BaseController {
 
     private final ModelMapper modelMapper;
 
-    public FoodController(FoodService foodService, FoodCategoryService foodCategoryService, TagService tagService, MeasureService measureService, ModelMapper modelMapper) {
+    public FoodController(FoodService foodService,
+                          FoodCategoryService foodCategoryService,
+                          TagService tagService,
+                          MeasureService measureService,
+                          ModelMapper modelMapper) {
         this.foodService = foodService;
         this.foodCategoryService = foodCategoryService;
         this.tagService = tagService;
@@ -81,7 +85,8 @@ public class FoodController extends BaseController {
             mav.addObject("foodCategories", this.foodCategoryService.getAll());
             mav.addObject("tags", this.tagService.getAll());
             if (foodCreateBindingModel.getMeasures() != null) {
-                mav.addObject("measures", this.measureService.getAllFromList(foodCreateBindingModel.getMeasures()));
+                mav.addObject("measures",
+                        this.measureService.getAllFromList(foodCreateBindingModel.getMeasures()));
             }
             return view(mav, FOOD_ADD_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -158,7 +163,9 @@ public class FoodController extends BaseController {
             return view(mav, FOOD_CATEGORY_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        this.foodCategoryService.create(this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class));
+        this.foodCategoryService.create(this.modelMapper.map(
+                foodCategoryCreateBindingModel, FoodCategoryServiceModel.class
+        ));
 
         return redirect(REDIRECT_FOOD_CATEGORY_URL);
     }
@@ -192,7 +199,8 @@ public class FoodController extends BaseController {
             return view(mav, FOOD_CATEGORY_ADD_EDIT_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        FoodCategoryServiceModel foodCategoryServiceModel = this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class);
+        FoodCategoryServiceModel foodCategoryServiceModel =
+                this.modelMapper.map(foodCategoryCreateBindingModel, FoodCategoryServiceModel.class);
         foodCategoryServiceModel.setId(categoryId);
         this.foodCategoryService.edit(foodCategoryServiceModel);
 

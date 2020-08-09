@@ -33,9 +33,7 @@ const addFood = e => {
         date: date,
     };
 
-    loader.show();
-
-    setTimeout(() => {
+    delayFetchBy1Sec(() => {
         fetch(actionURL, {
             method: 'post',
             headers: {
@@ -43,11 +41,14 @@ const addFood = e => {
             },
             body: JSON.stringify(json)
         })
+            .then(checkFetchResponse)
             .then(() => {
-                loader.hide();
                 window.location = '/diary/' + date;
+            })
+            .catch(err => {
+                handleError(err, 'error-container-add-food');
             });
-    }, 1000);
+    });
 
     return false;
 };
@@ -71,9 +72,7 @@ const addExercise = e => {
         date: date,
     };
 
-    loader.show();
-
-    setTimeout(() => {
+    delayFetchBy1Sec(() => {
         fetch(actionURL, {
             method: 'post',
             headers: {
@@ -81,11 +80,12 @@ const addExercise = e => {
             },
             body: JSON.stringify(json)
         })
-            .then(() => {
-                loader.hide();
-                window.location = '/diary/' + date;
+            .then(checkFetchResponse)
+            .then(() => window.location = '/diary/' + date)
+            .catch(err => {
+                handleError(err, 'error-container-add-exercise');
             });
-    }, 1000);
+    });
 };
 
 const getCurrentTab = () => {
@@ -93,6 +93,10 @@ const getCurrentTab = () => {
     const index = currentURL.indexOf('#');
     return currentURL.substr(index);
 };
+
+const getTabNameAfterDash = () => {
+    return getCurrentTab().substr(1).split('-')[1];
+}
 
 const toggleAsFavorite = (e, foodId) => {
     const classList = e.target.classList;
@@ -112,9 +116,7 @@ const toggleAsFavorite = (e, foodId) => {
         isFavorite
     };
 
-    loader.show();
-
-    setTimeout(() => {
+    delayFetchBy1Sec(() => {
         fetch(URLs.favoriteFoods, {
             method: 'post',
             headers: {
@@ -122,14 +124,17 @@ const toggleAsFavorite = (e, foodId) => {
             },
             body: JSON.stringify(json)
         })
+            .then(checkFetchResponse)
             .then(() => {
                 const currentTab = getCurrentTab();
                 if (currentTab === '#foods-favorite') {
                     document.querySelector(`a[href$="${currentTab}"]`).click();
                 }
-                loader.hide();
+            })
+            .catch(err => {
+                handleError(err, 'error-container-add-food');
             });
-    }, 1000);
+    });
 
     return false;
 };
@@ -175,10 +180,9 @@ const displayFoodBlock = (e) => {
 
     const foodId = li.children[0].value;
 
-    loader.show();
-
-    setTimeout(() => {
+    delayFetchBy1Sec(() => {
         fetch(URLs.food + `/${foodId}`)
+            .then(checkFetchResponse)
             .then(res => res.json())
             .then(food => {
                 foodAddBlock.innerHTML =
@@ -192,7 +196,8 @@ const displayFoodBlock = (e) => {
                         <input type="number" name="quantity" id="food-quantity" placeholder="Amount"/>
                         <select id="food-measure"></select>
                         <button class="btn btn-info">Add</button>
-                    </form>    
+                    </form>
+                    <small class="error" id="error-container-add-food"></small> 
                 </div>`;
 
                 food.measures.forEach(m => {
@@ -208,9 +213,13 @@ const displayFoodBlock = (e) => {
 
                 const form = document.getElementById('food-add-form');
                 form.addEventListener('submit', addFood);
-                loader.hide();
+            })
+            .catch(err => {
+                const partialString = getTabNameAfterDash();
+                hideElement(foodAddBlock);
+                handleError(err, `error-container-add-food-${partialString}`);
             });
-    }, 1000);
+    });
 };
 
 const checkIfListItemIsSelected = list => {
@@ -270,18 +279,17 @@ const displayExerciseBlock = (e) => {
         const exerciseId = li.children[0].value;
         hideCustomExerciseBlock(elementsAsJson);
 
-        loader.show();
-
-        setTimeout(() => {
+        delayFetchBy1Sec(() => {
             fetch(URLs.exercise + `/${exerciseId}`)
+                .then(checkFetchResponse)
                 .then(res => res.json())
                 .then(data => {
                     elementsAsJson.exerciseInfo.innerHTML = data.name;
                     elementsAsJson.kcalBurnedInfo.innerHTML = `${data.kcalBurnedPerHour}`;
                     elementsAsJson.duration.value = 60;
-                    loader.hide();
-                });
-        }, 1000);
+                })
+                .catch(err => handleError(err, 'error-container-add-exercise'));
+        });
     } else {
         revealCustomExerciseBlock(elementsAsJson);
         elementsAsJson.duration.value = '';
@@ -303,14 +311,12 @@ const getTableLine = () => {
 };
 
 const getFoods = (URL, table) => {
-    // Get the div with the post form
     const foodAddBlock = document.getElementById('food-add-block');
-    foodAddBlock.style.display = 'none';
+    hideElement(foodAddBlock);
 
-    loader.show();
-
-    setTimeout(() => {
+    delayFetchBy1Sec(() => {
         fetch(URL)
+            .then(checkFetchResponse)
             .then(res => res.json())
             .then(data => {
 
@@ -320,16 +326,18 @@ const getFoods = (URL, table) => {
                     toggleSelected(e, 'food-add-block');
                     displayFoodBlock(e);
                 }));
-                loader.hide();
+            })
+            .catch(err => {
+                const partialString = getTabNameAfterDash();
+                handleError(err, `error-container-add-food-${partialString}`);
             });
-    }, 1000);
+    });
 };
 
 const getExercises = (URL, table) => {
-    loader.show();
-
-    setTimeout(() => {
+    delayFetchBy1Sec(() => {
         fetch(URL)
+            .then(checkFetchResponse)
             .then(res => res.json())
             .then(data => {
 
@@ -339,9 +347,9 @@ const getExercises = (URL, table) => {
                     toggleSelected(e, null);
                     displayExerciseBlock(e);
                 }));
-                loader.hide();
-            });
-    }, 1000);
+            })
+            .catch(err => handleError(err, 'error-container-add-exercise'));
+    });
 };
 
 const removeElement = (URL, className) => {
@@ -349,21 +357,20 @@ const removeElement = (URL, className) => {
         .forEach(f => {
             f.onclick = () => {
                 const associationId = f.getAttribute('association-id');
-
-                loader.show();
-
-                setTimeout(() => {
+                delayFetchBy1Sec(() => {
                     fetch(URL + `/${associationId}`, {
                         method: 'delete',
                         headers: {
                             'Content-Type': 'application/json'
                         }
                     })
-                        .then(() => {
-                            loader.hide();
-                            window.location.reload();
+                        .then(checkFetchResponse)
+                        .then(() => window.location.reload())
+                        .catch(err => {
+                            const item = f.classList[1].split('-')[1]; // food or exercise
+                            handleError(err, `error-container-${item}`);
                         });
-                }, 1000);
+                });
             };
         });
 };
@@ -486,10 +493,9 @@ const search = () => {
     let query = `?name=${searchValue}&type=${currentTabWithoutHashTag}`;
     query += `${getCategoryQuery().toLowerCase()}`;
 
-    loader.show();
-
-    setTimeout(() => {
+    delayFetchBy1Sec(() => {
         fetch(URLs.searchedFoods + query)
+            .then(checkFetchResponse)
             .then(res => res.json())
             .then(data => {
                 searchInput.value = '';
@@ -499,9 +505,12 @@ const search = () => {
                     toggleSelected(e, 'food-add-block');
                     displayFoodBlock(e);
                 }));
-                loader.hide();
+            })
+            .catch(err => {
+                const partialString = getTabNameAfterDash();
+                handleError(err, `error-container-add-food-${partialString}`);
             });
-    }, 1000);
+    });
 };
 
 const setUpSearch = () => {
