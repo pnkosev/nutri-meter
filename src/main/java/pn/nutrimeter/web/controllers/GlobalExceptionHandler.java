@@ -1,11 +1,13 @@
 package pn.nutrimeter.web.controllers;
 
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import pn.nutrimeter.annotation.PageTitle;
+import pn.nutrimeter.error.BaseRuntimeException;
 import pn.nutrimeter.error.DateParseFailureException;
 import pn.nutrimeter.error.UserNotFoundException;
 
@@ -31,13 +33,9 @@ public class GlobalExceptionHandler {
         return this.getModelAndView(throwable);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler(BaseRuntimeException.class)
     @PageTitle("Error")
-    public ModelAndView userNotFoundExceptionHandler(RuntimeException e) { return this.getModelAndView(e); }
-
-    @ExceptionHandler(DateParseFailureException.class)
-    @PageTitle("Error")
-    public ModelAndView DateParseFailureExceptionHandler(DateTimeParseException e) { return this.getModelAndView(e); }
+    public ModelAndView handleCustomExceptions(BaseRuntimeException e) { return this.getModelAndView(e); }
 
     private ModelAndView getModelAndView(Throwable e) {
         ModelAndView mav = new ModelAndView(DEFAULT_ERROR_VIEW);

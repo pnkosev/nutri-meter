@@ -621,19 +621,21 @@ const progressBar = (canvas) => {
 const distributedProgressBar = (canvas) => {
     return {
         ctx: document.getElementById(canvas).getContext('2d'),
-        display: function ({p1, p2, p3}, {c1, c2, c3}) {
+        display: function ({bmrPercentage, activityLevelPercentage, exercisePercentage}, {c1, c2, c3}) {
             const rects = [
-                {x: 0, y: 0, w: p1 * this.ctx.canvas.width / 100, h: this.ctx.canvas.height},
                 {
-                    x: p1 * this.ctx.canvas.width / 100,
+                    x: 0, y: 0, w: bmrPercentage * this.ctx.canvas.width / 100, h: this.ctx.canvas.height
+                },
+                {
+                    x: bmrPercentage * this.ctx.canvas.width / 100,
                     y: 0,
-                    w: p2 * this.ctx.canvas.width / 100,
+                    w: activityLevelPercentage * this.ctx.canvas.width / 100,
                     h: this.ctx.canvas.height
                 },
                 {
-                    x: p1 * this.ctx.canvas.width / 100 + p2 * this.ctx.canvas.width / 100,
+                    x: bmrPercentage * this.ctx.canvas.width / 100 + activityLevelPercentage * this.ctx.canvas.width / 100,
                     y: 0,
-                    w: p3 * this.ctx.canvas.width / 100,
+                    w: exercisePercentage * this.ctx.canvas.width / 100,
                     h: this.ctx.canvas.height
                 },
             ];
@@ -712,17 +714,22 @@ const getDecimalPart = num => {
 };
 
 const increaseBiggestNum = nums => {
+    const objClone = {...nums};
+
     let n = 0;
     let temp = 0;
-    let res;
-    for (let key in nums) {
-        temp = getDecimalPart(nums[key]);
+    let index;
+
+    for (let key in objClone) {
+        temp = getDecimalPart(objClone[key]);
         if (n < temp) {
             n = temp;
-            res = key;
+            index = key;
         }
     }
-    nums[res] += 1;
+    objClone[index] += 1;
+
+    return objClone;
 };
 
 const setKcalBurnedProgressBar = () => {
@@ -730,32 +737,37 @@ const setKcalBurnedProgressBar = () => {
     const kcalFromActivityLevel = getKcalFromElement(document.getElementById('kcal-activity-level'));
     const kcalFromBmr = getKcalFromElement(document.getElementById('kcal-bmr'));
     const kcalFromExercise = getKcalFromElement(document.getElementById('kcal-exercise'));
-    const p1 = kcalFromBmr / kcalConsumed * 100;
-    const p2 = kcalFromActivityLevel / kcalConsumed * 100;
-    const p3 = kcalFromExercise / kcalConsumed * 100;
+    const bmrPercentage = kcalFromBmr / kcalConsumed * 100;
+    const activityLevelPercentage = kcalFromActivityLevel / kcalConsumed * 100;
+    const exercisePercentage = kcalFromExercise / kcalConsumed * 100;
 
-    let yo = {
-        p1,
-        p2,
-        p3
+    let percentages = {
+        bmrPercentage,
+        activityLevelPercentage,
+        exercisePercentage
     };
-    if (parseFloat(p1.toFixed()) + parseFloat(p2.toFixed()) + parseFloat(p3.toFixed()) < 100) {
-        increaseBiggestNum(yo);
+    let adjustedPercentages;
+    if (parseFloat(bmrPercentage.toFixed()) + parseFloat(activityLevelPercentage.toFixed()) + parseFloat(exercisePercentage.toFixed()) < 100) {
+        adjustedPercentages = increaseBiggestNum(percentages);
     }
-    document.getElementById('kcal-bmr-percents').innerText = `${yo.p1.toFixed()}%`;
-    document.getElementById('kcal-activity-percents').innerText = `${yo.p2.toFixed()}%`;
-    document.getElementById('kcal-exercise-percents').innerText = `${yo.p3.toFixed()}%`;
+    document.getElementById('kcal-bmr-percents')
+        .innerText = `${adjustedPercentages
+        ? adjustedPercentages.bmrPercentage.toFixed()
+        : percentages.bmrPercentage.toFixed()}%`;
+    document.getElementById('kcal-activity-percents')
+        .innerText = `${adjustedPercentages
+        ? adjustedPercentages.activityLevelPercentage.toFixed()
+        : percentages.activityLevelPercentage.toFixed()}%`;
+    document.getElementById('kcal-exercise-percents')
+        .innerText = `${adjustedPercentages
+        ? adjustedPercentages.exercisePercentage.toFixed()
+        : percentages.exercisePercentage.toFixed()}%`;
     const colorJson = {
         c1: '#f0a24d',
         c2: '#38c791',
         c3: '#f36381',
     };
-    const kcalJson = {
-        p1,
-        p2,
-        p3
-    };
-    distributedProgressBar('kcal-burned-progress-bar').display(kcalJson, colorJson);
+    distributedProgressBar('kcal-burned-progress-bar').display(percentages, colorJson);
 };
 
 const setKcalBudgetProgressBar = () => {

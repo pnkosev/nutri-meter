@@ -48,12 +48,18 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Getting a daily story by a given date and user ID
+     * @param date given date
+     * @param userId user's ID
+     * @return DailyStoryServiceModel
+     */
     @Override
-    public DailyStoryServiceModel getByDateAndUserId(LocalDate date, String id) {
-        Optional<DailyStory> dailyStoryOptional = this.dailyStoryRepository.findByDateAndUserId(date, id);
+    public DailyStoryServiceModel getByDateAndUserId(LocalDate date, String userId) {
+        Optional<DailyStory> dailyStoryOptional = this.dailyStoryRepository.findByDateAndUserId(date, userId);
 
         DailyStory dailyStory;
-        User user = this.userRepository.findById(id)
+        User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(ErrorConstants.USER_ID_NOT_FOUND));
 
         if (dailyStoryOptional.isEmpty()) {
@@ -84,6 +90,7 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         return dailyStoryServiceModel;
     }
 
+    // extract's a list of DailyStoryExerciseServiceModels from a DailyStory
     private List<DailyStoryExerciseServiceModel> getExerciseModels(DailyStory dailyStory) {
         List<DailyStoryExerciseServiceModel> newList = new ArrayList<>();
         return dailyStory.getDailyStoryFoodAssociation() == null
@@ -98,6 +105,7 @@ public class DailyStoryServiceImpl implements DailyStoryService {
                 .collect(Collectors.toList());
     }
 
+    // extract's a list of DailyStoryFoodServiceModel from a DailyStory
     private List<DailyStoryFoodServiceModel> getFoodModels(DailyStory dailyStory) {
         List<DailyStoryFoodServiceModel> newList = new ArrayList<>();
         return dailyStory.getDailyStoryFoodAssociation() == null
@@ -112,12 +120,14 @@ public class DailyStoryServiceImpl implements DailyStoryService {
                 .collect(Collectors.toList());
     }
 
+    // reduces (sums up) the nutritional values of a list of DailyStoryFoodServiceModels
+    // also reduces the kcal burned from a list of DailyStoryExerciseServiceModels
     private void reduceNutrientsFromListOfFoods(DailyStoryServiceModel dailyStoryServiceModel) {
-        List<DailyStoryFoodServiceModel> dailyStoryFoodAssociation = dailyStoryServiceModel.getDailyStoryFoodAssociation();
         List<DailyStoryExerciseServiceModel> dailyStoryExerciseAssociation = dailyStoryServiceModel.getDailyStoryExerciseAssociation();
+        List<DailyStoryFoodServiceModel> dailyStoryFoodAssociation = dailyStoryServiceModel.getDailyStoryFoodAssociation();
 
-        dailyStoryServiceModel.setKcalConsumed(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getKcal).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setKcalBurned(dailyStoryExerciseAssociation.stream().map(e -> e.getKcalBurnedPerHour() * (e.getDuration() / 60)).reduce(0.0, Double::sum));
+        dailyStoryServiceModel.setKcalConsumed(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getKcal).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setTotalProteins(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getTotalProteins).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setCysteine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getCysteine).reduce(0.0, Double::sum));
         dailyStoryServiceModel.setHistidine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getHistidine).reduce(0.0, Double::sum));

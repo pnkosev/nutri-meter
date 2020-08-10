@@ -7,9 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pn.nutrimeter.data.models.specifications.SearchCriteria;
 import pn.nutrimeter.data.models.specifications.UserSpecification;
-import pn.nutrimeter.error.BaseRuntimeException;
-import pn.nutrimeter.error.IdNotFoundException;
-import pn.nutrimeter.error.InvalidInputException;
 import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.web.models.view.UserSimpleViewModel;
 
@@ -29,6 +26,11 @@ public class UserRestController extends BaseRestController {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Handling an user search get request
+     * @param username user's username
+     * @return ResponseEntity<List<UserSimpleViewModel>>
+     */
     @GetMapping("/users")
     public ResponseEntity<List<UserSimpleViewModel>> searchedUsers(@RequestParam(value = "username") String username) {
         // TODO - VALIDATION AND RETURN APPROPRIATE STATUS IF ERROR
@@ -45,6 +47,10 @@ public class UserRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
+    /**
+     * Handling all users get request
+     * @return ResponseEntity<List<UserSimpleViewModel>>
+     */
     @GetMapping("/user/all")
     public ResponseEntity<List<UserSimpleViewModel>> allUsers() {
         List<UserSimpleViewModel> users = this.userService
@@ -56,12 +62,22 @@ public class UserRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
+    /**
+     * Handling promote user post request
+     * @param userId user's ID
+     * @return ResponseEntity
+     */
     @PostMapping("/user/promote/{userId}")
     public ResponseEntity promoteUser(@PathVariable String userId) {
         this.userService.promoteUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    /**
+     * Handling demote user post request
+     * @param userId user's ID
+     * @return ResponseEntity
+     */
     @PostMapping("/user/demote/{userId}")
     public ResponseEntity demoteUser(@PathVariable String userId) {
         this.userService.demoteUser(userId);

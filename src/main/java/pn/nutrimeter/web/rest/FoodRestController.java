@@ -11,8 +11,6 @@ import pn.nutrimeter.data.models.User;
 import pn.nutrimeter.data.models.specifications.*;
 import pn.nutrimeter.data.models.specifications.builder.SpecificationBuilderImpl;
 import pn.nutrimeter.data.models.specifications.builder.SpecificationBuilder;
-import pn.nutrimeter.error.BaseRuntimeException;
-import pn.nutrimeter.error.IdNotFoundException;
 import pn.nutrimeter.service.facades.AuthenticationFacade;
 import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.models.UserServiceModel;
@@ -60,6 +58,10 @@ public class FoodRestController extends BaseRestController {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Handling all foods get request
+     * @return ResponseEntity<List<FoodSimpleViewModel>>
+     */
     @GetMapping("/foods-all")
     public ResponseEntity<List<FoodSimpleViewModel>> allFoods() {
         List<FoodSimpleViewModel> allNonCustomFoodViewModels = this.foodService
@@ -71,6 +73,10 @@ public class FoodRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(allNonCustomFoodViewModels);
     }
 
+    /**
+     * Handling all custom foods get request
+     * @return ResponseEntity<List<FoodSimpleViewModel>>
+     */
     @GetMapping("/foods-custom")
     public ResponseEntity<List<FoodSimpleViewModel>> allCustomFoods() {
         List<FoodSimpleViewModel> allCustomFoodViewModels = this.foodService
@@ -82,6 +88,10 @@ public class FoodRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(allCustomFoodViewModels);
     }
 
+    /**
+     * Handling all favorite foods get request
+     * @return ResponseEntity<List<FoodSimpleViewModel>>
+     */
     @GetMapping("/foods-favorite")
     public ResponseEntity<List<FoodSimpleViewModel>> allFavoriteFoods() {
         List<FoodSimpleViewModel> favoriteFoodViewModels = this.foodService.getAllFavoritesOfUser()
@@ -92,6 +102,11 @@ public class FoodRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(favoriteFoodViewModels);
     }
 
+    /**
+     * Handling add/remove favorite food post request
+     * @param payload Map with information about the food's ID and if it should be added or removed as favorite
+     * @return ResponseEntity
+     */
     @PostMapping("/foods-favorite")
     public ResponseEntity toggleFavoriteFood(@RequestBody Map<String, String> payload) {
         String foodId = payload.get("foodId");
@@ -108,6 +123,13 @@ public class FoodRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    /**
+     * Handling food search get request
+     * @param name food's name
+     * @param type food's type
+     * @param category food's category
+     * @return ResponseEntity<List<FoodSimpleViewModel>>
+     */
     @GetMapping("/foods")
     public ResponseEntity<List<FoodSimpleViewModel>> searchedFoods(
             @RequestParam(value = "name") String name,
@@ -127,6 +149,11 @@ public class FoodRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(searchedFoods);
     }
 
+    /**
+     * Handling a single food get request
+     * @param foodId food's ID
+     * @return ResponseEntity<FoodDetailedViewModel>
+     */
     @GetMapping("/food/{foodId}")
     public ResponseEntity<FoodDetailedViewModel> getFood(@PathVariable String foodId) {
         FoodDetailedViewModel foodViewModel =
@@ -137,6 +164,13 @@ public class FoodRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(foodViewModel);
     }
 
+    /**
+     * Handling adding food to a dailyStory post request
+     * @param foodId food's ID
+     * @param model daily story food binding model (DTO)
+     * @param principal java interface allowing to retrieve current's user username
+     * @return ResponseEntity
+     */
     @PostMapping("/food/{foodId}")
     public ResponseEntity addFood(
             @PathVariable String foodId,
@@ -158,6 +192,11 @@ public class FoodRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    /**
+     * Handling food removal from a daily story delete request
+     * @param dailyStoryFoodId daily story food ID
+     * @return ResponseEntity
+     */
     @DeleteMapping("/food/{dailyStoryFoodId}")
     public ResponseEntity deleteFood(@PathVariable String dailyStoryFoodId) {
         this.dailyStoryFoodService.delete(dailyStoryFoodId);

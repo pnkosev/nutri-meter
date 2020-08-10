@@ -31,7 +31,7 @@ public class UserController extends BaseController {
     public static final String USER_LOGIN_VIEW = "user/login";
     public static final String ADMIN_TOOL_URL = "/admin-tool";
     public static final String ADMIN_TOOL_VIEW = "user/admin-tool";
-    public static final String REDIRECT_URL = "/login";
+    public static final String REDIRECT_URL = "/user/login";
 
     private final UserService userService;
 
@@ -42,17 +42,29 @@ public class UserController extends BaseController {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Handling user register get request
+     * @param userRegisterBindingModel user register binding model (DTO)
+     * @return ModelAndView
+     */
     @GetMapping(USER_REGISTER_URL)
     @PageTitle("Register")
     public ModelAndView register(UserRegisterBindingModel userRegisterBindingModel) {
         return view(USER_REGISTER_VIEW);
     }
 
+    /**
+     * Handling user register post request
+     * @param userRegisterBindingModel user register binding model (DTO)
+     * @param bindingResult java class allowing to detect errors
+     * @param errorMap error Map for custom errors
+     * @return ModelAndView
+     */
     @PostMapping(USER_REGISTER_URL)
     public ModelAndView registerPost(
             @Valid UserRegisterBindingModel userRegisterBindingModel,
             BindingResult bindingResult,
-            Map<String, String> map) {
+            Map<String, String> errorMap) {
 
         if (bindingResult.hasErrors()) {
             return view(USER_REGISTER_VIEW, HttpStatus.UNPROCESSABLE_ENTITY);
@@ -61,7 +73,7 @@ public class UserController extends BaseController {
         try {
             this.userService.register(this.modelMapper.map(userRegisterBindingModel, UserRegisterServiceModel.class));
         } catch (UserRegisterFailureException | UserAlreadyExistsException e) {
-            map.put("reason", e.getMessage());
+            errorMap.put("reason", e.getMessage());
             return view(USER_REGISTER_VIEW, e.getHttpStatus());
         }
 
@@ -69,12 +81,20 @@ public class UserController extends BaseController {
     }
 
 
+    /**
+     * Handling user login get request
+     * @return ModelAndView
+     */
     @GetMapping(USER_LOGIN_URL)
     @PageTitle("Login")
     public ModelAndView login() {
         return view(USER_LOGIN_VIEW);
     }
 
+    /**
+     * Handling user admin-tool get request
+     * @return ModelAndView
+     */
     @PreAuthorize("hasRole('ROLE_ROOT')")
     @GetMapping(ADMIN_TOOL_URL)
     @PageTitle("Admin tool")

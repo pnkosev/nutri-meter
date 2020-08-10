@@ -10,7 +10,6 @@
 //     }
 // };
 
-
 // THIS VERSION WILL CREATE THE OBJECT AT EACH CALL WHICH IS NOT OPTIMAL
 // const loader = () => {
 //     return {

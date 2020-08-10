@@ -50,6 +50,11 @@ public class FoodServiceImpl implements FoodService {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Creating a food
+     * @param foodServiceModel food service model (DTO)
+     * @return FoodServiceModel
+     */
     @Override
     public FoodServiceModel create(FoodServiceModel foodServiceModel) {
         if (!this.foodValidationService.isValid(foodServiceModel)) {
@@ -58,7 +63,8 @@ public class FoodServiceImpl implements FoodService {
 
         Boolean isCustom = foodServiceModel.getIsCustom();
 
-        foodServiceModel.setIsCustom(isCustom == null || isCustom); // SETS IT TO TRUE IF THE CHECKBOX IS CHECKED OR NULL]
+        // SETS IT TO TRUE IF THE CHECKBOX IS CHECKED OR NULL]
+        foodServiceModel.setIsCustom(isCustom == null || isCustom);
 
         foodServiceModel.setKcalPerHundredGrams(this.getTotalKcal(foodServiceModel));
 
@@ -90,6 +96,10 @@ public class FoodServiceImpl implements FoodService {
         return this.modelMapper.map(food, FoodServiceModel.class);
     }
 
+    /**
+     * Getting all the foods
+     * @return List<FoodServiceModel>
+     */
     @Override
     public List<FoodServiceModel> getAll() {
         return this.foodRepository.findAll()
@@ -98,7 +108,11 @@ public class FoodServiceImpl implements FoodService {
                 .collect(Collectors.toList());
     }
 
-
+    /**
+     * Getting all the foods from a search
+     * @param specification search criteria
+     * @return List<FoodServiceModel>
+     */
     @Override
     public List<FoodServiceModel> getAll(Specification<Food> specification) {
         return this.foodRepository.findAll(specification)
@@ -107,6 +121,10 @@ public class FoodServiceImpl implements FoodService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Getting all non custom foods
+     * @return List<FoodServiceModel>
+     */
     @Override
     public List<FoodServiceModel> getAllNonCustom() {
         return this.foodRepository.findAllNonCustom()
@@ -115,6 +133,10 @@ public class FoodServiceImpl implements FoodService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Getting all custom foods of the currently logged in user
+     * @return List<FoodServiceModel>
+     */
     @Override
     public List<FoodServiceModel> getAllCustomOfUser() {
         String username = this.getUsername();
@@ -125,6 +147,10 @@ public class FoodServiceImpl implements FoodService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Getting all favorite foods of the currently logged in user
+     * @return List<FoodServiceModel>
+     */
     @Override
     public List<FoodServiceModel> getAllFavoritesOfUser() {
         String username = this.getUsername();
@@ -135,9 +161,14 @@ public class FoodServiceImpl implements FoodService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Getting a food by its ID
+     * @param foodId food's ID
+     * @return FoodServiceModel
+     */
     @Override
-    public FoodServiceModel getById(String id) {
-        Food food = this.foodRepository.findById(id)
+    public FoodServiceModel getById(String foodId) {
+        Food food = this.foodRepository.findById(foodId)
                 .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_FOOD_ID));
         FoodServiceModel foodServiceModel = this.modelMapper.map(food, FoodServiceModel.class);
 
@@ -149,6 +180,11 @@ public class FoodServiceImpl implements FoodService {
         return foodServiceModel;
     }
 
+    /**
+     * Adding a food by its ID to the user's favorite list
+     * @param foodId food's ID
+     * @return FoodServiceModel
+     */
     @Override
     public FoodServiceModel addFoodAsFavorite(String foodId) {
         Food food = this.foodRepository.findById(foodId)
@@ -160,6 +196,11 @@ public class FoodServiceImpl implements FoodService {
         return this.modelMapper.map(food, FoodServiceModel.class);
     }
 
+    /**
+     * Removing a food by its ID to the user's favorite list
+     * @param foodId food's ID
+     * @return FoodServiceModel
+     */
     @Override
     public FoodServiceModel removeFoodAsFavorite(String foodId) {
         Food food = this.foodRepository.findById(foodId)

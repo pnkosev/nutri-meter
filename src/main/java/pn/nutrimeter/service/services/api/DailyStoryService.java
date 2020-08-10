@@ -6,5 +6,5 @@ import java.time.LocalDate;
 
 public interface DailyStoryService {
 
-    DailyStoryServiceModel getByDateAndUserId(LocalDate date, String id);
+    DailyStoryServiceModel getByDateAndUserId(LocalDate date, String userId);
 }

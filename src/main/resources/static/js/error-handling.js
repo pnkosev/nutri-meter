@@ -22,7 +22,20 @@ const showErrorMessage = (msg, containerId) => {
     setTimeout(() => {
         container.innerText = '';
     }, 3000);
-    // $.notify(msg, "error");
+
+    // library for pop-ups. If interested- add in head the following links:
+    // <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    // <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    // Toastify({
+    //     text: msg,
+    //     duration: 3000,
+    //     close: true,
+    //     gravity: "top", // `top` or `bottom`
+    //     position: 'right', // `left`, `center` or `right`
+    //     backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+    // }).showToast();
+
     // library for pop-ups. If interested- add in head the following link:
     // <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+    // $.notify(msg, "error");
 };

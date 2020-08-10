@@ -20,7 +20,7 @@ public interface FoodService {
 
     List<FoodServiceModel> getAllFavoritesOfUser();
 
-    FoodServiceModel getById(String id);
+    FoodServiceModel getById(String foodId);
 
     FoodServiceModel addFoodAsFavorite(String foodId);
 

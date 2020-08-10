@@ -20,6 +20,7 @@ import pn.nutrimeter.service.factories.macro_target.MacroTargetServiceModelFacto
 import pn.nutrimeter.service.factories.user.UserFactory;
 import pn.nutrimeter.service.models.*;
 import pn.nutrimeter.service.services.api.UserService;
+import pn.nutrimeter.service.services.impl.UserServiceImpl;
 import pn.nutrimeter.service.services.validation.UserValidationService;
 
 import java.util.*;
@@ -101,7 +102,8 @@ class UserServiceTest extends TestBase {
 
     @Test
     public void register_firstValidUser_shouldReturnCorrect() {
-        List<Role> allRoles = new ArrayList<>(Arrays.asList(new Role("ADMIN"), new Role("USER")));
+        List<Role> allRoles = new ArrayList<>(
+                Arrays.asList(new Role(UserServiceImpl.ROLE_ADMIN), new Role(UserServiceImpl.ROLE_USER)));
 
         User user = this.getUser();
         user.setAuthorities(new HashSet<>(allRoles));
@@ -112,16 +114,20 @@ class UserServiceTest extends TestBase {
         when(this.userRepository.saveAndFlush(user)).thenReturn(user);
 
         UserRegisterServiceModel actual = this.userService.register(this.user);
-        List<String> actualAuthorities = actual.getAuthorities().stream().map(RoleServiceModel::getAuthority).collect(Collectors.toList());
+        List<String> actualAuthorities = actual
+                .getAuthorities()
+                .stream()
+                .map(RoleServiceModel::getAuthority)
+                .collect(Collectors.toList());
 
         assertEquals(USERNAME, user.getUsername());
         assertEquals(2, actual.getAuthorities().size());
-        assertTrue(actualAuthorities.contains("ADMIN"));
+        assertTrue(actualAuthorities.contains(UserServiceImpl.ROLE_ADMIN));
     }
 
     @Test
     public void register_normalUser_shouldReturnCorrect() {
-        Role userRole = new Role("USER");
+        Role userRole = new Role(UserServiceImpl.ROLE_USER);
 
         User user = this.getUser();
         user.setAuthorities(new HashSet<>());
@@ -129,14 +135,14 @@ class UserServiceTest extends TestBase {
 
         when(this.userFactory.create(this.user)).thenReturn(user);
         when(this.userRepository.count()).thenReturn(1L);
-        when(this.roleRepository.findByAuthority("USER")).thenReturn(userRole);
+        when(this.roleRepository.findByAuthority(UserServiceImpl.ROLE_USER)).thenReturn(userRole);
         when(this.userRepository.saveAndFlush(user)).thenReturn(user);
 
         UserRegisterServiceModel actual = this.userService.register(this.user);
 
         assertEquals(USERNAME, user.getUsername());
         assertEquals(1, actual.getAuthorities().size());
-        assertEquals("USER", new ArrayList<>(actual.getAuthorities()).get(0).getAuthority());
+        assertEquals(UserServiceImpl.ROLE_USER, new ArrayList<>(actual.getAuthorities()).get(0).getAuthority());
     }
 
     @Test

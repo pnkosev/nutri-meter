@@ -35,10 +35,15 @@ class UserControllerTest extends MvcTestBase {
     @MockBean
     MicroTargetRepository mockMicroTargetRepository;
 
+
+    public static final String BASE_USER_URL = "/user";
+    public static final String USER_REGISTER_URL = BASE_USER_URL + UserController.USER_REGISTER_URL;
+    public static final String USER_LOGIN_URL = BASE_USER_URL + UserController.USER_LOGIN_URL;
+
     @Test
     public void register_withAnonymousUser_shouldReturnCorrect() throws Exception {
         this.mockMvc
-                .perform(get(UserController.USER_REGISTER_URL))
+                .perform(get(USER_REGISTER_URL))
                 .andExpect(status().isOk())
                 .andExpect(view().name(UserController.USER_REGISTER_VIEW));
     }
@@ -47,7 +52,7 @@ class UserControllerTest extends MvcTestBase {
     @WithMockUser
     public void register_withAuthenticatedUser_shouldReturnError() throws Exception {
         this.mockMvc
-                .perform(get(UserController.USER_REGISTER_URL))
+                .perform(get(USER_REGISTER_URL))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -66,7 +71,7 @@ class UserControllerTest extends MvcTestBase {
         when(this.mockMicroTargetRepository.findByLifeStageGroupId(any())).thenReturn(Optional.of(microTarget));
 
         this.mockMvc
-                .perform(post(UserController.USER_REGISTER_URL)
+                .perform(post(USER_REGISTER_URL)
                         .param("username", "username")
                         .param("email", "test@test.com")
                         .param("password", "Password1")
@@ -83,7 +88,7 @@ class UserControllerTest extends MvcTestBase {
     @Test
     public void registerPost_whenBindingResultHasErrors_shouldResultInInputError() throws Exception {
         this.mockMvc
-                .perform(post(UserController.USER_REGISTER_URL)
+                .perform(post(USER_REGISTER_URL)
                         .param("username", "u")
                         .param("email", "test@test.com")
                         .param("password", "Password1")
@@ -100,7 +105,7 @@ class UserControllerTest extends MvcTestBase {
     @Test
     public void registerPost_whenPasswordsDoNotMatch_shouldResultInInputError() throws Exception {
         this.mockMvc
-                .perform(post(UserController.USER_REGISTER_URL)
+                .perform(post(USER_REGISTER_URL)
                         .param("username", "username")
                         .param("email", "test@test.com")
                         .param("password", "Password1")
@@ -119,7 +124,7 @@ class UserControllerTest extends MvcTestBase {
         when(this.mockUserRepository.existsByUsername(any())).thenReturn(true);
 
         this.mockMvc
-                .perform(post(UserController.USER_REGISTER_URL)
+                .perform(post(USER_REGISTER_URL)
                         .param("username", "username")
                         .param("email", "test@test.com")
                         .param("password", "Password1")
@@ -138,7 +143,7 @@ class UserControllerTest extends MvcTestBase {
         when(this.mockUserRepository.existsByEmail(any())).thenReturn(true);
 
         this.mockMvc
-                .perform(post(UserController.USER_REGISTER_URL)
+                .perform(post(USER_REGISTER_URL)
                         .param("username", "username")
                         .param("email", "test@test.com")
                         .param("password", "Password1")
@@ -155,7 +160,7 @@ class UserControllerTest extends MvcTestBase {
     @Test
     public void login_whenAnonymous_shouldReturnCorrect() throws Exception {
         this.mockMvc
-                .perform(get(UserController.USER_LOGIN_URL))
+                .perform(get(USER_LOGIN_URL))
                 .andExpect(status().isOk())
                 .andExpect(view().name(UserController.USER_LOGIN_VIEW));
     }

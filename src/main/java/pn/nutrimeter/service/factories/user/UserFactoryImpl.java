@@ -63,7 +63,7 @@ public class UserFactoryImpl implements UserFactory {
 
         LifeStageGroup lifeStageGroup = this.lifeStageGroupRepository
                 .findLifeStageGroupBySexAndAge(userSex, yearsOld)
-                .orElseThrow(() -> new LifeStageGroupNotFoundException("No such life stage group found!"));
+                .orElseThrow(() -> new LifeStageGroupNotFoundException(ErrorConstants.LIFE_STAGE_GROUP_NOT_FOUND));
         user.setLifeStageGroup(lifeStageGroup);
         user.setMicroTarget(this.microTargetRepository
                 .findByLifeStageGroupId(lifeStageGroup.getId())
@@ -74,11 +74,22 @@ public class UserFactoryImpl implements UserFactory {
 
         user.setBmr(this.userCalculationService.calculateBMR(userSexAsString, userWeight, userHeight, yearsOld));
         user.setBmi(this.userCalculationService.calculateBMI(userWeight, userHeight));
-        user.setBodyFat(this.userCalculationService.calculateBodyFat(yearsOld, user.getAgeCategory().name(), userSexAsString, user.getBmi()));
-        user.setKcalFromActivityLevel(this.userCalculationService.calculateKcalFromActivityLevel(user.getActivityLevel().name(), user.getBmr()));
+        user.setBodyFat(this.userCalculationService
+                .calculateBodyFat(yearsOld, user.getAgeCategory().name(), userSexAsString, user.getBmi())
+        );
+        user.setKcalFromActivityLevel(this.userCalculationService
+                .calculateKcalFromActivityLevel(user.getActivityLevel().name(), user.getBmr())
+        );
         user.setKilosPerWeek(DEFAULT_KILOS_PER_WEEK);
         user.setKcalFromTarget(this.userCalculationService.calculateKcalFromWeightTarget(user.getKilosPerWeek()));
-        user.setTotalKcalTarget(this.userCalculationService.calculateTotalKcal(user.getBmr(), user.getKcalFromActivityLevel(), user.getTargetWeight(), userWeight, user.getKcalFromTarget()));
+        user.setTotalKcalTarget(this.userCalculationService
+                .calculateTotalKcal(
+                        user.getBmr(),
+                        user.getKcalFromActivityLevel(),
+                        user.getTargetWeight(),
+                        userWeight,
+                        user.getKcalFromTarget()
+                ));
 
         return user;
     }

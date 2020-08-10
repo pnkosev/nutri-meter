@@ -34,6 +34,12 @@ public class DailyStoryController extends BaseController {
         this.foodCategoryService = foodCategoryService;
     }
 
+    /**
+     * Handling diary get request
+     * @param date date
+     * @param principal java interface allowing to retrieve current's user username
+     * @return ModelAndView
+     */
     @GetMapping("/diary/{date}")
     @PageTitle("diary")
     public ModelAndView dailyStory(@PathVariable String date, Principal principal) {

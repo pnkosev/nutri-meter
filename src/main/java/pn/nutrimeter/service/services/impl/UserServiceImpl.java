@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final String ROLE_ROOT = "ROLE_ROOT";
-    private static final String ROLE_ADMIN = "ROLE_ADMIN";
-    private static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ROOT = "ROLE_ROOT";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_USER = "ROLE_USER";
 
     private final UserRepository userRepository;
 
@@ -57,6 +57,11 @@ public class UserServiceImpl implements UserService {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Register an user
+     * @param userRegisterServiceModel user service model (DTO)
+     * @return UserRegisterServiceModel
+     */
     @Override
     public UserRegisterServiceModel register(UserRegisterServiceModel userRegisterServiceModel) {
         if (!this.userValidationService.isNotNull(userRegisterServiceModel)) {
@@ -88,6 +93,11 @@ public class UserServiceImpl implements UserService {
         return this.modelMapper.map(this.userRepository.saveAndFlush(user), UserRegisterServiceModel.class);
     }
 
+    /**
+     * Getting an user by a given username
+     * @param username user's username
+     * @return UserServiceModel
+     */
     @Override
     public UserServiceModel getUserByUsername(String username) {
         User user = this.userRepository.findByUsername(username)
@@ -95,6 +105,13 @@ public class UserServiceImpl implements UserService {
         return this.modelMapper.map(user, UserServiceModel.class);
     }
 
+    /**
+     * Getting user's macro target user service model (DTO) by user's ID
+     * (creating it first according to user's weight)
+     * @param userId user's ID
+     * @param userWeight user's weight
+     * @return MacroTargetServiceModel
+     */
     @Override
     public MacroTargetServiceModel getMacroTargetByUserId(String userId, double userWeight) {
         User user = this.userRepository.findById(userId)
@@ -104,6 +121,11 @@ public class UserServiceImpl implements UserService {
         return this.macroTargetServiceModelFactory.create(macroTarget, userWeight);
     }
 
+    /**
+     * Getting user's micro target by user's ID
+     * @param userId user's ID
+     * @return MicroTargetServiceModel
+     */
     @Override
     public MicroTargetServiceModel getMicroTargetByUserId(String userId) {
         User user = this.userRepository.findById(userId)
@@ -111,6 +133,10 @@ public class UserServiceImpl implements UserService {
         return this.modelMapper.map(user.getMicroTarget(), MicroTargetServiceModel.class);
     }
 
+    /**
+     * Getting all users EXCEPT for the root
+     * @return List<UserServiceModel>
+     */
     @Override
     public List<UserServiceModel> getAllUsers() {
         Role roleRoot = roleRepository.findByAuthority("ROLE_ROOT");
@@ -122,6 +148,12 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Getting all users according to a search criteria
+     * Using Specification<User>
+     * @param specification search criteria
+     * @return List<UserServiceModel>
+     */
     @Override
     public List<UserServiceModel> getAllUsers(Specification<User> specification) {
         return this.userRepository.findAll(specification)
@@ -140,6 +172,11 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Promoting an user
+     * @param userId user's ID
+     * @return UserServiceModel
+     */
     @Override
     public UserServiceModel promoteUser(String userId) {
         User user = this.userRepository.findById(userId)
@@ -158,6 +195,11 @@ public class UserServiceImpl implements UserService {
         return this.modelMapper.map(user, UserServiceModel.class);
     }
 
+    /**
+     * Demoting an user
+     * @param userId user's ID
+     * @return UserServiceModel
+     */
     @Override
     public UserServiceModel demoteUser(String userId) {
         User user = this.userRepository.findById(userId)
@@ -177,6 +219,11 @@ public class UserServiceImpl implements UserService {
         return this.modelMapper.map(user, UserServiceModel.class);
     }
 
+    /**
+     * Load user by username
+     * @param username username of the logged in user
+     * @return UserDetails
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
         return this.userRepository

@@ -66,6 +66,11 @@ public class FoodController extends BaseController {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Handling food adding get request
+     * @param foodCreateBindingModel food create binding model (DTO)
+     * @return ModelAndView
+     */
     @GetMapping(FOOD_ADD_URL)
     @PageTitle("Add Food")
     public ModelAndView addFood(FoodCreateBindingModel foodCreateBindingModel) {
@@ -75,6 +80,12 @@ public class FoodController extends BaseController {
         return view(mav, FOOD_ADD_VIEW);
     }
 
+    /**
+     * Handling food adding post request
+     * @param foodCreateBindingModel food create binding model (DTO)
+     * @param bindingResult java class allowing to detect errors
+     * @return ModelAndView
+     */
     @PostMapping(FOOD_ADD_URL)
     public ModelAndView addFoodPost(
             @Valid FoodCreateBindingModel foodCreateBindingModel,
@@ -144,6 +155,11 @@ public class FoodController extends BaseController {
         return redirect(REDIRECT_HOME_URL);
     }
 
+    /**
+     * Handling food category adding get request
+     * @param foodCategoryCreateBindingModel food category create binding model (DTO)
+     * @return ModelAndView
+     */
     @GetMapping(FOOD_CATEGORY_ADD_URL)
     @PageTitle("Add Category")
     public ModelAndView addCategory(FoodCategoryCreateBindingModel foodCategoryCreateBindingModel) {
@@ -152,6 +168,12 @@ public class FoodController extends BaseController {
         return view(mav, FOOD_CATEGORY_ADD_EDIT_VIEW);
     }
 
+    /**
+     * Handling food category adding post request
+     * @param foodCategoryCreateBindingModel food category create binding model (DTO)
+     * @param bindingResult java class allowing to detect errors
+     * @return ModelAndView
+     */
     @PostMapping(FOOD_CATEGORY_ADD_URL)
     public ModelAndView addCategoryPost(
             @Valid FoodCategoryCreateBindingModel foodCategoryCreateBindingModel,
@@ -170,6 +192,12 @@ public class FoodController extends BaseController {
         return redirect(REDIRECT_FOOD_CATEGORY_URL);
     }
 
+    /**
+     * Handling food category editing get request
+     * @param categoryId food category's ID
+     * @param foodCategoryCreateBindingModel food category create binding model (DTO)
+     * @return ModelAndView
+     */
     @GetMapping(FOOD_CATEGORY_EDIT_URL)
     @PageTitle("Edit Category")
     public ModelAndView editCategory(
@@ -185,6 +213,13 @@ public class FoodController extends BaseController {
         return view(mav, FOOD_CATEGORY_ADD_EDIT_VIEW);
     }
 
+    /**
+     * Handling food category editing post request
+     * @param categoryId food category's ID
+     * @param foodCategoryCreateBindingModel food category create binding model (DTO)
+     * @param bindingResult java class allowing to detect errors
+     * @return ModelAndView
+     */
     @PostMapping(FOOD_CATEGORY_EDIT_URL)
     public ModelAndView editCategoryPost(
             @PathVariable String categoryId,
@@ -207,6 +242,11 @@ public class FoodController extends BaseController {
         return redirect(REDIRECT_FOOD_CATEGORY_URL);
     }
 
+    /**
+     * Handling tag adding get request
+     * @param tagCreateBindingModel tag create binding model (DTO)
+     * @return ModelAndView
+     */
     @GetMapping(FOOD_TAG_ADD_URL)
     @PageTitle("Add Tag")
     public ModelAndView addTag(TagCreateBindingModel tagCreateBindingModel) {
@@ -215,6 +255,12 @@ public class FoodController extends BaseController {
         return view(mav, FOOD_TAG_ADD_EDIT_VIEW);
     }
 
+    /**
+     * Handling tag adding get request
+     * @param tagCreateBindingModel tag create binding model (DTO)
+     * @param bindingResult java class allowing to detect errors
+     * @return ModelAndView
+     */
     @PostMapping(FOOD_TAG_ADD_URL)
     public ModelAndView addTagPost(
             @Valid TagCreateBindingModel tagCreateBindingModel,
@@ -231,6 +277,12 @@ public class FoodController extends BaseController {
         return redirect(REDIRECT_TAG_URL);
     }
 
+    /**
+     * Handling tag editing get request
+     * @param tagId tag's ID
+     * @param tagCreateBindingModel tag create binding model (DTO)
+     * @return ModelAndView
+     */
     @GetMapping(FOOD_TAG_EDIT_URL)
     @PageTitle("Edit Tag")
     public ModelAndView editTag(
@@ -246,6 +298,13 @@ public class FoodController extends BaseController {
         return view(mav, FOOD_TAG_ADD_EDIT_VIEW);
     }
 
+    /**
+     * Handling tag editing post request
+     * @param tagId tag's ID
+     * @param tagCreateBindingModel tag create binding model (DTO)
+     * @param bindingResult java class allowing to detect errors
+     * @return ModelAndView
+     */
     @PostMapping(FOOD_TAG_EDIT_URL)
     public ModelAndView editTagPost(
             @PathVariable String tagId,

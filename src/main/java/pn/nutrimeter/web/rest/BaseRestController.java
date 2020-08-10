@@ -11,7 +11,7 @@ public class BaseRestController {
     protected BaseRestController() {}
 
     @ExceptionHandler(BaseRuntimeException.class)
-    public ResponseEntity<String> handleIdNotFoundException(BaseRuntimeException e) {
+    public ResponseEntity<String> handleCustomException(BaseRuntimeException e) {
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
 }

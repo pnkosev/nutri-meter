@@ -42,6 +42,10 @@ public class ExerciseRestController extends BaseRestController {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Handling all exercises get request
+     * @return ResponseEntity<List<ExerciseViewModel>>
+     */
     @GetMapping("/exercises")
     public ResponseEntity<List<ExerciseViewModel>> getExercises() {
         List<ExerciseViewModel> exercises = this.exerciseService
@@ -53,6 +57,11 @@ public class ExerciseRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(exercises);
     }
 
+    /**
+     * Handling a single exercise get request
+     * @param exerciseId exercise's ID
+     * @return ResponseEntity<ExerciseViewModel>
+     */
     @GetMapping("/exercise/{exerciseId}")
     public ResponseEntity<ExerciseViewModel> getExercise(@PathVariable String exerciseId) {
         ExerciseServiceModel exerciseServiceModel = this.exerciseService.getById(exerciseId);
@@ -60,6 +69,12 @@ public class ExerciseRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(viewModel);
     }
 
+    /**
+     * Handling exercise add post request
+     * @param model daily exercise binding model (DTO)
+     * @param principal java interface allowing to retrieve current's user username
+     * @return ResponseEntity
+     */
     @PostMapping("/exercise/add")
     public ResponseEntity addExercise(
             @RequestBody DailyExerciseBindingModel model,
@@ -88,6 +103,11 @@ public class ExerciseRestController extends BaseRestController {
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
+    /**
+     * Handling exerceise removal from a daily story delete request
+     * @param dailyStoryExerciseId daily story exercise' ID
+     * @return ResponseEntity
+     */
     @DeleteMapping("/exercise/{dailyStoryExerciseId}")
     public ResponseEntity deleteExercise(@PathVariable String dailyStoryExerciseId) {
         this.dailyStoryExerciseService.delete(dailyStoryExerciseId);
