@@ -2,6 +2,7 @@ package pn.nutrimeter.web.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -160,6 +161,7 @@ public class FoodController extends BaseController {
      * @param foodCategoryCreateBindingModel food category create binding model (DTO)
      * @return ModelAndView
      */
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     @GetMapping(FOOD_CATEGORY_ADD_URL)
     @PageTitle("Add Category")
     public ModelAndView addCategory(FoodCategoryCreateBindingModel foodCategoryCreateBindingModel) {
@@ -198,6 +200,7 @@ public class FoodController extends BaseController {
      * @param foodCategoryCreateBindingModel food category create binding model (DTO)
      * @return ModelAndView
      */
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     @GetMapping(FOOD_CATEGORY_EDIT_URL)
     @PageTitle("Edit Category")
     public ModelAndView editCategory(
@@ -220,6 +223,7 @@ public class FoodController extends BaseController {
      * @param bindingResult java class allowing to detect errors
      * @return ModelAndView
      */
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     @PostMapping(FOOD_CATEGORY_EDIT_URL)
     public ModelAndView editCategoryPost(
             @PathVariable String categoryId,
@@ -247,6 +251,7 @@ public class FoodController extends BaseController {
      * @param tagCreateBindingModel tag create binding model (DTO)
      * @return ModelAndView
      */
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     @GetMapping(FOOD_TAG_ADD_URL)
     @PageTitle("Add Tag")
     public ModelAndView addTag(TagCreateBindingModel tagCreateBindingModel) {
@@ -261,6 +266,7 @@ public class FoodController extends BaseController {
      * @param bindingResult java class allowing to detect errors
      * @return ModelAndView
      */
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     @PostMapping(FOOD_TAG_ADD_URL)
     public ModelAndView addTagPost(
             @Valid TagCreateBindingModel tagCreateBindingModel,
@@ -283,6 +289,7 @@ public class FoodController extends BaseController {
      * @param tagCreateBindingModel tag create binding model (DTO)
      * @return ModelAndView
      */
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     @GetMapping(FOOD_TAG_EDIT_URL)
     @PageTitle("Edit Tag")
     public ModelAndView editTag(
@@ -305,6 +312,7 @@ public class FoodController extends BaseController {
      * @param bindingResult java class allowing to detect errors
      * @return ModelAndView
      */
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     @PostMapping(FOOD_TAG_EDIT_URL)
     public ModelAndView editTagPost(
             @PathVariable String tagId,

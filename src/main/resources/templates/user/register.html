@@ -15,6 +15,9 @@
             <div class="form-group usernameInput">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" placeholder="Username"
+                       required
+                       pattern="[A-z0-9]{2,15}"
+                       title="Between 2 and 15 symbols"
                        th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"
                        th:field="*{username}">
                 <small class="error" th:if="${#fields.errors('username')}" th:errors="*{username}"></small>
@@ -22,6 +25,9 @@
             <div class="form-group emailInput">
                 <label for="email">Email address</label>
                 <input type="email" class="form-control" id="email" placeholder="example@domain.com"
+                       required
+                       pattern="^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,6}$"
+                       title="Valid email"
                        th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
                        th:field="*{email}">
                 <small class="error" th:if="${#fields.errors('email')}" th:errors="*{email}"></small>
@@ -29,6 +35,9 @@
             <div class="form-group passwordInput">
                 <label for="password">Password</label>
                 <input type="password" class="form-control" id="password" placeholder="Password"
+                       required
+                       pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,20}$"
+                       title="1 lower, 1 upper case and 1 digit- between 8 and 20 characters"
                        th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
                        th:field="*{password}">
                 <small class="error" th:if="${#fields.errors('password')}" th:errors="*{password}"></small>
@@ -36,13 +45,17 @@
             <div class="form-group confirmPasswordInput">
                 <label for="confirmPass">Confirm Password</label>
                 <input type="password" class="form-control" id="confirmPass" placeholder="Confirm password"
+                       required
+                       pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,20}$"
+                       title="1 lower, 1 upper case and 1 digit- between 8 and 20 characters"
                        th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid'"
                        th:field="*{confirmPassword}">
                 <small class="error" th:if="${#fields.errors('confirmPassword')}" th:errors="*{confirmPassword}"></small>
             </div>
             <th:block th:each="value,iter : ${T(pn.nutrimeter.data.models.enums.Sex).values()}" th:if="${iter.index} < 2">
                 <div class="form-group form-check mt-3 sexInput">
-                    <input class="form-check-input" type="radio" name="sex" th:id="sex + ${iter.index}"
+                    <input class="form-check-input" type="radio" name="sex"
+                           th:id="sex + ${iter.index}"
                            th:value="${value}" th:checked="${iter.index == 0 ? 'true' : 'false'}">
                     <label class="form-check-label" th:for="sex + ${iter.index}">
                         [[${value}]]
@@ -52,6 +65,9 @@
             <div class="form-group birthday">
                 <label for="birthday">Born</label>
                 <input type="date" class="form-control" id="birthday" name="birthday"
+                       required
+                       pattern="^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$"
+                       title="Date in format mm/dd/yyyy"
                        th:classappend="${#fields.hasErrors('birthday')} ? 'is-invalid'"
                        th:field="*{birthday}">
                 <small class="error" th:if="${#fields.errors('birthday')}" th:errors="*{birthday}"></small>
@@ -64,7 +80,10 @@
             </div>
             <div class="form-group weightInput">
                 <label for="weight">Weight</label>
-                <input type="number" class="form-control" id="weight"
+                <input type="text" class="form-control" id="weight"
+                       required
+                       pattern="^([3-9]|[1-8][0-9]|9[0-9]|1[0-9]{2}|200)$"
+                       title="Range between 3 and 200"
                        th:classappend="${#fields.hasErrors('weight')} ? 'is-invalid'"
                        th:field="*{weight}">
                 <small class="error" th:if="${#fields.errors('weight')}" th:errors="*{weight}"></small>
@@ -76,7 +95,10 @@
             <div class="form-group weightInput">
                 <label for="height">Height</label>
                 <span>
-                    <input type="number" class="form-control" id="height"
+                    <input type="text" class="form-control" id="height"
+                           required
+                           pattern="^([5-8][0-9]|9[0-9]|1[0-9]{2}|2[0-4][0-9]|250)$"
+                           title="Range between 50 and 250"
                            th:classappend="${#fields.hasErrors('height')} ? 'is-invalid'"
                            th:field="*{height}">
                     <small class="error" th:if="${#fields.errors('height')}" th:errors="*{height}"></small>

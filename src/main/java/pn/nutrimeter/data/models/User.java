@@ -22,20 +22,20 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails {
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true, length = 15)
     private String username;
 
     @Column(name = "email", nullable = false, unique = true, updatable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 20)
     private String password;
 
     @Column(name = "sex", nullable = false)
     @Enumerated(EnumType.STRING)
     private Sex sex;
 
-    @Column(name = "weight", nullable = false)
+    @Column(name = "weight", nullable = false, precision = 5, scale = 2)
     private Double weight;
 
     @Column(name = "target_weight")
@@ -47,7 +47,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "kcal_from_target")
     private Double kcalFromTarget;
 
-    @Column(name = "height", nullable = false)
+    @Column(name = "height", nullable = false, precision = 5, scale = 2)
     private Double height;
 
     @Column(name = "birthday", nullable = false)
