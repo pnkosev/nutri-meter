@@ -17,14 +17,14 @@ import java.util.List;
 @Table(name = "exercises")
 public class Exercise extends BaseEntity {
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 30)
     private String name;
 
     @Column(name = "category")
     @Enumerated(EnumType.STRING)
     private ExerciseCategory category;
 
-    @Column(name = "kcal_burned_per_hour")
+    @Column(name = "kcal_burned_per_hour", nullable = false, precision = 4, scale = 2)
     private Double kcalBurnedPerHour;
 
     @ManyToOne

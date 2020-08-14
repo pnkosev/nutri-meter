@@ -19,7 +19,7 @@ import javax.persistence.*;
 //@IdClass(DailyStoryExerciseId.class)
 public class DailyStoryExercise extends BaseEntity {
 
-    @Column(name = "duration")
+    @Column(name = "duration", nullable = false, precision = 3, scale = 2)
     private Double duration;
 
     @ManyToOne

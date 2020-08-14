@@ -249,6 +249,10 @@ const toggleDisplay = (el) => {
 };
 
 const revealCustomExerciseBlock = ({nameInput, exerciseInfo, kcalBurnedInput, kcalBurnedInfo}) => {
+    nameInput.value = '';
+    exerciseInfo.innerHTML = '';
+    kcalBurnedInput.value = '';
+    kcalBurnedInfo.innerHTML = '';
     displayElement(nameInput);
     hideElement(exerciseInfo);
     displayElement(kcalBurnedInput);
@@ -285,7 +289,9 @@ const displayExerciseBlock = (e) => {
                 .then(res => res.json())
                 .then(data => {
                     elementsAsJson.exerciseInfo.innerHTML = data.name;
-                    elementsAsJson.kcalBurnedInfo.innerHTML = `${data.kcalBurnedPerHour}`;
+                    elementsAsJson.nameInput.value = data.name;
+                    elementsAsJson.kcalBurnedInfo.innerHTML = data.kcalBurnedPerHour;
+                    elementsAsJson.kcalBurnedInput.value = data.kcalBurnedPerHour;
                     elementsAsJson.duration.value = 60;
                 })
                 .catch(err => handleError(err, 'error-container-add-exercise'));
