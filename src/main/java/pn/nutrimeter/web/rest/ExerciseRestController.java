@@ -15,6 +15,7 @@ import pn.nutrimeter.service.services.api.UserService;
 import pn.nutrimeter.web.models.binding.DailyExerciseBindingModel;
 import pn.nutrimeter.web.models.view.ExerciseViewModel;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -77,12 +78,12 @@ public class ExerciseRestController extends BaseRestController {
      */
     @PostMapping("/exercise/add")
     public ResponseEntity addExercise(
-            @RequestBody DailyExerciseBindingModel model,
+            @Valid @RequestBody DailyExerciseBindingModel model,
             Principal principal) {
 
-        // TODO MODEL VALIDATION
-
-        Double kcalBurnedPerHour = this.getKcalBurnedPerHour(model.getDuration(), model.getKcalBurned());
+        Double kcalBurnedPerHour = this.getKcalBurnedPerHour(
+                parseStringToDouble(model.getDuration()), parseStringToDouble(model.getKcalBurned())
+        );
 
         ExerciseServiceModel esm = this.exerciseService
                 .getByNameAndKcalBurnedPerHour(model.getName(), kcalBurnedPerHour);
@@ -98,7 +99,9 @@ public class ExerciseRestController extends BaseRestController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(model.getDate(), formatter);
 
-        this.dailyStoryExerciseService.create(date, userModel.getId(), esm.getId(), model.getDuration());
+        this.dailyStoryExerciseService.create(
+                date, userModel.getId(), esm.getId(), parseStringToDouble(model.getDuration())
+        );
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -117,4 +120,6 @@ public class ExerciseRestController extends BaseRestController {
     private Double getKcalBurnedPerHour(Double duration, Double kcalBurned) {
         return kcalBurned / (duration / 60);
     }
+
+    private Double parseStringToDouble(String string) { return Double.parseDouble(string); }
 }

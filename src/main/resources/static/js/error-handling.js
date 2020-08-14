@@ -16,7 +16,24 @@ const handleError = (err, containerId = 'error-container', callBackFunc = showEr
     }
 };
 
+const isJsonString = (str) => {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+};
+
+const extractValuesFromJson = (json) => {
+    return Object.values(json).join('\n');
+    // return Object.keys(json)
+    //     .map(k => `${json[k]}`)
+    //     .join('\n');
+};
+
 const showErrorMessage = (msg, containerId) => {
+    isJsonString(msg) ? msg = extractValuesFromJson(JSON.parse(msg)) : msg;
     const container = document.getElementById(containerId);
     container.innerText = msg;
     setTimeout(() => {
@@ -39,3 +56,4 @@ const showErrorMessage = (msg, containerId) => {
     // <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
     // $.notify(msg, "error");
 };
+
