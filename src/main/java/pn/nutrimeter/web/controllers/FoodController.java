@@ -145,10 +145,14 @@ public class FoodController extends BaseController {
 
         try {
             this.foodService.create(foodServiceModel);
-        } catch (FoodAddFailureException | IdNotFoundException e) {
+        } catch (FoodAddFailureException e) {
             ModelAndView mav = new ModelAndView();
             mav.addObject("foodCategories", this.foodCategoryService.getAll());
             mav.addObject("tags", this.tagService.getAll());
+            if (foodCreateBindingModel.getMeasures() != null) {
+                mav.addObject("measures",
+                        this.measureService.getAllFromList(foodCreateBindingModel.getMeasures()));
+            }
             mav.addObject("msg", e.getMessage());
             return view(mav, FOOD_ADD_VIEW, e.getHttpStatus());
         }

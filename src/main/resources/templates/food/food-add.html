@@ -653,11 +653,23 @@
                 <form id="measure-add-form" th:action="@{/api/measure/add}" th:method="post">
                     <div class="form-group">
                         <label for="measure">Measure name</label>
-                        <input type="text" class="form-control" id="measure" placeholder="Measure">
+                        <input type="text"
+                               class="form-control"
+                               id="measure"
+                               placeholder="Measure"
+                               required
+                               pattern="[A-z]{1,10}"
+                               title="Between 1 and 10 characters"
+                        >
                     </div>
                     <div class="form-group">
                         <label for="grams">Grams</label>
-                        <input type="number" class="form-control" id="grams" placeholder="Grams">
+                        <input type="number"
+                               class="form-control"
+                               id="grams"
+                               placeholder="Grams"
+                               required
+                        >
                     </div>
                     <div class="button-holder d-flex justify-content-center mt-4">
                         <button class="btn btn-secondary text-white mb-3" type="submit">Add Measure</button>

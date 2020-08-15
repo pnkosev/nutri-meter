@@ -61,14 +61,20 @@ public class FoodServiceImpl implements FoodService {
             throw new FoodAddFailureException(ErrorConstants.INVALID_FOOD_MODEL);
         }
 
+        foodServiceModel.setKcalPerHundredGrams(this.getTotalKcal(foodServiceModel));
+
+        Food food = this.modelMapper.map(foodServiceModel, Food.class);
+
         Boolean isCustom = foodServiceModel.getIsCustom();
 
         // SETS IT TO TRUE IF THE CHECKBOX IS CHECKED OR NULL]
         foodServiceModel.setIsCustom(isCustom == null || isCustom);
 
-        foodServiceModel.setKcalPerHundredGrams(this.getTotalKcal(foodServiceModel));
+        if (food.isCustom()) {
+            User user = this.getUser();
+            food.setUser(user);
+        }
 
-        Food food = this.modelMapper.map(foodServiceModel, Food.class);
         // THIS IS DONE AUTOMATICALLY BY THE MAPPER
 //        food.setFoodCategories(foodServiceModel.getFoodCategories()
 //                .stream()
@@ -84,11 +90,6 @@ public class FoodServiceImpl implements FoodService {
             food.setMeasures(defaultMeasures);
         } else {
             food.getMeasures().addAll(defaultMeasures);
-        }
-
-        if (food.isCustom()) {
-            User user = this.getUser();
-            food.setUser(user);
         }
 
         this.foodRepository.saveAndFlush(food);

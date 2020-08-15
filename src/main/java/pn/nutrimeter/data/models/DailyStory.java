@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "daily_stories")
 public class DailyStory extends BaseEntity {
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false, updatable = false)
     private LocalDate date;
 
     @Column(name = "daily_weight")

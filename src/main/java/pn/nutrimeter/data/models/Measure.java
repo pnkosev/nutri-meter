@@ -15,10 +15,10 @@ import java.util.List;
 @Table(name = "measures")
 public class Measure extends BaseEntity {
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 2)
     private String name;
 
-    @Column(name = "equivalent_in_grams")
+    @Column(name = "equivalent_in_grams", nullable = false, precision = 4, scale = 2)
     private Double equivalentInGrams;
 
     @ManyToMany(mappedBy = "measures")

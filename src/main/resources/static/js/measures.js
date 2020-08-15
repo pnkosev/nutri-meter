@@ -122,7 +122,9 @@ const handleFoodForm = () => {
                 .then(res => res.json())
                 .then(arr => {
                     let index = 0;
-                    measureRows.forEach(r => {
+                    measureRows
+                        .slice(measureRows.length - jsonArray.length) // slice from the first row without hidden input
+                        .forEach(r => {
                         r.innerHTML += addHiddenInput(arr[index++].id);
                     });
                     foodForm.submit();

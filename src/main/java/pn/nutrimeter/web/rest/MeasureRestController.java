@@ -4,15 +4,18 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pn.nutrimeter.service.models.MeasureServiceModel;
 import pn.nutrimeter.service.services.api.MeasureService;
 import pn.nutrimeter.web.models.binding.MeasureCreateBindingModel;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Validated
 @RestController
 public class MeasureRestController extends BaseRestController {
 
@@ -26,7 +29,9 @@ public class MeasureRestController extends BaseRestController {
     }
 
     @PostMapping("/measure/add")
-    public ResponseEntity<List<MeasureServiceModel>> addMeasures(@RequestBody List<MeasureCreateBindingModel> bindingModelList) {
+    public ResponseEntity<List<MeasureServiceModel>> addMeasures(
+            @Valid @RequestBody List<MeasureCreateBindingModel> bindingModelList
+    ) {
         ArrayList<MeasureServiceModel> measureServiceModels = new ArrayList<>();
 
         bindingModelList.forEach(m -> {

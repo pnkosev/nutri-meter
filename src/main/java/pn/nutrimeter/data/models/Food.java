@@ -17,16 +17,16 @@ import java.util.List;
 @Table(name = "foods")
 public class Food extends BaseEntity {
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 30)
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 100)
     private String description;
 
     @Column(name = "kcal_per_hundred_grams", nullable = false)
     private Integer kcalPerHundredGrams;
 
-    @Column(name = "total_proteins")
+    @Column(name = "total_proteins", nullable = false, precision = 3, scale = 2)
     private Double totalProteins;
 
     @Column(name = "cysteine")
@@ -62,7 +62,7 @@ public class Food extends BaseEntity {
     @Column(name = "valine")
     private Double valine;
 
-    @Column(name = "total_carbohydrates")
+    @Column(name = "total_carbohydrates", nullable = false, precision = 3, scale = 2)
     private Double totalCarbohydrates;
 
     @Column(name = "fiber")
@@ -77,7 +77,7 @@ public class Food extends BaseEntity {
     @Column(name = "added_sugars")
     private Double addedSugars;
 
-    @Column(name = "total_lipids")
+    @Column(name = "total_lipids", nullable = false, precision = 3, scale = 2)
     private Double totalLipids;
 
     @Column(name = "monounsaturated")

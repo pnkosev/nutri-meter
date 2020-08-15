@@ -37,8 +37,12 @@ public class DailyStoryExerciseServiceImpl implements DailyStoryExerciseService 
     public void create(LocalDate date, String userId, String exerciseId, Double duration) {
         DailyStoryExercise dailyStoryExercise = new DailyStoryExercise();
 
-        DailyStory dailyStory = this.dailyStoryRepository.findByDateAndUserId(date, userId).orElseThrow(() -> new DailyStoryNotFoundException(ErrorConstants.DAILY_STORY_NOT_FOUND));
-        Exercise exercise = this.exerciseRepository.findById(exerciseId).orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_EXERCISE_ID));
+        DailyStory dailyStory = this.dailyStoryRepository
+                .findByDateAndUserId(date, userId)
+                .orElseThrow(() -> new DailyStoryNotFoundException(ErrorConstants.DAILY_STORY_NOT_FOUND));
+        Exercise exercise = this.exerciseRepository
+                .findById(exerciseId)
+                .orElseThrow(() -> new IdNotFoundException(ErrorConstants.INVALID_EXERCISE_ID));
 
         dailyStoryExercise.setDuration(duration);
         dailyStoryExercise.setDailyStory(dailyStory);
