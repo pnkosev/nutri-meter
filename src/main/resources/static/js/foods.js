@@ -72,6 +72,22 @@ const addExercise = e => {
         date: date,
     };
 
+    if (!validator.isDigit(json.duration)) {
+        showErrorMessage(
+            'Duration must be between 1 and 3 digits!',
+            'error-container-add-exercise'
+        );
+        return;
+    }
+
+    if (!validator.isDigit(json.kcalBurned, 4)) {
+        showErrorMessage(
+            'Kcal burned must be between 1 and 3 digits!',
+            'error-container-add-exercise'
+        );
+        return;
+    }
+
     delayFetchBy1Sec(() => {
         fetch(actionURL, {
             method: 'post',

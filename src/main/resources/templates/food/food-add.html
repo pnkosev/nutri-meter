@@ -6,6 +6,7 @@
 <th:block th:include="~{_shared/head}"/>
 <script src="/js/loader.js"></script>
 <script src="/js/error-handling.js"></script>
+<script src="/js/validator.js"></script>
 <script src="/js/measures.js"></script>
 <body>
 <th:block th:include="~{_shared/header}"/>
@@ -13,13 +14,17 @@
 <main class="mb-5">
     <div class="container w-50 mt-5">
         <h1 class="mt-5 mb-5 text-center">Add a food</h1>
-        <form class="mx-auto w-100" id="food-add-form" th:action="@{/food/add}" th:method="post" th:object="${foodCreateBindingModel}">
+        <form class="mx-auto w-100" id="food-add-form" th:action="@{/food/add}" th:method="post"
+              th:object="${foodCreateBindingModel}">
             <div th:if="${msg}" class="text-center">
                 <small class="error" th:text="${msg}"></small>
             </div>
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="name" placeholder="Food name"
+                       required
+                       pattern="[A-z]{3,30}"
+                       title="Between 3 and 30 characters"
                        th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
                        th:field="*{name}">
                 <small class="error" th:if="${#fields.errors('name')}" th:errors="*{name}"></small>
@@ -27,6 +32,7 @@
             <div class="form-group">
                 <label for="description">Description</label>
                 <textarea class="form-control" id="description" placeholder="Description" rows="3"
+                          required
                           th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"
                           th:field="*{description}"></textarea>
                 <small class="error" th:if="${#fields.errors('description')}" th:errors="*{description}"></small>
@@ -34,6 +40,7 @@
             <div class="form-group">
                 <label for="categories">Select at least one category</label>
                 <select multiple class="form-control" id="categories"
+                        required
                         th:classappend="${#fields.hasErrors('foodCategories')} ? 'is-invalid'"
                         th:field="*{foodCategories}">
                     <option class="multi-option"
@@ -46,7 +53,8 @@
             </div>
             <div class="form-group">
                 <th:block th:each="tag, stat : ${tags}">
-                    <input type="checkbox" th:field="*{tags}" th:id="tag + ${stat.index}" name="tag" th:value="${tag.id}"/>
+                    <input type="checkbox" th:field="*{tags}" th:id="tag + ${stat.index}" name="tag"
+                           th:value="${tag.id}"/>
                     <label th:for="tag + ${stat.index}" th:text="${tag.name}"></label>
                 </th:block>
             </div>
@@ -69,17 +77,19 @@
                         </tr>
                         </thead>
                         <tbody id="measures-container">
-                            <th:block th:if="${measures != null}">
-                                <th:block th:each="measure, stat : ${measures}">
-                                    <tr>
-                                        <td th:text="${stat.index + 1}"></td>
-                                        <td th:text="${measure.name}"></td>
-                                        <td th:text="${#numbers.formatDecimal(measure.equivalentInGrams, 1, 0)}"></td>
-                                        <td class="text-right"><button type="button" class="measure-delete-btn btn-danger">X</button></td>
-                                        <td class="hidden"><input type="hidden" th:value="${measure.id}"></td>
-                                    </tr>
-                                </th:block>
+                        <th:block th:if="${measures != null}">
+                            <th:block th:each="measure, stat : ${measures}">
+                                <tr>
+                                    <td th:text="${stat.index + 1}"></td>
+                                    <td th:text="${measure.name}"></td>
+                                    <td th:text="${#numbers.formatDecimal(measure.equivalentInGrams, 1, 0)}"></td>
+                                    <td class="text-right">
+                                        <button type="button" class="measure-delete-btn btn-danger">X</button>
+                                    </td>
+                                    <td class="hidden"><input type="hidden" th:value="${measure.id}"></td>
+                                </tr>
                             </th:block>
+                        </th:block>
                         </tbody>
                     </table>
                 </div>
@@ -114,9 +124,13 @@
                             </td>
                             <td>
                                 <input type="number" id="carbs"
-                                    th:classappend="${#fields.hasErrors('totalCarbohydrates')} ? 'is-invalid'"
-                                    th:field="*{totalCarbohydrates}">
-                                <small class="error" th:if="${#fields.errors('totalCarbohydrates')}" th:errors="*{totalCarbohydrates}"></small>
+                                       required
+                                       min="0"
+                                       max="100"
+                                       th:classappend="${#fields.hasErrors('totalCarbohydrates')} ? 'is-invalid'"
+                                       th:field="*{totalCarbohydrates}">
+                                <small class="error" th:if="${#fields.errors('totalCarbohydrates')}"
+                                       th:errors="*{totalCarbohydrates}"></small>
                             </td>
                         </tr>
                         <tr>
@@ -168,9 +182,13 @@
                             </td>
                             <td>
                                 <input type="number" id="proteins"
-                                    th:classappend="${#fields.hasErrors('totalProteins')} ? 'is-invalid'"
-                                    th:field="*{totalProteins}">
-                                <small class="error" th:if="${#fields.errors('totalProteins')}" th:errors="*{totalProteins}"></small>
+                                       required
+                                       min="0"
+                                       max="100"
+                                       th:classappend="${#fields.hasErrors('totalProteins')} ? 'is-invalid'"
+                                       th:field="*{totalProteins}">
+                                <small class="error" th:if="${#fields.errors('totalProteins')}"
+                                       th:errors="*{totalProteins}"></small>
                             </td>
                         </tr>
                         <tr>
@@ -301,9 +319,13 @@
                             </td>
                             <td>
                                 <input type="number" id="lipids"
-                                    th:classappend="${#fields.hasErrors('totalLipids')} ? 'is-invalid'"
-                                    th:field="*{totalLipids}">
-                                <small class="error" th:if="${#fields.errors('totalLipids')}" th:errors="*{totalLipids}"></small>
+                                       required
+                                       min="0"
+                                       max="100"
+                                       th:classappend="${#fields.hasErrors('totalLipids')} ? 'is-invalid'"
+                                       th:field="*{totalLipids}">
+                                <small class="error" th:if="${#fields.errors('totalLipids')}"
+                                       th:errors="*{totalLipids}"></small>
                             </td>
                         </tr>
                         <tr>
@@ -636,7 +658,7 @@
                 </div>
             </div>
             <div class="button-holder d-flex justify-content-center mt-4">
-                <button class="btn btn-secondary text-white mb-3" type="button">Add Food</button>
+                <button class="btn btn-secondary text-white mb-3" type="submit">Add Food</button>
             </div>
         </form>
     </div>
@@ -669,11 +691,14 @@
                                id="grams"
                                placeholder="Grams"
                                required
+                               min="1"
+                               max="9999"
                         >
                     </div>
                     <div class="button-holder d-flex justify-content-center mt-4">
                         <button class="btn btn-secondary text-white mb-3" type="submit">Add Measure</button>
                     </div>
+                    <small class="error" id="error-container-measure"></small>
                 </form>
             </div>
         </div>

@@ -64,6 +64,14 @@ const handleMeasureForm = () => {
             equivalentInGrams: document.getElementById('grams').value,
         };
 
+        if (!validator.isDigit(measure.equivalentInGrams, 4)) {
+            showErrorMessage(
+                'Equivalent in grams must be between 1 and 4 digits!',
+                'error-container-measure'
+            );
+            return;
+        }
+
         const measuresContainer = document.getElementById('measures-container');
         measuresContainer.innerHTML += createRow(measure);
 
@@ -82,7 +90,7 @@ const handleHiddenInputs = () => {
             const cols = r.children;
             if (cols.length === 5) {
                 const input = cols[4].children[0];
-                if (input.getAttribute('name') !== 'measures'){
+                if (input.getAttribute('name') !== 'measures') {
                     input.setAttribute('name', 'measures');
                 }
             }
@@ -90,7 +98,8 @@ const handleHiddenInputs = () => {
 };
 
 
-const handleFoodForm = () => {
+const handleFoodForm = e => {
+    e.preventDefault();
     const foodForm = document.getElementById('food-add-form');
     const measureRows = [...document.getElementById('measures-container').children];
     let jsonArray = [];
@@ -125,8 +134,8 @@ const handleFoodForm = () => {
                     measureRows
                         .slice(measureRows.length - jsonArray.length) // slice from the first row without hidden input
                         .forEach(r => {
-                        r.innerHTML += addHiddenInput(arr[index++].id);
-                    });
+                            r.innerHTML += addHiddenInput(arr[index++].id);
+                        });
                     foodForm.submit();
                 })
                 .catch(handleError);
@@ -259,8 +268,8 @@ window.onload = () => {
     setUpSelect();
     setUpNutrientInput();
     handleMeasureForm();
-    const btn = document.querySelector('#food-add-form > div.button-holder > button');
-    btn.addEventListener('click', handleFoodForm);
+    const foodForm = document.getElementById('food-add-form');
+    foodForm.onsubmit = e => handleFoodForm(e);
     [...document.getElementsByClassName('measure-delete-btn')].forEach(e => e.addEventListener('click', deleteMeasure));
     handleHiddenInputs();
 };
