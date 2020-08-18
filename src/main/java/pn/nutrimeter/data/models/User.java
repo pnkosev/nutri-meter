@@ -20,6 +20,13 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
+@NamedStoredProcedureQuery(
+        name = "usp_update_user",
+        procedureName = "usp_update_user",
+        parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "user_id", type = String.class),
+                @StoredProcedureParameter(mode = ParameterMode.IN, name = "life_stage_group_id", type = String.class)
+        })
 public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "username", nullable = false, unique = true, length = 15)
@@ -52,6 +59,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
+
+    @Column(name = "years_old", nullable = false, precision = 3, scale = 1)
+    private Double yearsOld;
 
     @Column(name = "age_category")
     @Enumerated(EnumType.STRING)

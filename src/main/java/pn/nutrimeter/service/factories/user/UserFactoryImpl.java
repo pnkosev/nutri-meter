@@ -51,15 +51,15 @@ public class UserFactoryImpl implements UserFactory {
         User user = this.modelMapper.map(userRegisterServiceModel, User.class);
         double userWeight = user.getWeight();
         double userHeight = user.getHeight();
-        Sex userSex = user.getSex();
-        String userSexAsString = userSex.name();
 
         user.setPassword(this.hashingService.hash(userRegisterServiceModel.getPassword()));
         user.setTargetWeight(userWeight);
 
         double yearsOld = this.userCalculationService.getYearsOld(user.getBirthday());
-
         user.setAgeCategory(this.userCalculationService.updateAgeCategory(yearsOld));
+
+        Sex userSex = yearsOld >= 9 ? user.getSex() : null;
+        String userSexAsString = user.getSex().name();
 
         LifeStageGroup lifeStageGroup = this.lifeStageGroupRepository
                 .findLifeStageGroupBySexAndAge(userSex, yearsOld)

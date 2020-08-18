@@ -4,15 +4,22 @@ import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.enums.AgeCategory;
 import pn.nutrimeter.service.services.api.UserCalculationService;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class UserCalculationServiceImpl implements UserCalculationService {
 
     @Override
     public double getYearsOld(LocalDate birthday) {
-        return Period.between(birthday, LocalDate.now()).getYears();
+        double yearsWithoutPrecision = birthday.until(LocalDate.now(), ChronoUnit.DAYS) / 365.2425d;
+
+        return BigDecimal.valueOf(yearsWithoutPrecision)
+                .setScale(1, RoundingMode.HALF_DOWN)
+                .doubleValue();
     }
 
     @Override
