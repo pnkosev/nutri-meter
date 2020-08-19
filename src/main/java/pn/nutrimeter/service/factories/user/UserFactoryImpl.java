@@ -56,6 +56,7 @@ public class UserFactoryImpl implements UserFactory {
         user.setTargetWeight(userWeight);
 
         double yearsOld = this.userCalculationService.getYearsOld(user.getBirthday());
+        user.setYearsOld(yearsOld);
         user.setAgeCategory(this.userCalculationService.updateAgeCategory(yearsOld));
 
         Sex userSex = yearsOld >= 9 ? user.getSex() : null;
