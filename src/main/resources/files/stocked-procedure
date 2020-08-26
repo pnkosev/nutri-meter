@@ -1,0 +1,60 @@
+/* Get all nutrients from a given daily_story summed up */
+CREATE DEFINER=`root`@`localhost` PROCEDURE `usp_reduce_nutrients`(
+	in daily_story_id varchar(100)
+)
+BEGIN
+	select
+		sum(reduce(d.id, f.total_proteins)) as totalProteins,
+		sum(reduce(d.id, f.added_sugars)) as addedSugars,
+		sum(reduce(d.id, f.calcium)) as calcium,
+		sum(reduce(d.id, f.cholesterol)) as cholesterol,
+		sum(reduce(d.id, f.copper)) as copper,
+		sum(reduce(d.id, f.cysteine)) as cysteine,
+		sum(reduce(d.id, f.fiber)) as fiber,
+		sum(reduce(d.id, f.folate)) as folate,
+		sum(reduce(d.id, f.histidine)) as histidine,
+		sum(reduce(d.id, f.iodine)) as iodine,
+		sum(reduce(d.id, f.iron)) as iron,
+		sum(reduce(d.id, f.isoleucine)) as isoleucine,
+		sum(reduce(d.id, f.kcal_per_hundred_grams)) as kcal_per_hundred_grams,
+		sum(reduce(d.id, f.leucine)) as leucine,
+		sum(reduce(d.id, f.lysine)) as lysine,
+		sum(reduce(d.id, f.magnesium)) as magnesium,
+		sum(reduce(d.id, f.manganese)) as manganese,
+		sum(reduce(d.id, f.methionine)) as methionine,
+		sum(reduce(d.id, f.monounsaturated)) as monounsaturated,
+		sum(reduce(d.id, f.omega3)) as omega3,
+		sum(reduce(d.id, f.omega6)) as omega6,
+		sum(reduce(d.id, f.phenylalanine)) as phenylalanine,
+		sum(reduce(d.id, f.phosphorus)) as phosphorus,
+		sum(reduce(d.id, f.polyunsaturated)) as polyunsaturated,
+		sum(reduce(d.id, f.potassium)) as potassium,
+		sum(reduce(d.id, f.saturated)) as saturated,
+		sum(reduce(d.id, f.selenium)) as selenium,
+		sum(reduce(d.id, f.sodium)) as sodium,
+		sum(reduce(d.id, f.starch)) as starch,
+		sum(reduce(d.id, f.sugars)) as sugars,
+		sum(reduce(d.id, f.threonine)) as threonine,
+		sum(reduce(d.id, f.total_carbohydrates)) as totalCarbohydrates,
+		sum(reduce(d.id, f.total_lipids)) as totalLipids,
+		sum(reduce(d.id, f.trans_fats)) as transFats,
+		sum(reduce(d.id, f.tryptophan)) as tryptophan,
+		sum(reduce(d.id, f.tyrosine)) as tyrosine,
+		sum(reduce(d.id, f.valine)) as valine,
+		sum(reduce(d.id, f.vitamin_a)) as vitaminA,
+		sum(reduce(d.id, f.vitamin_b1)) as vitaminB1,
+		sum(reduce(d.id, f.vitaminb12)) as vitaminB12,
+		sum(reduce(d.id, f.vitamin_b2)) as vitaminB2,
+		sum(reduce(d.id, f.vitamin_b3)) as vitaminB3,
+		sum(reduce(d.id, f.vitamin_b5)) as vitaminB5,
+		sum(reduce(d.id, f.vitamin_b6)) as vitaminB6,
+		sum(reduce(d.id, f.vitamin_c)) as vitaminC,
+		sum(reduce(d.id, f.vitamin_d)) as vitaminD,
+		sum(reduce(d.id, f.vitamin_e)) as vitaminE,
+		sum(reduce(d.id, f.vitamin_k)) as vitaminK,
+		sum(reduce(d.id, f.zinc)) as zinc
+	from daily_stories_foods d
+	join foods f
+	on f.id = d.food_id
+	and d.daily_story_id = daily_story_id;
+END

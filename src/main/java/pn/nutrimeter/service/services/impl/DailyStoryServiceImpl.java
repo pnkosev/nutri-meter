@@ -1,6 +1,10 @@
 package pn.nutrimeter.service.services.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 import pn.nutrimeter.data.models.DailyStory;
 import pn.nutrimeter.data.models.Exercise;
@@ -16,9 +20,7 @@ import pn.nutrimeter.service.models.*;
 import pn.nutrimeter.service.services.api.DailyStoryService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +29,8 @@ public class DailyStoryServiceImpl implements DailyStoryService {
     private final DailyStoryRepository dailyStoryRepository;
 
     private final UserRepository userRepository;
+
+    private final JdbcTemplate jdbcTemplate;
 
     private final DailyStoryFoodFactory dailyStoryFoodFactory;
 
@@ -37,12 +41,13 @@ public class DailyStoryServiceImpl implements DailyStoryService {
     public DailyStoryServiceImpl(
             DailyStoryRepository dailyStoryRepository,
             UserRepository userRepository,
-            DailyStoryFoodFactory dailyStoryFoodFactory,
+            JdbcTemplate jdbcTemplate, DailyStoryFoodFactory dailyStoryFoodFactory,
             DailyStoryExerciseFactory dailyStoryExerciseFactory,
             ModelMapper modelMapper
     ) {
         this.dailyStoryRepository = dailyStoryRepository;
         this.userRepository = userRepository;
+        this.jdbcTemplate = jdbcTemplate;
         this.dailyStoryFoodFactory = dailyStoryFoodFactory;
         this.dailyStoryExerciseFactory = dailyStoryExerciseFactory;
         this.modelMapper = modelMapper;
@@ -50,7 +55,8 @@ public class DailyStoryServiceImpl implements DailyStoryService {
 
     /**
      * Getting a daily story by a given date and user ID
-     * @param date given date
+     *
+     * @param date   given date
      * @param userId user's ID
      * @return DailyStoryServiceModel
      */
@@ -79,18 +85,38 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         }
         this.dailyStoryRepository.saveAndFlush(dailyStory);
 
+
+        DailyStoryServiceModel dailyStoryServiceModel = getReducedNutrients(dailyStory.getId());
+        dailyStoryServiceModel.setId(dailyStory.getId());
+        dailyStoryServiceModel.setDailyWeight(dailyStory.getDailyWeight());
+        dailyStoryServiceModel.setDate(dailyStory.getDate());
+
         List<DailyStoryFoodServiceModel> dailyStoryFoodServiceModels = this.getFoodModels(dailyStory);
         List<DailyStoryExerciseServiceModel> dailyStoryExerciseServiceModels = this.getExerciseModels(dailyStory);
-        DailyStoryServiceModel dailyStoryServiceModel = this.modelMapper.map(dailyStory, DailyStoryServiceModel.class);
+
         dailyStoryServiceModel.setDailyStoryFoodAssociation(dailyStoryFoodServiceModels);
         dailyStoryServiceModel.setDailyStoryExerciseAssociation(dailyStoryExerciseServiceModels);
 
-        this.reduceNutrientsFromListOfFoods(dailyStoryServiceModel);
+        List<DailyStoryExerciseServiceModel> dailyStoryExerciseAssociation = dailyStoryServiceModel.getDailyStoryExerciseAssociation();
+        dailyStoryServiceModel.setKcalBurned(dailyStoryExerciseAssociation.stream().map(e -> e.getKcalBurnedPerHour() * (e.getDuration() / 60)).reduce(0.0, Double::sum));
 
         return dailyStoryServiceModel;
     }
 
-    // extract's a list of DailyStoryExerciseServiceModels from a DailyStory
+    private DailyStoryServiceModel getReducedNutrients(String dailyStoryId) {
+        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate).withProcedureName("usp_reduce_nutrients");
+
+        Map<String, Object> inParamMap = new HashMap<String, Object>();
+        inParamMap.put("daily_story_id", dailyStoryId);
+        SqlParameterSource in = new MapSqlParameterSource(inParamMap);
+        Map<String, Object> simpleJdbcCallResult = simpleJdbcCall.execute(in);
+        ArrayList list = (ArrayList) simpleJdbcCallResult.get("#result-set-1");
+        Map result = (Map) list.get(0);
+
+        return this.modelMapper.map(result, DailyStoryServiceModel.class);
+    }
+
+    // extracts a list of DailyStoryExerciseServiceModels from a DailyStory
     private List<DailyStoryExerciseServiceModel> getExerciseModels(DailyStory dailyStory) {
         List<DailyStoryExerciseServiceModel> newList = new ArrayList<>();
         return dailyStory.getDailyStoryFoodAssociation() == null
@@ -105,7 +131,7 @@ public class DailyStoryServiceImpl implements DailyStoryService {
                 .collect(Collectors.toList());
     }
 
-    // extract's a list of DailyStoryFoodServiceModel from a DailyStory
+    // extracts a list of DailyStoryFoodServiceModel from a DailyStory
     private List<DailyStoryFoodServiceModel> getFoodModels(DailyStory dailyStory) {
         List<DailyStoryFoodServiceModel> newList = new ArrayList<>();
         return dailyStory.getDailyStoryFoodAssociation() == null
@@ -120,61 +146,4 @@ public class DailyStoryServiceImpl implements DailyStoryService {
                 .collect(Collectors.toList());
     }
 
-    // reduces (sums up) the nutritional values of a list of DailyStoryFoodServiceModels
-    // also reduces the kcal burned from a list of DailyStoryExerciseServiceModels
-    private void reduceNutrientsFromListOfFoods(DailyStoryServiceModel dailyStoryServiceModel) {
-        List<DailyStoryExerciseServiceModel> dailyStoryExerciseAssociation = dailyStoryServiceModel.getDailyStoryExerciseAssociation();
-        List<DailyStoryFoodServiceModel> dailyStoryFoodAssociation = dailyStoryServiceModel.getDailyStoryFoodAssociation();
-
-        dailyStoryServiceModel.setKcalBurned(dailyStoryExerciseAssociation.stream().map(e -> e.getKcalBurnedPerHour() * (e.getDuration() / 60)).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setKcalConsumed(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getKcal).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setTotalProteins(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getTotalProteins).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setCysteine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getCysteine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setHistidine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getHistidine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setIsoleucine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getIsoleucine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setLeucine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getLeucine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setLysine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getLysine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setMethionine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getMethionine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setPhenylalanine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getPhenylalanine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setThreonine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getThreonine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setTryptophan(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getTryptophan).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setTyrosine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getTyrosine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setValine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getValine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setTotalCarbohydrates(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getTotalCarbohydrates).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setFiber(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getFiber).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setStarch(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getStarch).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setSugars(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getSugars).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setAddedSugars(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getAddedSugars).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setTotalLipids(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getTotalLipids).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setMonounsaturated(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getMonounsaturated).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setPolyunsaturated(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getPolyunsaturated).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setOmega3(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getOmega3).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setOmega6(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getOmega6).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setSaturated(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getSaturated).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setTransFats(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getTransFats).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setCholesterol(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getCholesterol).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminA(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminA).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminB1(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminB1).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminB2(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminB2).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminB3(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminB3).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminB5(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminB5).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminB6(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminB6).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminB12(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminB12).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setFolate(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getFolate).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminC(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminC).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminD(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminD).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminE(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminE).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setVitaminK(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getVitaminK).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setCalcium(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getCalcium).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setCopper(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getCopper).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setIodine(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getIodine).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setIron(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getIron).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setMagnesium(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getMagnesium).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setManganese(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getManganese).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setPhosphorus(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getPhosphorus).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setPotassium(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getPotassium).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setSelenium(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getSelenium).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setSodium(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getSodium).reduce(0.0, Double::sum));
-        dailyStoryServiceModel.setZinc(dailyStoryFoodAssociation.stream().map(DailyStoryFoodServiceModel::getZinc).reduce(0.0, Double::sum));
-    }
 }
