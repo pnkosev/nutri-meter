@@ -5,10 +5,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.models.FoodCategory;
+import pn.nutrimeter.data.models.Measure;
+import pn.nutrimeter.data.models.Tag;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
+import pn.nutrimeter.data.repositories.MeasureRepository;
 import pn.nutrimeter.web.base.MvcTestBase;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +31,9 @@ class FoodControllerTest extends MvcTestBase {
 
     @MockBean
     FoodRepository mockFoodRepository;
+
+    @MockBean
+    MeasureRepository mockMeasureRepository;
 
     @Test
     @WithMockUser
@@ -56,6 +64,8 @@ class FoodControllerTest extends MvcTestBase {
     public void addFoodPost_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirect() throws Exception {
         when(this.mockFoodCategoryRepository.findById(any())).thenReturn(Optional.of(new FoodCategory()));
         when(this.mockFoodRepository.saveAndFlush(any())).thenReturn(new Food());
+        when(this.mockMeasureRepository.findByName("g")).thenReturn(new Measure());
+        when(this.mockMeasureRepository.findByName("oz")).thenReturn(new Measure());
 
         this.mockMvc
                 .perform(post(BASE_URL + FoodController.FOOD_ADD_URL)
@@ -64,6 +74,7 @@ class FoodControllerTest extends MvcTestBase {
                         .param("totalProteins", "5")
                         .param("totalCarbohydrates", "5")
                         .param("totalLipids", "5")
+                        .param("tags", "")
                         .param("foodCategories", this.getFoodCategoryString()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(FoodController.REDIRECT_HOME_URL));
@@ -71,7 +82,7 @@ class FoodControllerTest extends MvcTestBase {
 
     @Test
     @WithMockUser
-    public void addFoodPost_whenBindingResultHasErrors_shouldReturnCorrectAndRedirect() throws Exception {
+    public void addFoodPost_whenBindingResultHasErrors_shouldThrowAndReturn() throws Exception {
         this.mockMvc
                 .perform(post(BASE_URL + FoodController.FOOD_ADD_URL)
                         .param("name", "n")
@@ -85,7 +96,7 @@ class FoodControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ROOT"})
     public void addCategory_whenAuthenticated_shouldReturnCorrect() throws Exception {
         this.mockMvc
                 .perform(get(BASE_URL + FoodController.FOOD_CATEGORY_ADD_URL))
@@ -102,17 +113,18 @@ class FoodControllerTest extends MvcTestBase {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ROOT"})
     public void addCategoryPost_whenBindingResultHasNoErrors_shouldReturnCorrectAndRedirect() throws Exception {
         this.mockMvc
                 .perform(post(BASE_URL + FoodController.FOOD_CATEGORY_ADD_URL)
-                        .param("name", "name"))
+                        .param("name", "name")
+                        .param("description", "description"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl(FoodController.REDIRECT_HOME_URL));
+                .andExpect(redirectedUrl("/user/admin-tool#categories"));
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = {"ROOT"})
     public void addCategoryPost_whenBindingResultHasErrors_shouldResultInInputError() throws Exception {
         this.mockMvc
                 .perform(post(BASE_URL + FoodController.FOOD_CATEGORY_ADD_URL))
@@ -120,7 +132,13 @@ class FoodControllerTest extends MvcTestBase {
                 .andExpect(view().name(FoodController.FOOD_CATEGORY_ADD_EDIT_VIEW));
     }
 
-    private FoodCategory getFoodCategory() { return new FoodCategory() {{ setName("NAME"); }}; }
+    private FoodCategory getFoodCategory() {
+        return new FoodCategory() {{
+            setName("NAME");
+        }};
+    }
 
-    private String getFoodCategoryString() { return "ID"; }
+    private String getFoodCategoryString() {
+        return "ID";
+    }
 }

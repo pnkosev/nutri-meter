@@ -119,7 +119,8 @@ public class FoodController extends BaseController {
 
         List<String> tags = foodCreateBindingModel.getTags();
 
-        foodServiceModel.setTags(
+        if (!tags.isEmpty()) {
+            foodServiceModel.setTags(
                 tags
                 .stream()
                 .map(id -> {
@@ -128,6 +129,7 @@ public class FoodController extends BaseController {
                     return tagServiceModel;
                 })
                 .collect(Collectors.toList()));
+        }
 
         List<String> measures = foodCreateBindingModel.getMeasures();
 
@@ -180,6 +182,7 @@ public class FoodController extends BaseController {
      * @param bindingResult java class allowing to detect errors
      * @return ModelAndView
      */
+    @PreAuthorize("hasRole('ROLE_ROOT')")
     @PostMapping(FOOD_CATEGORY_ADD_URL)
     public ModelAndView addCategoryPost(
             @Valid FoodCategoryCreateBindingModel foodCategoryCreateBindingModel,
