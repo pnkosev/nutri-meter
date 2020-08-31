@@ -98,7 +98,9 @@ public class DailyStoryServiceImpl implements DailyStoryService {
         dailyStoryServiceModel.setDailyStoryExerciseAssociation(dailyStoryExerciseServiceModels);
 
         List<DailyStoryExerciseServiceModel> dailyStoryExerciseAssociation = dailyStoryServiceModel.getDailyStoryExerciseAssociation();
-        dailyStoryServiceModel.setKcalBurned(dailyStoryExerciseAssociation.stream().map(e -> e.getKcalBurnedPerHour() * (e.getDuration() / 60)).reduce(0.0, Double::sum));
+        dailyStoryServiceModel.setKcalBurned(dailyStoryExerciseAssociation
+                .stream()
+                .map(e -> e.getKcalBurnedPerHour() * (e.getDuration() / 60)).reduce(0.0, Double::sum));
 
         return dailyStoryServiceModel;
     }

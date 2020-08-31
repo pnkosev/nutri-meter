@@ -1,25 +1,25 @@
 package pn.nutrimeter.web.controllers;
 
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import pn.nutrimeter.data.models.Food;
 import pn.nutrimeter.data.models.FoodCategory;
 import pn.nutrimeter.data.models.Measure;
-import pn.nutrimeter.data.models.Tag;
 import pn.nutrimeter.data.repositories.FoodCategoryRepository;
 import pn.nutrimeter.data.repositories.FoodRepository;
 import pn.nutrimeter.data.repositories.MeasureRepository;
 import pn.nutrimeter.web.base.MvcTestBase;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class FoodControllerTest extends MvcTestBase {
@@ -34,6 +34,9 @@ class FoodControllerTest extends MvcTestBase {
 
     @MockBean
     MeasureRepository mockMeasureRepository;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     @Test
     @WithMockUser
